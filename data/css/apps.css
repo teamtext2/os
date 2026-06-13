@@ -1,0 +1,17 @@
+/* Hiệu ứng bấm icon ứng dụng */
+.app-icon {
+    transition: transform 0.1s ease, filter 0.2s ease;
+}
+.app-icon:active {
+    transform: scale(0.85);
+    filter: brightness(0.8);
+}
+
+/* Kéo thả Sortable */
+.sortable-ghost {
+    opacity: 0.4;
+}
+.sortable-drag {
+    transform: scale(1.1);
+    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3));
+}

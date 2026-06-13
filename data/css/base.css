@@ -1,0 +1,14 @@
+/* Base styles and scrollbar overrides */
+body {
+    background-color: #000;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    overflow: hidden;
+    user-select: none; /* Chống bôi đen text khi kéo thả */
+    -webkit-user-select: none;
+}
+
+/* Ẩn thanh cuộn */
+::-webkit-scrollbar {
+    display: none;
+}
