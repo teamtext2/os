@@ -9,3 +9,61 @@
 .layer-window.active {
     transform: translateY(0);
 }
+
+/* --- CHẾ ĐỘ ĐA NHIỆM TRỰC TIẾP (LIVE WINDOW MULTITASKING STYLES) --- */
+
+/* Lớp phủ khi kích hoạt chế độ đa nhiệm */
+#app-layer.multitasking-active {
+    z-index: 45 !important;
+    background: rgba(0, 0, 0, 0.35) !important;
+    backdrop-filter: blur(30px) !important;
+    -webkit-backdrop-filter: blur(30px) !important;
+}
+
+/* Container chứa các ứng dụng khi ở chế độ đa nhiệm */
+#app-layer.multitasking-active #iframes-container {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    gap: 28px !important;
+    padding: 0 48px !important;
+    scroll-snap-type: x mandatory !important;
+    background: transparent !important;
+    perspective: 1000px; /* Tạo chiều sâu */
+}
+
+/* Thẻ app-wrapper khi ở chế độ đa nhiệm */
+#app-layer.multitasking-active .app-wrapper {
+    display: flex !important;
+    position: relative !important;
+    width: 260px !important;
+    height: 440px !important;
+    border-radius: 28px !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    overflow: hidden !important;
+    flex-shrink: 0 !important;
+    scroll-snap-align: center !important;
+    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease !important;
+    transform-origin: center center !important;
+    cursor: pointer;
+}
+
+/* Hover phóng to nhẹ card đa nhiệm */
+#app-layer.multitasking-active .app-wrapper:hover {
+    transform: scale(1.03) !important;
+}
+
+/* Chặn click/tương tác vào iframe khi đang ở chế độ đa nhiệm */
+#app-layer.multitasking-active .app-wrapper iframe {
+    pointer-events: none !important;
+}
+
+/* Bo góc cho iframe và header bên trong card đa nhiệm */
+#app-layer.multitasking-active .app-wrapper .app-header {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+}

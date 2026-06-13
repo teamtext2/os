@@ -12,54 +12,95 @@ function updateTaskBadge() {
     }
 }
 
-// Mở một ứng dụng (nạp vào iframe hoặc phục hồi từ nền)
+// Mở một ứng dụng (nạp vào wrapper chứa header riêng và iframe hoặc phục hồi từ nền)
 function openApp(title, url) {
     if (typeof closeTaskSwitcher === 'function') {
-        closeTaskSwitcher(); // Ẩn switcher nếu đang mở
+        closeTaskSwitcher(false); // Ẩn switcher nhưng không quay lại Home screen
     }
 
     const container = document.getElementById('iframes-container');
     const loader = document.getElementById('app-loading');
     
-    // Ẩn tất cả iframe đang chạy
-    Object.values(runningApps).forEach(ifr => ifr.style.display = 'none');
+    // Ẩn tất cả wrapper đang chạy
+    const wrappers = container.querySelectorAll('.app-wrapper');
+    wrappers.forEach(w => w.style.display = 'none');
+
+    // Tắt chế độ đa nhiệm trên app-layer
+    document.getElementById('app-layer').classList.remove('multitasking-active');
 
     if (runningApps[title]) {
         // App đã mở -> Lấy lại ra hiển thị
-        runningApps[title].style.display = 'block';
+        runningApps[title].style.display = 'flex';
     } else {
         // Mở App mới
         loader.style.display = 'flex';
-        const iframe = document.createElement('iframe');
-        iframe.src = url;
-        iframe.className = "w-full h-full border-none absolute inset-0 bg-white";
-        iframe.sandbox = "allow-scripts allow-same-origin allow-forms";
+
+        const wrapper = document.createElement('div');
+        wrapper.className = "app-wrapper absolute inset-0 bg-white flex flex-col overflow-hidden";
+        wrapper.setAttribute('data-app-name', title);
+
+        wrapper.innerHTML = `
+            <div class="app-header w-full h-12 bg-gray-100 flex items-center justify-between px-6 pt-safe pb-2 shrink-0 border-b">
+                <span class="text-black font-semibold text-sm truncate w-1/2">${title}</span>
+                <div class="flex gap-3">
+                    <button onclick="event.stopPropagation(); goHome()" class="bg-gray-200 text-gray-700 rounded-full p-1.5 hover:bg-gray-300 transition">
+                        <i data-lucide="minus" class="w-4 h-4"></i>
+                    </button>
+                    <button onclick="event.stopPropagation(); killApp('${title}')" class="bg-red-100 text-red-600 rounded-full p-1.5 hover:bg-red-200 transition">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="flex-1 relative bg-white">
+                <iframe src="${url}" class="w-full h-full border-none absolute inset-0" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+            </div>
+        `;
+
+        const iframe = wrapper.querySelector('iframe');
         iframe.onload = () => { loader.style.display = 'none'; };
-        
-        container.appendChild(iframe);
-        runningApps[title] = iframe;
+
+        container.appendChild(wrapper);
+        runningApps[title] = wrapper;
         updateTaskBadge();
+
+        if (typeof refreshIcons === 'function') {
+            refreshIcons();
+        }
     }
 
-    document.getElementById('app-layer-title').textContent = title;
     document.getElementById('app-layer').classList.add('active');
     currentActiveApp = title;
 }
 
 // Quay lại màn hình chính
 function goHome() {
-    document.getElementById('app-layer').classList.remove('active');
+    const appLayer = document.getElementById('app-layer');
+    if (appLayer) {
+        appLayer.classList.remove('active');
+        appLayer.classList.remove('multitasking-active');
+    }
     currentActiveApp = null;
+}
+
+// Tắt một ứng dụng cụ thể
+function killApp(title) {
+    if (runningApps[title]) {
+        runningApps[title].remove(); // Xóa khỏi DOM
+        delete runningApps[title]; // Xóa khỏi bộ nhớ
+        updateTaskBadge();
+    }
+    if (currentActiveApp === title) {
+        goHome();
+    }
 }
 
 // Tắt hẳn ứng dụng hiện tại đang mở
 function killCurrentApp() {
-    if (currentActiveApp && runningApps[currentActiveApp]) {
-        runningApps[currentActiveApp].remove(); // Xóa khỏi DOM
-        delete runningApps[currentActiveApp]; // Xóa khỏi bộ nhớ
-        updateTaskBadge();
+    if (currentActiveApp) {
+        killApp(currentActiveApp);
+    } else {
+        goHome();
     }
-    goHome();
 }
 
 // Render lưới ứng dụng lên màn hình chính và thiết lập kéo thả
