@@ -1,0 +1,69 @@
+/* --- HIỆU ỨNG VÀ GIAO DIỆN HOME INDICATOR CAO CẤP --- */
+
+/* Wrapper chứa thanh vuốt */
+.home-indicator-wrapper {
+    height: 24px;
+    width: 100%;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    z-index: 50;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: none; /* Chống cuộn mặc định của trình duyệt */
+}
+
+/* Thanh vuốt chính */
+.home-indicator-bar {
+    width: 140px;
+    height: 5px;
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 99px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.2s ease, transform 0.2s ease, width 0.2s ease;
+}
+
+/* Khi có app đang mở (app-layer active), chuyển sang màu tối để khớp nền app trắng */
+#app-layer.active ~ #home-indicator .home-indicator-bar {
+    background-color: rgba(0, 0, 0, 0.4);
+    box-shadow: none;
+}
+
+/* Khi đang nhấn giữ thanh vuốt */
+.home-indicator-wrapper:active .home-indicator-bar {
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    transform: scaleY(1.2);
+    width: 160px;
+    cursor: grabbing;
+}
+
+#app-layer.active ~ #home-indicator:active .home-indicator-bar {
+    background-color: rgba(0, 0, 0, 0.85) !important;
+}
+
+/* Đảm bảo transform scale xuất phát từ trung tâm dưới cùng của app layer */
+#app-layer {
+    transform-origin: center bottom;
+}
+
+/* Lớp phủ chặn tương tác của iframe khi đang kéo */
+.gesture-blocker {
+    position: absolute;
+    inset: 0;
+    z-index: 9999;
+    background: transparent;
+    pointer-events: auto;
+}
+
+/* Hiệu ứng chuyển cảnh mượt mà khi thả tay (Spring-back/Exit) */
+.gesture-transition {
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), border-radius 0.4s ease !important;
+}
+
+/* Visual feedback khi người dùng kéo đủ xa và giữ để mở đa nhiệm */
+.gesture-holding #app-layer {
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+}

@@ -85,7 +85,7 @@ function renderApps(apps) {
 
         appEl.innerHTML = `
             ${iconHTML}
-            <span class="text-xs text-white text-center w-full truncate drop-shadow-md font-medium px-1">${appName}</span>
+            <span class="app-label text-xs text-white text-center w-full truncate drop-shadow-md font-medium px-1">${appName}</span>
         `;
 
         // Bấm để mở app
@@ -97,12 +97,25 @@ function renderApps(apps) {
         refreshIcons();
     }
 
-    // Kích hoạt tính năng kéo thả SortableJS
+    // Kích hoạt tính năng kéo thả SortableJS (kết nối lưới ứng dụng và dock)
     new Sortable(grid, {
+        group: 'shared-apps-group',
         animation: 150,
-        delay: 200, // Đợi 200ms khi ấn giữ trên điện thoại mới cho phép kéo (tránh nhầm với vuốt cuộn trang)
+        delay: 150, // Nhạy hơn cho trải nghiệm mượt mà
         delayOnTouchOnly: true,
         ghostClass: 'sortable-ghost',
         dragClass: 'sortable-drag'
     });
+
+    const dockGrid = document.getElementById('dock-grid');
+    if (dockGrid) {
+        new Sortable(dockGrid, {
+            group: 'shared-apps-group',
+            animation: 150,
+            delay: 150,
+            delayOnTouchOnly: true,
+            ghostClass: 'sortable-ghost',
+            dragClass: 'sortable-drag'
+        });
+    }
 }

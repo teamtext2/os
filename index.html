@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="data/css/window.css">
     <link rel="stylesheet" href="data/css/dock.css">
     <link rel="stylesheet" href="data/css/apps.css">
+    <link rel="stylesheet" href="data/css/gestures.css">
 </head>
 <body class="bg-black">
 
@@ -52,28 +53,32 @@
             </div>
         </div>
 
-        <!-- Dock dưới cùng (Icon mặc định mới) -->
-        <div class="absolute bottom-6 left-4 right-4 glass-dock rounded-3xl p-3 flex justify-around items-center z-10 drop-shadow-2xl">
+        <!-- Dock dưới cùng (Hỗ trợ kéo thả ứng dụng) -->
+        <div id="dock-grid" class="absolute bottom-6 left-4 right-4 glass-dock rounded-3xl p-3 flex justify-center items-center gap-4 z-10 drop-shadow-2xl min-h-[72px]">
             <div class="app-icon flex flex-col items-center cursor-pointer" onclick="openApp('Camera', 'https://text2.co/app/camera/')">
                 <div class="w-12 h-12 bg-gray-800 rounded-2xl flex items-center justify-center shadow-lg border border-gray-600">
                     <i data-lucide="camera" class="w-6 h-6 text-white"></i>
                 </div>
+                <span class="app-label text-xs text-white text-center w-full truncate drop-shadow-md font-medium px-1 mt-1.5">Camera</span>
             </div>
             <div class="app-icon flex flex-col items-center cursor-pointer" onclick="openApp('Trình duyệt', 'https://bing.com')">
                 <div class="w-12 h-12 bg-blue-500 rounded-2xl flex items-center justify-center shadow-lg border border-blue-400">
                     <i data-lucide="compass" class="w-6 h-6 text-white"></i>
                 </div>
+                <span class="app-label text-xs text-white text-center w-full truncate drop-shadow-md font-medium px-1 mt-1.5">Trình duyệt</span>
             </div>
             <div class="app-icon flex flex-col items-center cursor-pointer" onclick="openTaskSwitcher()">
                 <div class="w-12 h-12 bg-indigo-500 rounded-2xl flex items-center justify-center shadow-lg border border-indigo-400 relative">
                     <i data-lucide="layers" class="w-6 h-6 text-white"></i>
                     <span id="task-badge" class="absolute -top-1 -right-1 bg-red-500 text-xs w-4 h-4 rounded-full flex items-center justify-center hidden">0</span>
                 </div>
+                <span class="app-label text-xs text-white text-center w-full truncate drop-shadow-md font-medium px-1 mt-1.5">Đa nhiệm</span>
             </div>
             <div class="app-icon flex flex-col items-center cursor-pointer" onclick="openSettings()">
                 <div class="w-12 h-12 bg-gray-300 rounded-2xl flex items-center justify-center shadow-lg border border-gray-100">
                     <i data-lucide="settings" class="w-6 h-6 text-gray-800"></i>
                 </div>
+                <span class="app-label text-xs text-white text-center w-full truncate drop-shadow-md font-medium px-1 mt-1.5">Cài đặt</span>
             </div>
         </div>
 
@@ -104,14 +109,12 @@
             <!-- Container chứa các iframes -->
             <div id="iframes-container" class="flex-1 relative bg-white"></div>
             
-            <!-- Home Indicator -->
-            <div class="h-6 w-full bg-white flex items-center justify-center pb-2 cursor-pointer" onclick="goHome()">
-                <div class="w-1/3 h-1.5 bg-black rounded-full"></div>
-            </div>
+            <!-- Đệm khoảng trống ở đáy màn hình thay thế thanh cử chỉ -->
+            <div class="h-6 w-full bg-white shrink-0"></div>
         </div>
 
         <!-- 2. Layer Đa Nhiệm (Task Switcher) -->
-        <div id="task-switcher-layer" class="layer-window absolute inset-0 bg-black/80 backdrop-blur-md flex flex-col overflow-hidden">
+        <div id="task-switcher-layer" class="layer-window absolute inset-0 bg-black/35 backdrop-blur-2xl flex flex-col overflow-hidden">
             <div class="w-full pt-12 pb-4 text-center">
                 <h2 class="text-white font-semibold text-lg">Đa nhiệm</h2>
             </div>
@@ -168,6 +171,11 @@
         <div id="toast" class="absolute top-16 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur text-black px-4 py-2 rounded-full text-xs font-semibold shadow-xl opacity-0 transition-opacity duration-300 pointer-events-none z-50">
             Thông báo
         </div>
+
+        <!-- Global Home Indicator (Thanh kéo cử chỉ hệ thống) -->
+        <div id="home-indicator" class="home-indicator-wrapper absolute bottom-0 left-0 right-0 z-50 pb-2">
+            <div class="home-indicator-bar"></div>
+        </div>
     </div>
 
     <!-- JS Tách Biệt Theo Từng Cụm chức năng -->
@@ -176,5 +184,6 @@
     <script src="data/js/multitasking.js"></script>
     <script src="data/js/settings.js"></script>
     <script src="data/js/system.js"></script>
+    <script src="data/js/gestures.js"></script>
 </body>
 </html>

@@ -1,7 +1,24 @@
 /* Thanh Dock hiệu ứng mờ kính (glassmorphism) */
 .glass-dock {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
-    border-top: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Tự động ẩn nhãn ứng dụng khi kéo vào dock */
+#dock-grid .app-icon .app-label {
+    display: none !important;
+}
+
+/* Tự động thu nhỏ kích thước icon khi kéo vào dock */
+#dock-grid .app-icon > div {
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 12px !important;
+}
+
+/* Đảm bảo flexbox trong dock co giãn mượt mà */
+#dock-grid {
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
 }
