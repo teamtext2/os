@@ -1,5 +1,5 @@
 // --- CẤU HÌNH & TRẠNG THÁI HỆ THỐNG ---
-const DATA_URL = 'https://os.text2.com/app.json';
+const DATA_URL = 'app.json';
 let runningApps = {}; // Quản lý đa nhiệm: { "Tên App": iframeElement }
 let currentActiveApp = null; // Tên app đang mở
 
