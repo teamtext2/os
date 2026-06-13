@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Text2 OS - Mobile Ecosystem</title>
+    <!-- Nạp Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Nạp Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Nạp SortableJS cho tính năng kéo thả -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <style>
+        /* Tối ưu hiệu ứng mượt mà (60fps) */
+        body {
+            background-color: #000;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            overflow: hidden;
+            user-select: none; /* Chống bôi đen text khi kéo thả */
+            -webkit-user-select: none;
+        }
+
+        /* Ẩn thanh cuộn */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Các layer giao diện */
+        .layer-window {
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+            will-change: transform;
+            z-index: 40;
+        }
+
+        .layer-window.active {
+            transform: translateY(0);
+        }
+
+        /* Hiệu ứng bấm icon */
+        .app-icon {
+            transition: transform 0.1s ease, filter 0.2s ease;
+        }
+        .app-icon:active {
+            transform: scale(0.85);
+            filter: brightness(0.8);
+        }
+
+        /* Thanh dock */
+        .glass-dock {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Kéo thả Sortable */
+        .sortable-ghost {
+            opacity: 0.4;
+        }
+        .sortable-drag {
+            transform: scale(1.1);
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3));
+        }
+    </style>
+</head>
+<body class="bg-black">
+
+    <!-- Màn hình chờ tương tác để bật Fullscreen -->
+    <div id="start-overlay" class="fixed inset-0 z-[100] bg-black text-white flex flex-col items-center justify-center cursor-pointer transition-opacity duration-500" onclick="startOS()">
+        <i data-lucide="power" class="w-16 h-16 text-blue-500 animate-pulse mb-6"></i>
+        <h2 class="text-2xl font-bold mb-2">Text2 OS</h2>
+        <p class="text-gray-400 text-sm">Chạm để khởi động</p>
+    </div>
+
+    <!-- Khung Hệ Điều Hành (Tràn viền 100%) -->
+    <div id="os-container" class="relative flex flex-col w-full h-[100dvh] bg-cover bg-center text-white overflow-hidden transition-all duration-500" style="background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop');">
+        
+        <!-- Màn hình khởi động -->
+        <div id="boot-screen" class="absolute inset-0 bg-black z-50 flex flex-col items-center justify-center transition-opacity duration-500">
+            <i data-lucide="cpu" class="w-16 h-16 text-white animate-pulse mb-4"></i>
+            <h1 class="text-2xl font-bold tracking-widest bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">TEXT2 OS</h1>
+            <p class="text-xs text-gray-500 mt-2">Đang nạp hệ sinh thái...</p>
+        </div>
+
+        <!-- Thanh Trạng Thái (Status Bar) -->
+        <div class="w-full flex justify-between items-center px-6 pt-4 pb-2 text-sm font-medium z-10 drop-shadow-md">
+            <span id="clock" class="tracking-wider text-shadow">00:00</span>
+            <div class="flex items-center gap-1.5 drop-shadow-md">
+                <i data-lucide="bar-chart-2" class="w-4 h-4"></i>
+                <i data-lucide="wifi" class="w-4 h-4"></i>
+                <i data-lucide="battery-full" class="w-5 h-5"></i>
+            </div>
+        </div>
+
+        <!-- Lưới Ứng dụng (App Grid) -->
+        <div class="flex-1 px-4 pt-6 overflow-y-auto z-10 pb-24" id="main-screen">
+            <div id="app-grid" class="grid grid-cols-4 gap-x-4 gap-y-6">
+                <!-- App icons sẽ được render ở đây -->
+            </div>
+        </div>
+
+        <!-- Dock dưới cùng (Icon mặc định mới) -->
+        <div class="absolute bottom-6 left-4 right-4 glass-dock rounded-3xl p-3 flex justify-around items-center z-10 drop-shadow-2xl">
+            <div class="app-icon flex flex-col items-center cursor-pointer" onclick="openApp('Camera', 'https://text2.co/app/camera/')">
+                <div class="w-12 h-12 bg-gray-800 rounded-2xl flex items-center justify-center shadow-lg border border-gray-600">
+                    <i data-lucide="camera" class="w-6 h-6 text-white"></i>
+                </div>
+            </div>
+            <div class="app-icon flex flex-col items-center cursor-pointer" onclick="openApp('Trình duyệt', 'https://bing.com')">
+                <div class="w-12 h-12 bg-blue-500 rounded-2xl flex items-center justify-center shadow-lg border border-blue-400">
+                    <i data-lucide="compass" class="w-6 h-6 text-white"></i>
+                </div>
+            </div>
+            <div class="app-icon flex flex-col items-center cursor-pointer" onclick="openTaskSwitcher()">
+                <div class="w-12 h-12 bg-indigo-500 rounded-2xl flex items-center justify-center shadow-lg border border-indigo-400 relative">
+                    <i data-lucide="layers" class="w-6 h-6 text-white"></i>
+                    <span id="task-badge" class="absolute -top-1 -right-1 bg-red-500 text-xs w-4 h-4 rounded-full flex items-center justify-center hidden">0</span>
+                </div>
+            </div>
+            <div class="app-icon flex flex-col items-center cursor-pointer" onclick="openSettings()">
+                <div class="w-12 h-12 bg-gray-300 rounded-2xl flex items-center justify-center shadow-lg border border-gray-100">
+                    <i data-lucide="settings" class="w-6 h-6 text-gray-800"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= CÁC LAYER ỨNG DỤNG ================= -->
+
+        <!-- 1. Layer chứa các Iframe (App đang chạy) -->
+        <div id="app-layer" class="layer-window absolute inset-0 bg-white flex flex-col overflow-hidden">
+            <!-- Header của App -->
+            <div class="w-full h-12 bg-gray-100 flex items-center justify-between px-6 pt-safe pb-2 shrink-0 border-b">
+                <span id="app-layer-title" class="text-black font-semibold text-sm truncate w-1/2">Ứng dụng</span>
+                <div class="flex gap-3">
+                    <button onclick="goHome()" class="bg-gray-200 text-gray-700 rounded-full p-1.5 hover:bg-gray-300 transition">
+                        <i data-lucide="minus" class="w-4 h-4"></i> <!-- Thu nhỏ -->
+                    </button>
+                    <button onclick="killCurrentApp()" class="bg-red-100 text-red-600 rounded-full p-1.5 hover:bg-red-200 transition">
+                        <i data-lucide="x" class="w-4 h-4"></i> <!-- Tắt hẳn -->
+                    </button>
+                </div>
+            </div>
+            
+            <div id="app-loading" class="absolute inset-0 flex items-center justify-center bg-white z-50 pointer-events-none hidden">
+                <div class="flex flex-col items-center gap-2">
+                    <i data-lucide="loader-2" class="w-8 h-8 text-blue-500 animate-spin"></i>
+                    <span class="text-gray-500 text-sm">Đang tải...</span>
+                </div>
+            </div>
+
+            <!-- Container chứa các iframes -->
+            <div id="iframes-container" class="flex-1 relative bg-white"></div>
+            
+            <!-- Home Indicator -->
+            <div class="h-6 w-full bg-white flex items-center justify-center pb-2 cursor-pointer" onclick="goHome()">
+                <div class="w-1/3 h-1.5 bg-black rounded-full"></div>
+            </div>
+        </div>
+
+        <!-- 2. Layer Đa Nhiệm (Task Switcher) -->
+        <div id="task-switcher-layer" class="layer-window absolute inset-0 bg-black/80 backdrop-blur-md flex flex-col overflow-hidden">
+            <div class="w-full pt-12 pb-4 text-center">
+                <h2 class="text-white font-semibold text-lg">Đa nhiệm</h2>
+            </div>
+            <div class="flex-1 flex items-center overflow-x-auto px-6 gap-6 pb-20 snap-x" id="task-list">
+                <!-- Danh sách app đang chạy -->
+            </div>
+            <div class="absolute bottom-8 w-full flex justify-center">
+                <button onclick="closeTaskSwitcher()" class="bg-white/20 backdrop-blur px-6 py-2 rounded-full text-white font-medium">Trở về Home</button>
+            </div>
+        </div>
+
+        <!-- 3. Layer Cài Đặt Hệ Thống (Native UI) -->
+        <div id="settings-layer" class="layer-window absolute inset-0 bg-gray-50 text-black flex flex-col overflow-hidden">
+            <div class="w-full h-14 bg-white flex items-center px-4 border-b shrink-0 shadow-sm">
+                <button onclick="closeSettings()" class="text-blue-500 flex items-center gap-1 font-medium">
+                    <i data-lucide="chevron-left" class="w-5 h-5"></i> Xong
+                </button>
+                <h2 class="flex-1 text-center font-bold text-lg mr-8">Cài đặt</h2>
+            </div>
+            <div class="flex-1 overflow-y-auto p-4 bg-gray-50">
+                <div class="bg-white rounded-2xl shadow-sm p-4 mb-6">
+                    <div class="flex items-center gap-4 mb-2">
+                        <div class="w-16 h-16 bg-gradient-to-tr from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-xl font-bold">T2</div>
+                        <div>
+                            <h3 class="font-bold text-lg">Tài khoản Text2</h3>
+                            <p class="text-sm text-gray-500">Đã kết nối hệ sinh thái</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="font-bold text-gray-700 ml-2 mb-2 uppercase text-xs tracking-wider">Hình nền (Wallpaper)</h3>
+                <div class="grid grid-cols-2 gap-3 mb-6">
+                    <div onclick="changeWallpaper('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop')" class="h-40 rounded-xl bg-cover bg-center cursor-pointer border-2 border-transparent focus:border-blue-500 active:opacity-70" style="background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=500');"></div>
+                    <div onclick="changeWallpaper('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2564&auto=format&fit=crop')" class="h-40 rounded-xl bg-cover bg-center cursor-pointer border-2 border-transparent active:opacity-70" style="background-image: url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=500');"></div>
+                    <div onclick="changeWallpaper('https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?q=80&w=2564&auto=format&fit=crop')" class="h-40 rounded-xl bg-cover bg-center cursor-pointer border-2 border-transparent active:opacity-70" style="background-image: url('https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?q=80&w=500');"></div>
+                    <div onclick="changeWallpaper('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=2564&auto=format&fit=crop')" class="h-40 rounded-xl bg-cover bg-center cursor-pointer border-2 border-transparent active:opacity-70" style="background-image: url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=500');"></div>
+                </div>
+
+                <h3 class="font-bold text-gray-700 ml-2 mb-2 uppercase text-xs tracking-wider">Thông tin hệ thống</h3>
+                <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+                    <div class="px-4 py-3 border-b flex justify-between text-sm">
+                        <span class="text-gray-700">Phiên bản OS</span>
+                        <span class="text-gray-400">2.0 (Full-screen)</span>
+                    </div>
+                    <div class="px-4 py-3 flex justify-between text-sm">
+                        <span class="text-gray-700">Tổng ứng dụng</span>
+                        <span id="total-apps-count" class="text-gray-400">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Thông báo Toast -->
+        <div id="toast" class="absolute top-16 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur text-black px-4 py-2 rounded-full text-xs font-semibold shadow-xl opacity-0 transition-opacity duration-300 pointer-events-none z-50">
+            Thông báo
+        </div>
+    </div>
+
+    <script>
+        // --- CẤU HÌNH & TRẠNG THÁI ---
+        const DATA_URL = 'https://text2.co/app.json';
+        let runningApps = {}; // Quản lý đa nhiệm: { "Tên App": iframeElement }
+        let currentActiveApp = null; // Tên app đang mở
+
+        // Dữ liệu dự phòng
+        const FALLBACK_APPS = [
+            { "t": "Note", "l": "https://text2.co/app/note/", "i": "https://text2.co/app/note/apple-touch-icon.png"},
+            { "t": "Translate", "l": "https://text2.co/app/translate/", "i": "https://text2.co/app/translate/apple-touch-icon.png"},
+            { "t": "QR", "l": "https://text2.co/app/qr/", "i": "https://text2.co/app/qr/apple-touch-icon.png"},
+            { "t": "Grammar", "l": "https://text2.co/app/grammar/", "i": "https://text2.co/app/grammar/apple-touch-icon.png"},
+            { "t": "Chat", "l": "https://text2.co/app/chat/", "i": "https://text2.co/app/chat/apple-touch-icon.png"},
+            { "t": "Calendar", "l": "https://text2.co/app/calendar/", "i": "https://text2.co/app/calendar/apple-touch-icon.png"},
+            { "t": "Image", "l": "https://text2.co/app/img/", "i": "https://text2.co/app/img/apple-touch-icon.png"},
+            { "t": "Weather", "l": "https://text2.co/app/weather/", "i": "https://text2.co/app/weather/apple-touch-icon.png"},
+            { "t": "Doc", "l": "https://text2.co/app/doc/", "i": "https://text2.co/app/doc/apple-touch-icon.png"},
+            { "t": "Generate Image", "l": "https://text2.co/app/generate-img/", "i": "https://text2.co/app/generate-img/apple-touch-icon.png"},
+            { "t": "Mindmap", "l": "https://text2.co/app/mindmap/", "i": "https://text2.co/app/mindmap/apple-touch-icon.png"},
+            { "t": "Chess", "l": "https://text2.co/game/chess/", "i": "https://text2.co/game/chess/apple-touch-icon.png"}
+        ];
+
+        // Khởi tạo hệ thống
+        window.onload = () => {
+            refreshIcons();
+        };
+
+        function refreshIcons() {
+            lucide.createIcons();
+        }
+
+        // Đồng hồ
+        setInterval(() => {
+            document.getElementById('clock').textContent = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+        }, 1000);
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.opacity = '1';
+            setTimeout(() => toast.style.opacity = '0', 3000);
+        }
+
+        // --- KHỞI ĐỘNG (BẬT FULLSCREEN) ---
+        function startOS() {
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) elem.requestFullscreen().catch(e => console.log(e));
+            else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+
+            const startOverlay = document.getElementById('start-overlay');
+            startOverlay.style.opacity = '0';
+            setTimeout(() => startOverlay.style.display = 'none', 500);
+
+            setTimeout(fetchEcosystemApps, 800);
+        }
+
+        // --- FETCH DỮ LIỆU ---
+        async function fetchEcosystemApps() {
+            let appsToRender = FALLBACK_APPS; // Mặc định
+            try {
+                const response = await fetch(DATA_URL);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (Array.isArray(data)) appsToRender = data;
+                    else if (typeof data === 'object') {
+                        for (let key in data) {
+                            if (Array.isArray(data[key])) { appsToRender = data[key]; break; }
+                        }
+                    }
+                    showToast('Đã tải hệ sinh thái Text2!');
+                }
+            } catch (error) {
+                console.warn("Lỗi mạng/CORS, dùng dữ liệu dự phòng.");
+            } finally {
+                document.getElementById('total-apps-count').textContent = appsToRender.length;
+                renderApps(appsToRender);
+                
+                const bootScreen = document.getElementById('boot-screen');
+                bootScreen.style.opacity = '0';
+                setTimeout(() => bootScreen.style.display = 'none', 500);
+            }
+        }
+
+        // --- RENDER & DRAG-DROP GRID ---
+        function renderApps(apps) {
+            const grid = document.getElementById('app-grid');
+            grid.innerHTML = '';
+
+            apps.forEach((app, index) => {
+                const appName = app.t || app.name || `App ${index}`;
+                const appUrl = app.l || app.url || '#';
+                const imageIcon = app.i || app.image || null;
+
+                const appEl = document.createElement('div');
+                appEl.className = 'app-icon flex flex-col items-center gap-1.5 cursor-pointer';
+                
+                let iconHTML = imageIcon 
+                    ? `<div class="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-md shadow-md overflow-hidden flex items-center justify-center border border-white/20">
+                            <img src="${imageIcon}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://via.placeholder.com/150/333333/FFFFFF?text=${appName.charAt(0)}';" draggable="false" />
+                       </div>`
+                    : `<div class="w-14 h-14 bg-gradient-to-tr from-purple-500 to-indigo-500 rounded-2xl flex items-center justify-center shadow-md text-white">
+                            <i data-lucide="box" class="w-7 h-7"></i>
+                       </div>`;
+
+                appEl.innerHTML = `
+                    ${iconHTML}
+                    <span class="text-xs text-white text-center w-full truncate drop-shadow-md font-medium px-1">${appName}</span>
+                `;
+
+                // Bấm để mở
+                appEl.onclick = () => openApp(appName, appUrl);
+                grid.appendChild(appEl);
+            });
+
+            refreshIcons();
+
+            // Kích hoạt tính năng kéo thả
+            new Sortable(grid, {
+                animation: 150,
+                delay: 200, // Đợi 200ms khi ấn giữ trên điện thoại mới cho phép kéo (tránh nhầm với vuốt cuộn trang)
+                delayOnTouchOnly: true,
+                ghostClass: 'sortable-ghost',
+                dragClass: 'sortable-drag'
+            });
+        }
+
+        // --- QUẢN LÝ APP & ĐA NHIỆM ---
+        function updateTaskBadge() {
+            const count = Object.keys(runningApps).length;
+            const badge = document.getElementById('task-badge');
+            if (count > 0) {
+                badge.textContent = count;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        function openApp(title, url) {
+            closeTaskSwitcher(); // Ẩn switcher nếu đang mở
+
+            const container = document.getElementById('iframes-container');
+            const loader = document.getElementById('app-loading');
+            
+            // Ẩn tất cả iframe đang chạy
+            Object.values(runningApps).forEach(ifr => ifr.style.display = 'none');
+
+            if (runningApps[title]) {
+                // App đã mở -> Lấy lại ra
+                runningApps[title].style.display = 'block';
+            } else {
+                // Mở App mới
+                loader.style.display = 'flex';
+                const iframe = document.createElement('iframe');
+                iframe.src = url;
+                iframe.className = "w-full h-full border-none absolute inset-0 bg-white";
+                iframe.sandbox = "allow-scripts allow-same-origin allow-forms";
+                iframe.onload = () => { loader.style.display = 'none'; };
+                
+                container.appendChild(iframe);
+                runningApps[title] = iframe;
+                updateTaskBadge();
+            }
+
+            document.getElementById('app-layer-title').textContent = title;
+            document.getElementById('app-layer').classList.add('active');
+            currentActiveApp = title;
+        }
+
+        function goHome() {
+            document.getElementById('app-layer').classList.remove('active');
+            currentActiveApp = null;
+        }
+
+        function killCurrentApp() {
+            if (currentActiveApp && runningApps[currentActiveApp]) {
+                runningApps[currentActiveApp].remove(); // Xóa DOM
+                delete runningApps[currentActiveApp]; // Xóa khỏi bộ nhớ
+                updateTaskBadge();
+            }
+            goHome();
+        }
+
+        // --- TASK SWITCHER UI ---
+        function openTaskSwitcher() {
+            goHome(); // Đảm bảo app hiện tại thu nhỏ xuống
+            const taskList = document.getElementById('task-list');
+            taskList.innerHTML = '';
+
+            const apps = Object.keys(runningApps);
+            if (apps.length === 0) {
+                taskList.innerHTML = '<p class="text-gray-400 w-full text-center">Không có ứng dụng nào đang chạy</p>';
+            } else {
+                apps.forEach(appName => {
+                    const card = document.createElement('div');
+                    card.className = "shrink-0 w-3/4 max-w-[250px] h-[60vh] bg-white rounded-3xl shadow-2xl flex flex-col overflow-hidden snap-center relative";
+                    
+                    card.innerHTML = `
+                        <div class="h-12 bg-gray-100 flex items-center justify-between px-4">
+                            <span class="font-bold text-black truncate">${appName}</span>
+                            <button onclick="event.stopPropagation(); killAppFromTask('${appName}')" class="text-red-500 bg-red-100 rounded-full p-1"><i data-lucide="x" class="w-4 h-4"></i></button>
+                        </div>
+                        <div class="flex-1 bg-gray-50 flex items-center justify-center p-4">
+                            <i data-lucide="layout-template" class="w-16 h-16 text-gray-300"></i>
+                            <div class="absolute inset-0 bg-transparent"></div> <!-- Khối bắt sự kiện click -->
+                        </div>
+                    `;
+                    // Bấm vào card để mở lại app
+                    card.onclick = () => {
+                        openApp(appName, null); // url null vì iframe đã tồn tại
+                    };
+                    taskList.appendChild(card);
+                });
+                refreshIcons();
+            }
+
+            document.getElementById('task-switcher-layer').classList.add('active');
+        }
+
+        function closeTaskSwitcher() {
+            document.getElementById('task-switcher-layer').classList.remove('active');
+        }
+
+        function killAppFromTask(appName) {
+            if (runningApps[appName]) {
+                runningApps[appName].remove();
+                delete runningApps[appName];
+                updateTaskBadge();
+                openTaskSwitcher(); // Refresh UI
+            }
+        }
+
+        // --- CÀI ĐẶT & HÌNH NỀN ---
+        function openSettings() {
+            document.getElementById('settings-layer').classList.add('active');
+        }
+
+        function closeSettings() {
+            document.getElementById('settings-layer').classList.remove('active');
+        }
+
+        function changeWallpaper(url) {
+            document.getElementById('os-container').style.backgroundImage = `url('${url}')`;
+            showToast('Đã đổi hình nền thành công!');
+        }
+
+    </script>
+</body>
+</html>
