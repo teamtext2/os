@@ -5,13 +5,18 @@
 
 /* Ghi đè hiệu ứng slide mặc định cho app và settings để dùng JS Zoom Open */
 #app-layer.layer-window,
-#settings-layer.layer-window {
+#settings-layer.layer-window,
+#task-switcher-layer.layer-window {
     position: absolute;
     inset: 0;
     transform: none;
     transition: none;
     pointer-events: none;
     display: none;
+}
+
+#app-layer.layer-window,
+#settings-layer.layer-window {
     background: transparent;
 }
 
@@ -19,6 +24,11 @@
 #settings-layer.layer-window.active {
     pointer-events: auto;
     display: flex;
+}
+
+#task-switcher-layer.layer-window.active {
+    pointer-events: auto;
+    display: block;
 }
 
 /* Styling mặc định cho App Wrapper khi chạy */

@@ -48,8 +48,8 @@ function animateZoomOpen(element, iconEl) {
     // Force browser reflow before triggering transition
     element.offsetHeight;
 
-    // Expand to full screen with a smooth spring-back cubic bezier curves
-    element.style.transition = 'transform 0.48s cubic-bezier(0.34, 1.42, 0.64, 1), opacity 0.35s ease, border-radius 0.48s ease';
+    // Expand to full screen with an ultra-smooth ease-out cubic bezier curve
+    element.style.transition = 'transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-radius 0.45s cubic-bezier(0.16, 1, 0.3, 1)';
     element.style.transform = 'translate3d(0, 0, 0) scale3d(1, 1, 1)';
     element.style.borderRadius = '24px'; // Modern flagship phone rounded look
     element.style.opacity = '1';
@@ -89,7 +89,7 @@ function animateZoomClose(element, callback) {
     const scaleY = iconHeight / winH;
 
     // Smoothly scale back to icon bounds
-    element.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.35s ease, border-radius 0.4s ease';
+    element.style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-radius 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
     element.style.transform = `translate3d(${iconLeft}px, ${iconTop}px, 0) scale3d(${scaleX}, ${scaleY}, 1)`;
     element.style.borderRadius = '24px';
     element.style.opacity = '0';
@@ -178,10 +178,12 @@ function openApp(title, url, event) {
     });
 
     let wrapper = runningApps[title];
+    let isNew = false;
     if (wrapper) {
         // App is already running -> restore visibility
         wrapper.style.display = 'flex';
     } else {
+        isNew = true;
         // Open new App process
         loader.style.display = 'flex';
 
@@ -202,12 +204,9 @@ function openApp(title, url, event) {
                 </div>
             </div>
             <div class="flex-1 relative bg-white">
-                <iframe src="${url}" class="w-full h-full border-none absolute inset-0" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+                <iframe src="about:blank" class="w-full h-full border-none absolute inset-0" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
             </div>
         `;
-
-        const iframe = wrapper.querySelector('iframe');
-        iframe.onload = () => { loader.style.display = 'none'; };
 
         container.appendChild(wrapper);
         runningApps[title] = wrapper;
@@ -221,6 +220,21 @@ function openApp(title, url, event) {
     document.getElementById('app-layer').classList.add('active');
     animateZoomOpen(wrapper, iconEl);
     currentActiveApp = title;
+
+    // Defer loading the iframe src to keep the zoom-in transition perfectly fluid
+    if (isNew) {
+        setTimeout(() => {
+            const iframe = wrapper.querySelector('iframe');
+            if (iframe) {
+                iframe.onload = () => {
+                    loader.style.display = 'none';
+                };
+                iframe.src = url;
+            }
+        }, 380);
+    } else {
+        loader.style.display = 'none';
+    }
 }
 
 // Return to home screen

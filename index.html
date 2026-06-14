@@ -106,7 +106,12 @@
         </div>
 
         <!-- 2. Multitasking Switcher Layer (Live Previews) -->
-        <div id="task-switcher-layer" class="layer-window absolute inset-0 bg-black/35 backdrop-blur-2xl pointer-events-none"></div>
+        <div id="task-switcher-layer" class="layer-window absolute inset-0 bg-black/35 backdrop-blur-2xl pointer-events-none">
+            <!-- Visual Close Switcher Button -->
+            <button onclick="closeTaskSwitcher()" class="absolute top-6 right-6 w-10 h-10 rounded-full bg-white/25 hover:bg-white/35 backdrop-blur flex items-center justify-center text-white transition pointer-events-auto shadow-lg border border-white/20 active:scale-90 z-50">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
 
         <!-- 3. System Settings Layer (Native UI) -->
         <div id="settings-layer" class="layer-window absolute inset-0 bg-gray-50 text-black flex flex-col overflow-hidden">
