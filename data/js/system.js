@@ -1,26 +1,26 @@
-// --- KHỞI TẠO & HỆ THỐNG CHUNG (SYSTEM INITIALIZATION & UTILITIES) ---
+// --- SYSTEM INITIALIZATION & UTILITIES ---
 
-// Khởi tạo hệ thống khi trang được tải xong
+// Initialize system when page has loaded
 window.onload = () => {
     refreshIcons();
 };
 
-// Cập nhật biểu tượng của Lucide Icons
+// Refresh Lucide Icons
 function refreshIcons() {
     if (window.lucide && typeof lucide.createIcons === 'function') {
         lucide.createIcons();
     }
 }
 
-// Đồng hồ cập nhật mỗi giây
+// Clock updates every second
 setInterval(() => {
     const clockEl = document.getElementById('clock');
     if (clockEl) {
-        clockEl.textContent = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+        clockEl.textContent = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
     }
 }, 1000);
 
-// Hiển thị thông báo Toast
+// Display toast notifications
 function showToast(message) {
     const toast = document.getElementById('toast');
     if (toast) {
@@ -30,7 +30,7 @@ function showToast(message) {
     }
 }
 
-// Khởi động hệ điều hành và yêu cầu Fullscreen
+// Boot the operating system and request full screen
 function startOS() {
     const elem = document.documentElement;
     if (elem.requestFullscreen) {
@@ -48,9 +48,17 @@ function startOS() {
     setTimeout(fetchEcosystemApps, 800);
 }
 
-// Tải danh sách ứng dụng từ server
+// Load application ecosystem from server
 async function fetchEcosystemApps() {
-    let appsToRender = FALLBACK_APPS; // Mặc định từ config.js
+    let appsToRender = FALLBACK_APPS; // Default from config.js
+
+    // Check if we are running under file:// protocol to avoid console CORS errors
+    if (window.location.protocol === 'file:') {
+        console.log("Running locally on file:// protocol. Fetching app.json is disabled to prevent CORS errors. Loading fallback apps.");
+        proceedWithApps(appsToRender);
+        return;
+    }
+
     try {
         const response = await fetch(DATA_URL);
         if (response.ok) {
@@ -65,24 +73,29 @@ async function fetchEcosystemApps() {
                     }
                 }
             }
-            showToast('Đã tải hệ sinh thái Text2!');
+            showToast('Loaded Text2 ecosystem!');
         }
     } catch (error) {
-        console.warn("Lỗi mạng/CORS hoặc sự cố tải dữ liệu API, sử dụng dữ liệu dự phòng.");
+        console.warn("Network/CORS error or API data loading issue, using fallback data.");
     } finally {
-        const totalCountEl = document.getElementById('total-apps-count');
-        if (totalCountEl) {
-            totalCountEl.textContent = appsToRender.length;
-        }
-        
-        if (typeof renderApps === 'function') {
-            renderApps(appsToRender);
-        }
-        
-        const bootScreen = document.getElementById('boot-screen');
-        if (bootScreen) {
-            bootScreen.style.opacity = '0';
-            setTimeout(() => bootScreen.style.display = 'none', 500);
-        }
+        proceedWithApps(appsToRender);
     }
 }
+
+function proceedWithApps(appsToRender) {
+    const totalCountEl = document.getElementById('total-apps-count');
+    if (totalCountEl) {
+        totalCountEl.textContent = appsToRender.length;
+    }
+    
+    if (typeof renderApps === 'function') {
+        renderApps(appsToRender);
+    }
+    
+    const bootScreen = document.getElementById('boot-screen');
+    if (bootScreen) {
+        bootScreen.style.opacity = '0';
+        setTimeout(() => bootScreen.style.display = 'none', 500);
+    }
+}
+

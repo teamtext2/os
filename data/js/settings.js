@@ -1,11 +1,11 @@
-// --- CÀI ĐẶT & THAY ĐỔI HÌNH NỀN (SETTINGS & WALLPAPER) ---
+// --- SETTINGS & WALLPAPER MANAGEMENT ---
 
-// Mở giao diện Cài đặt
+// Open Settings
 function openSettings(event) {
     const layer = document.getElementById('settings-layer');
     if (!layer) return;
 
-    // Tìm icon Settings vừa click để xác định vị trí zoom
+    // Find clicked Settings icon to locate zoom origin
     let iconEl = null;
     if (event) {
         iconEl = event.currentTarget || event.target;
@@ -19,7 +19,7 @@ function openSettings(event) {
     }
 }
 
-// Đóng giao diện Cài đặt
+// Close Settings
 function closeSettings() {
     const layer = document.getElementById('settings-layer');
     if (!layer) return;
@@ -33,20 +33,21 @@ function closeSettings() {
     }
 }
 
-// Thay đổi hình nền hệ thống
+// Change system wallpaper
 function changeWallpaper(url) {
     const container = document.getElementById('os-container');
     if (container) {
-        // Cập nhật ảnh kết cấu (texture) của WebGL nền
+        // Update WebGL background texture
         if (typeof window.updateWallpaperTexture === 'function') {
             window.updateWallpaperTexture(url);
-            container.style.backgroundImage = 'none'; // Xóa ảnh nền tĩnh để tối ưu hiệu năng
+            container.style.backgroundImage = 'none'; // Clear static background image to optimize rendering performance
         } else {
             container.style.backgroundImage = `url('${url}')`;
         }
     }
 
     if (typeof showToast === 'function') {
-        showToast('Đã đổi hình nền thành công!');
+        showToast('Wallpaper changed successfully!');
     }
 }
+

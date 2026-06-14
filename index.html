@@ -1,46 +1,47 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Text2 OS - Mobile Ecosystem</title>
     <meta name="robots" content="noindex, nofollow">
-    <!-- Nạp Tailwind CSS -->
+    <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Nạp Lucide Icons -->
+    <!-- Load Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Nạp SortableJS cho tính năng kéo thả -->
+    <!-- Load SortableJS for drag-and-drop -->
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
-    <!-- CSS Tách Biệt Theo Từng Cụm -->
+    <!-- CSS Modules -->
     <link rel="stylesheet" href="data/css/base.css">
     <link rel="stylesheet" href="data/css/window.css">
     <link rel="stylesheet" href="data/css/dock.css">
     <link rel="stylesheet" href="data/css/apps.css">
     <link rel="stylesheet" href="data/css/gestures.css">
+    <link rel="stylesheet" href="data/css/settings.css">
 </head>
 <body class="bg-black">
 
-    <!-- Màn hình chờ tương tác để bật Fullscreen -->
+    <!-- Interactive Boot Overlay -->
     <div id="start-overlay" class="fixed inset-0 z-[100] bg-black text-white flex flex-col items-center justify-center cursor-pointer transition-opacity duration-500" onclick="startOS()">
         <i data-lucide="power" class="w-16 h-16 text-blue-500 animate-pulse mb-6"></i>
         <h2 class="text-2xl font-bold mb-2">Text2 OS</h2>
-        <p class="text-gray-400 text-sm">Chạm để khởi động</p>
+        <p class="text-gray-400 text-sm">Tap to Boot</p>
     </div>
 
-    <!-- Khung Hệ Điều Hành (Tràn viền 100%) -->
+    <!-- Operating System Container -->
     <div id="os-container" class="relative flex flex-col w-full h-[100dvh] bg-cover bg-center text-white overflow-hidden transition-all duration-500" style="background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop');">
         
         <!-- WebGL Ripple Background Canvas -->
         <canvas id="webgl-canvas" class="absolute inset-0 w-full h-full z-0 pointer-events-none"></canvas>
 
-        <!-- Màn hình khởi động -->
+        <!-- Boot Screen -->
         <div id="boot-screen" class="absolute inset-0 bg-black z-50 flex flex-col items-center justify-center transition-opacity duration-500">
             <img src="https://text2.co/favicon.ico" class="w-16 h-16 object-contain animate-pulse mb-4" alt="Logo">
             <h1 class="text-2xl font-bold tracking-widest bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">TEXT2 OS</h1>
-            <p class="text-xs text-gray-500 mt-2">Khởi động hệ điều hành...</p>
+            <p class="text-xs text-gray-500 mt-2">Booting operating system...</p>
         </div>
 
-        <!-- Thanh Trạng Thái (Status Bar) -->
+        <!-- Status Bar -->
         <div class="w-full flex justify-between items-center px-6 pt-4 pb-2 text-sm font-medium z-10 drop-shadow-md">
             <span id="clock" class="tracking-wider text-shadow">00:00</span>
             <div class="flex items-center gap-1.5 drop-shadow-md">
@@ -50,14 +51,14 @@
             </div>
         </div>
 
-        <!-- Lưới Ứng dụng (App Grid) -->
+        <!-- App Grid -->
         <div class="flex-1 px-4 pt-6 overflow-y-auto z-10 pb-24" id="main-screen">
             <div id="app-grid" class="grid grid-cols-4 gap-x-4 gap-y-6">
-                <!-- App icons sẽ được render ở đây -->
+                <!-- App icons will be rendered here -->
             </div>
         </div>
 
-        <!-- Dock dưới cùng (Hỗ trợ kéo thả ứng dụng) -->
+        <!-- Bottom Dock -->
         <div id="dock-grid" class="absolute bottom-6 left-4 right-4 glass-dock rounded-3xl p-3 flex justify-center items-center gap-4 z-10 drop-shadow-2xl min-h-[72px]">
             <div class="app-icon flex flex-col items-center cursor-pointer" onclick="openApp('Camera', 'https://text2.co/app/camera/', event)">
                 <div class="w-12 h-12 bg-gray-800 rounded-2xl flex items-center justify-center shadow-lg border border-gray-600">
@@ -65,105 +66,509 @@
                 </div>
                 <span class="app-label text-xs text-white text-center w-full truncate drop-shadow-md font-medium px-1 mt-1.5">Camera</span>
             </div>
-            <div class="app-icon flex flex-col items-center cursor-pointer" onclick="openApp('Trình duyệt', 'https://bing.com', event)">
+            <div class="app-icon flex flex-col items-center cursor-pointer" onclick="openApp('Browser', 'https://bing.com', event)">
                 <div class="w-12 h-12 bg-blue-500 rounded-2xl flex items-center justify-center shadow-lg border border-blue-400">
                     <i data-lucide="compass" class="w-6 h-6 text-white"></i>
                 </div>
-                <span class="app-label text-xs text-white text-center w-full truncate drop-shadow-md font-medium px-1 mt-1.5">Trình duyệt</span>
+                <span class="app-label text-xs text-white text-center w-full truncate drop-shadow-md font-medium px-1 mt-1.5">Browser</span>
             </div>
             <div class="app-icon flex flex-col items-center cursor-pointer" onclick="openTaskSwitcher()">
                 <div class="w-12 h-12 bg-indigo-500 rounded-2xl flex items-center justify-center shadow-lg border border-indigo-400 relative">
                     <i data-lucide="layers" class="w-6 h-6 text-white"></i>
                     <span id="task-badge" class="absolute -top-1 -right-1 bg-red-500 text-xs w-4 h-4 rounded-full flex items-center justify-center hidden">0</span>
                 </div>
-                <span class="app-label text-xs text-white text-center w-full truncate drop-shadow-md font-medium px-1 mt-1.5">Đa nhiệm</span>
+                <span class="app-label text-xs text-white text-center w-full truncate drop-shadow-md font-medium px-1 mt-1.5">Multitasking</span>
             </div>
             <div class="app-icon flex flex-col items-center cursor-pointer" onclick="openSettings(event)">
                 <div class="w-12 h-12 bg-gray-300 rounded-2xl flex items-center justify-center shadow-lg border border-gray-100">
                     <i data-lucide="settings" class="w-6 h-6 text-gray-800"></i>
                 </div>
-                <span class="app-label text-xs text-white text-center w-full truncate drop-shadow-md font-medium px-1 mt-1.5">Cài đặt</span>
+                <span class="app-label text-xs text-white text-center w-full truncate drop-shadow-md font-medium px-1 mt-1.5">Settings</span>
             </div>
         </div>
 
-        <!-- ================= CÁC LAYER ỨNG DỤNG ================= -->
+        <!-- ================= APPLICATION LAYERS ================= -->
 
-        <!-- 1. Layer chứa các Iframe (App đang chạy) -->
+        <!-- 1. Iframe Active Layer (Running Apps) -->
         <div id="app-layer" class="layer-window absolute inset-0 bg-transparent flex flex-col overflow-hidden">
             <div id="app-loading" class="absolute inset-0 flex items-center justify-center bg-white z-50 pointer-events-none hidden">
                 <div class="flex flex-col items-center gap-2">
                     <i data-lucide="loader-2" class="w-8 h-8 text-blue-500 animate-spin"></i>
-                    <span class="text-gray-500 text-sm">Đang tải...</span>
+                    <span class="text-gray-500 text-sm">Loading...</span>
                 </div>
             </div>
 
-            <!-- Container chứa các iframes -->
+            <!-- Iframe container -->
             <div id="iframes-container" class="flex-1 relative bg-transparent"></div>
             
-            <!-- Đệm khoảng trống ở đáy màn hình thay thế thanh cử chỉ -->
+            <!-- Bottom safe area padding spacer -->
             <div class="h-6 w-full bg-white shrink-0"></div>
         </div>
 
-        <!-- 2. Layer Đa Nhiệm (Nền mờ Đa nhiệm) -->
+        <!-- 2. Multitasking Switcher Layer (Live Previews) -->
         <div id="task-switcher-layer" class="layer-window absolute inset-0 bg-black/35 backdrop-blur-2xl pointer-events-none"></div>
 
-        <!-- 3. Layer Cài Đặt Hệ Thống (Native UI) -->
+        <!-- 3. System Settings Layer (Native UI) -->
         <div id="settings-layer" class="layer-window absolute inset-0 bg-gray-50 text-black flex flex-col overflow-hidden">
-            <div class="w-full h-14 bg-white flex items-center px-4 border-b shrink-0 shadow-sm">
-                <button onclick="closeSettings()" class="text-blue-500 flex items-center gap-1 font-medium">
-                    <i data-lucide="chevron-left" class="w-5 h-5"></i> Xong
-                </button>
-                <h2 class="flex-1 text-center font-bold text-lg mr-8">Cài đặt</h2>
-            </div>
-            <div class="flex-1 overflow-y-auto p-4 bg-gray-50">
-                <div class="bg-white rounded-2xl shadow-sm p-4 mb-6">
-                    <div class="flex items-center gap-4 mb-2">
-                        <div class="w-16 h-16 bg-gradient-to-tr from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-xl font-bold">T2</div>
-                        <div>
-                            <h3 class="font-bold text-lg">Tài khoản Text2</h3>
-                            <p class="text-sm text-gray-500">Đã kết nối hệ sinh thái</p>
+            <div class="settings-container w-full h-full relative">
+                
+                <!-- Main Settings Page -->
+                <div id="settings-main-page" class="settings-page">
+                    <div class="header-bar w-full h-14 bg-white flex items-center px-4 border-b shrink-0 shadow-sm border-b-gray-200">
+                        <button onclick="closeSettings()" class="text-blue-500 flex items-center gap-1 font-medium">
+                            <i data-lucide="chevron-left" class="w-5 h-5"></i> Done
+                        </button>
+                        <h2 class="flex-1 text-center font-bold text-lg mr-8">Settings</h2>
+                    </div>
+                    
+                    <div class="flex-1 overflow-y-auto p-4 bg-gray-50">
+                        <!-- User Card -->
+                        <div class="settings-card bg-white rounded-2xl shadow-sm p-4 mb-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-14 h-14 bg-gradient-to-tr from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-xl font-bold">T2</div>
+                                <div>
+                                    <h3 class="font-bold text-base">Text2 Account</h3>
+                                    <p class="text-xs text-gray-500">Connected to ecosystem</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- General Settings List -->
+                        <div class="bg-white rounded-2xl shadow-sm overflow-hidden mb-6 settings-card">
+                            <!-- Wi-Fi -->
+                            <div onclick="openSettingsSubpage('settings-wifi-page')" class="px-4 py-3 border-b flex justify-between items-center cursor-pointer hover:bg-gray-50 active:bg-gray-100 transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-blue-500 flex items-center justify-center text-white">
+                                        <i data-lucide="wifi" class="w-5 h-5"></i>
+                                    </div>
+                                    <span class="font-medium text-sm">Wi-Fi</span>
+                                </div>
+                                <div class="flex items-center gap-1.5 text-gray-400 text-sm">
+                                    <span id="setting-wifi-summary" class="text-xs text-gray-400">Connected</span>
+                                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                                </div>
+                            </div>
+                            <!-- Bluetooth -->
+                            <div onclick="openSettingsSubpage('settings-bluetooth-page')" class="px-4 py-3 border-b flex justify-between items-center cursor-pointer hover:bg-gray-50 active:bg-gray-100 transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white">
+                                        <i data-lucide="bluetooth" class="w-5 h-5"></i>
+                                    </div>
+                                    <span class="font-medium text-sm">Bluetooth</span>
+                                </div>
+                                <div class="flex items-center gap-1.5 text-gray-400 text-sm">
+                                    <span id="setting-bluetooth-summary" class="text-xs text-gray-400">On</span>
+                                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                                </div>
+                            </div>
+                            <!-- Display & Brightness -->
+                            <div onclick="openSettingsSubpage('settings-display-page')" class="px-4 py-3 border-b flex justify-between items-center cursor-pointer hover:bg-gray-50 active:bg-gray-100 transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-orange-400 flex items-center justify-center text-white">
+                                        <i data-lucide="sun" class="w-5 h-5"></i>
+                                    </div>
+                                    <span class="font-medium text-sm">Display & Brightness</span>
+                                </div>
+                                <div class="flex items-center gap-1.5 text-gray-400 text-sm">
+                                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                                </div>
+                            </div>
+                            <!-- WebGL Custom Engine -->
+                            <div onclick="openSettingsSubpage('settings-webgl-page')" class="px-4 py-3 border-b flex justify-between items-center cursor-pointer hover:bg-gray-50 active:bg-gray-100 transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-indigo-500 flex items-center justify-center text-white">
+                                        <i data-lucide="sparkles" class="w-5 h-5"></i>
+                                    </div>
+                                    <span class="font-medium text-sm">WebGL Ripple Engine</span>
+                                </div>
+                                <div class="flex items-center gap-1.5 text-gray-400 text-sm">
+                                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                                </div>
+                            </div>
+                            <!-- Wallpaper -->
+                            <div onclick="openSettingsSubpage('settings-wallpaper-page')" class="px-4 py-3 border-b flex justify-between items-center cursor-pointer hover:bg-gray-50 active:bg-gray-100 transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-purple-500 flex items-center justify-center text-white">
+                                        <i data-lucide="image" class="w-5 h-5"></i>
+                                    </div>
+                                    <span class="font-medium text-sm">Wallpaper</span>
+                                </div>
+                                <div class="flex items-center gap-1.5 text-gray-400 text-sm">
+                                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                                </div>
+                            </div>
+                            <!-- Battery -->
+                            <div onclick="openSettingsSubpage('settings-battery-page')" class="px-4 py-3 border-b flex justify-between items-center cursor-pointer hover:bg-gray-50 active:bg-gray-100 transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-green-500 flex items-center justify-center text-white">
+                                        <i data-lucide="battery" class="w-5 h-5"></i>
+                                    </div>
+                                    <span class="font-medium text-sm">Battery</span>
+                                </div>
+                                <div class="flex items-center gap-1.5 text-gray-400 text-sm">
+                                    <span id="setting-battery-level" class="text-xs text-gray-400">85%</span>
+                                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                                </div>
+                            </div>
+                            <!-- About -->
+                            <div onclick="openSettingsSubpage('settings-about-page')" class="px-4 py-3 flex justify-between items-center cursor-pointer hover:bg-gray-50 active:bg-gray-100 transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-gray-500 flex items-center justify-center text-white">
+                                        <i data-lucide="info" class="w-5 h-5"></i>
+                                    </div>
+                                    <span class="font-medium text-sm">About</span>
+                                </div>
+                                <div class="flex items-center gap-1.5 text-gray-400 text-sm">
+                                    <span id="setting-device-name-display" class="text-xs text-gray-400">Text2 Phone 15</span>
+                                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <h3 class="font-bold text-gray-700 ml-2 mb-2 uppercase text-xs tracking-wider">Hình nền (Wallpaper)</h3>
-                <div class="grid grid-cols-2 gap-3 mb-6">
-                    <div onclick="changeWallpaper('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop')" class="h-40 rounded-xl bg-cover bg-center cursor-pointer border-2 border-transparent focus:border-blue-500 active:opacity-70" style="background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=500');"></div>
-                    <div onclick="changeWallpaper('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2564&auto=format&fit=crop')" class="h-40 rounded-xl bg-cover bg-center cursor-pointer border-2 border-transparent active:opacity-70" style="background-image: url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=500');"></div>
-                    <div onclick="changeWallpaper('https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?q=80&w=2564&auto=format&fit=crop')" class="h-40 rounded-xl bg-cover bg-center cursor-pointer border-2 border-transparent active:opacity-70" style="background-image: url('https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?q=80&w=500');"></div>
-                    <div onclick="changeWallpaper('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=2564&auto=format&fit=crop')" class="h-40 rounded-xl bg-cover bg-center cursor-pointer border-2 border-transparent active:opacity-70" style="background-image: url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=500');"></div>
+                <!-- Wi-Fi Subpage -->
+                <div id="settings-wifi-page" class="settings-page settings-subpage">
+                    <div class="header-bar w-full h-14 bg-white flex items-center px-4 border-b shrink-0 shadow-sm border-b-gray-200">
+                        <button onclick="closeSettingsSubpage('settings-wifi-page')" class="text-blue-500 flex items-center gap-1 font-medium">
+                            <i data-lucide="chevron-left" class="w-5 h-5"></i> Back
+                        </button>
+                        <h2 class="flex-1 text-center font-bold text-lg mr-8">Wi-Fi</h2>
+                    </div>
+                    <div class="flex-1 overflow-y-auto p-4 bg-gray-50">
+                        <div class="settings-card bg-white rounded-2xl shadow-sm p-4 mb-6 flex justify-between items-center">
+                            <div>
+                                <h4 class="font-bold text-sm">Wi-Fi Connection</h4>
+                                <p class="text-xs text-gray-500">Enable or disable wireless ecosystem networking</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="setting-wifi-toggle" checked onchange="toggleWifi(this.checked)">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <h3 class="font-bold text-gray-500 ml-2 mb-2 uppercase text-xs tracking-wider">Networks</h3>
+                        <div id="settings-wifi-list" class="bg-white rounded-2xl shadow-sm overflow-hidden settings-card">
+                            <div onclick="connectWifi('Text2_HighSpeed_5G', this)" class="network-item px-4 py-3 border-b flex justify-between items-center cursor-pointer hover:bg-gray-50">
+                                <div class="flex items-center gap-3">
+                                    <i data-lucide="wifi" class="w-4 h-4 text-blue-500"></i>
+                                    <span class="text-sm font-medium">Text2_HighSpeed_5G</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-xs text-gray-400">
+                                    <span class="network-status">Connected</span>
+                                    <i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin text-blue-500 connection-spinner hidden"></i>
+                                    <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+                                </div>
+                            </div>
+                            <div onclick="connectWifi('Coffee_Shop_Free', this)" class="network-item px-4 py-3 border-b flex justify-between items-center cursor-pointer hover:bg-gray-50">
+                                <div class="flex items-center gap-3">
+                                    <i data-lucide="wifi" class="w-4 h-4 text-gray-400"></i>
+                                    <span class="text-sm font-medium">Coffee_Shop_Free</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-xs text-gray-400">
+                                    <span class="network-status">Secured</span>
+                                    <i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin text-blue-500 connection-spinner hidden"></i>
+                                    <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+                                </div>
+                            </div>
+                            <div onclick="connectWifi('Home_Network_WiFi', this)" class="network-item px-4 py-3 border-b flex justify-between items-center cursor-pointer hover:bg-gray-50">
+                                <div class="flex items-center gap-3">
+                                    <i data-lucide="wifi" class="w-4 h-4 text-gray-400"></i>
+                                    <span class="text-sm font-medium">Home_Network_WiFi</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-xs text-gray-400">
+                                    <span class="network-status">Secured</span>
+                                    <i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin text-blue-500 connection-spinner hidden"></i>
+                                    <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+                                </div>
+                            </div>
+                            <div onclick="connectWifi('Neighbor_WiFi', this)" class="network-item px-4 py-3 flex justify-between items-center cursor-pointer hover:bg-gray-50">
+                                <div class="flex items-center gap-3">
+                                    <i data-lucide="wifi" class="w-4 h-4 text-gray-400"></i>
+                                    <span class="text-sm font-medium">Neighbor_WiFi</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-xs text-gray-400">
+                                    <span class="network-status">Secured</span>
+                                    <i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin text-blue-500 connection-spinner hidden"></i>
+                                    <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <h3 class="font-bold text-gray-700 ml-2 mb-2 uppercase text-xs tracking-wider">Thông tin hệ thống</h3>
-                <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
-                    <div class="px-4 py-3 border-b flex justify-between text-sm">
-                        <span class="text-gray-700">Phiên bản OS</span>
-                        <span class="text-gray-400">2.0 (Full-screen)</span>
+                <!-- Bluetooth Subpage -->
+                <div id="settings-bluetooth-page" class="settings-page settings-subpage">
+                    <div class="header-bar w-full h-14 bg-white flex items-center px-4 border-b shrink-0 shadow-sm border-b-gray-200">
+                        <button onclick="closeSettingsSubpage('settings-bluetooth-page')" class="text-blue-500 flex items-center gap-1 font-medium">
+                            <i data-lucide="chevron-left" class="w-5 h-5"></i> Back
+                        </button>
+                        <h2 class="flex-1 text-center font-bold text-lg mr-8">Bluetooth</h2>
                     </div>
-                    <div class="px-4 py-3 flex justify-between text-sm">
-                        <span class="text-gray-700">Tổng ứng dụng</span>
-                        <span id="total-apps-count" class="text-gray-400">0</span>
+                    <div class="flex-1 overflow-y-auto p-4 bg-gray-50">
+                        <div class="settings-card bg-white rounded-2xl shadow-sm p-4 mb-6 flex justify-between items-center">
+                            <div>
+                                <h4 class="font-bold text-sm">Bluetooth Connectivity</h4>
+                                <p class="text-xs text-gray-500">Pair and communicate with external modules</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="setting-bluetooth-toggle" checked onchange="toggleBluetooth(this.checked)">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <h3 class="font-bold text-gray-500 ml-2 mb-2 uppercase text-xs tracking-wider">Devices</h3>
+                        <div id="settings-bluetooth-list" class="bg-white rounded-2xl shadow-sm overflow-hidden settings-card">
+                            <div onclick="connectBluetooth('Text2 Pods Pro', this)" class="px-4 py-3 border-b flex justify-between items-center cursor-pointer hover:bg-gray-50">
+                                <div class="flex items-center gap-3">
+                                    <i data-lucide="headphones" class="w-4 h-4 text-blue-500"></i>
+                                    <span class="text-sm font-medium">Text2 Pods Pro</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-xs text-gray-400">
+                                    <span class="bt-status">Connected</span>
+                                    <i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin text-blue-500 bt-spinner hidden"></i>
+                                </div>
+                            </div>
+                            <div onclick="connectBluetooth('Smart Keyboard', this)" class="px-4 py-3 border-b flex justify-between items-center cursor-pointer hover:bg-gray-50">
+                                <div class="flex items-center gap-3">
+                                    <i data-lucide="keyboard" class="w-4 h-4 text-gray-400"></i>
+                                    <span class="text-sm font-medium">Smart Keyboard</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-xs text-gray-400">
+                                    <span class="bt-status">Saved</span>
+                                    <i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin text-blue-500 bt-spinner hidden"></i>
+                                </div>
+                            </div>
+                            <div onclick="connectBluetooth('Sony WH-1000XM4', this)" class="px-4 py-3 flex justify-between items-center cursor-pointer hover:bg-gray-50">
+                                <div class="flex items-center gap-3">
+                                    <i data-lucide="headphones" class="w-4 h-4 text-gray-400"></i>
+                                    <span class="text-sm font-medium">Sony WH-1000XM4</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-xs text-gray-400">
+                                    <span class="bt-status">Not Connected</span>
+                                    <i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin text-blue-500 bt-spinner hidden"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Display & Brightness Subpage -->
+                <div id="settings-display-page" class="settings-page settings-subpage">
+                    <div class="header-bar w-full h-14 bg-white flex items-center px-4 border-b shrink-0 shadow-sm border-b-gray-200">
+                        <button onclick="closeSettingsSubpage('settings-display-page')" class="text-blue-500 flex items-center gap-1 font-medium">
+                            <i data-lucide="chevron-left" class="w-5 h-5"></i> Back
+                        </button>
+                        <h2 class="flex-1 text-center font-bold text-lg mr-8">Display & Brightness</h2>
+                    </div>
+                    <div class="flex-1 overflow-y-auto p-4 bg-gray-50">
+                        <div class="settings-card bg-white rounded-2xl shadow-sm p-4 mb-6">
+                            <div class="flex justify-between items-center mb-3">
+                                <h4 class="font-bold text-sm">System Brightness</h4>
+                                <span id="setting-brightness-val" class="text-xs font-semibold text-blue-500">85%</span>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <i data-lucide="sun-dim" class="w-4 h-4 text-gray-400"></i>
+                                <input type="range" id="setting-brightness-slider" min="10" max="100" class="custom-range flex-1">
+                                <i data-lucide="sun" class="w-5 h-5 text-gray-600"></i>
+                            </div>
+                        </div>
+
+                        <div class="settings-card bg-white rounded-2xl shadow-sm p-4 mb-6 flex justify-between items-center">
+                            <div>
+                                <h4 class="font-bold text-sm">Dark Theme</h4>
+                                <p class="text-xs text-gray-500">Darken UI layout for night usage</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="setting-darkmode-toggle">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- WebGL Ripple Engine Subpage -->
+                <div id="settings-webgl-page" class="settings-page settings-subpage">
+                    <div class="header-bar w-full h-14 bg-white flex items-center px-4 border-b shrink-0 shadow-sm border-b-gray-200">
+                        <button onclick="closeSettingsSubpage('settings-webgl-page')" class="text-blue-500 flex items-center gap-1 font-medium">
+                            <i data-lucide="chevron-left" class="w-5 h-5"></i> Back
+                        </button>
+                        <h2 class="flex-1 text-center font-bold text-lg mr-8">WebGL Ripple Engine</h2>
+                    </div>
+                    <div class="flex-1 overflow-y-auto p-4 bg-gray-50">
+                        <div class="settings-card bg-white rounded-2xl shadow-sm p-4 mb-6 flex justify-between items-center">
+                            <div>
+                                <h4 class="font-bold text-sm">Enable Interactive Ripples</h4>
+                                <p class="text-xs text-gray-500">Toggle liquid visual background rendering</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="setting-ripple-toggle" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <h3 class="font-bold text-gray-500 ml-2 mb-2 uppercase text-xs tracking-wider">Engine Uniform Settings</h3>
+                        <div class="settings-card bg-white rounded-2xl shadow-sm p-4 gap-6 flex flex-col">
+                            <!-- Damping -->
+                            <div>
+                                <div class="flex justify-between items-center mb-1">
+                                    <span class="text-sm font-medium">Wave Damping (Decay)</span>
+                                </div>
+                                <input type="range" id="setting-ripple-damping" min="0.80" max="0.99" step="0.01" class="custom-range">
+                                <p class="text-xxs text-gray-400 mt-1">Higher values make ripples spread further and last longer before dissipating.</p>
+                            </div>
+                            <!-- Speed -->
+                            <div>
+                                <div class="flex justify-between items-center mb-1">
+                                    <span class="text-sm font-medium">Wave Propagation Speed</span>
+                                </div>
+                                <input type="range" id="setting-ripple-speed" min="0.5" max="4.0" step="0.1" class="custom-range">
+                                <p class="text-xxs text-gray-400 mt-1">Controls the speed of ripple expansion outward from the gesture touchpoint.</p>
+                            </div>
+                            <!-- Intensity -->
+                            <div>
+                                <div class="flex justify-between items-center mb-1">
+                                    <span class="text-sm font-medium">Refraction Distortion Intensity</span>
+                                </div>
+                                <input type="range" id="setting-ripple-intensity" min="0.5" max="3.5" step="0.1" class="custom-range">
+                                <p class="text-xxs text-gray-400 mt-1">Adjusts the bending factor of light background pixels beneath the ripple.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wallpaper Subpage -->
+                <div id="settings-wallpaper-page" class="settings-page settings-subpage">
+                    <div class="header-bar w-full h-14 bg-white flex items-center px-4 border-b shrink-0 shadow-sm border-b-gray-200">
+                        <button onclick="closeSettingsSubpage('settings-wallpaper-page')" class="text-blue-500 flex items-center gap-1 font-medium">
+                            <i data-lucide="chevron-left" class="w-5 h-5"></i> Back
+                        </button>
+                        <h2 class="flex-1 text-center font-bold text-lg mr-8">Wallpaper</h2>
+                    </div>
+                    <div class="flex-1 overflow-y-auto p-4 bg-gray-50">
+                        <h3 class="font-bold text-gray-500 ml-2 mb-2 uppercase text-xs tracking-wider">Choose Theme Background</h3>
+                        <div class="grid grid-cols-2 gap-3 mb-6">
+                            <div onclick="changeWallpaper('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop')" class="h-40 rounded-xl bg-cover bg-center cursor-pointer border-2 border-transparent focus:border-blue-500 active:opacity-70" style="background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=500');"></div>
+                            <div onclick="changeWallpaper('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2564&auto=format&fit=crop')" class="h-40 rounded-xl bg-cover bg-center cursor-pointer border-2 border-transparent active:opacity-70" style="background-image: url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=500');"></div>
+                            <div onclick="changeWallpaper('https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?q=80&w=2564&auto=format&fit=crop')" class="h-40 rounded-xl bg-cover bg-center cursor-pointer border-2 border-transparent active:opacity-70" style="background-image: url('https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?q=80&w=500');"></div>
+                            <div onclick="changeWallpaper('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=2564&auto=format&fit=crop')" class="h-40 rounded-xl bg-cover bg-center cursor-pointer border-2 border-transparent active:opacity-70" style="background-image: url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=500');"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Battery Subpage -->
+                <div id="settings-battery-page" class="settings-page settings-subpage">
+                    <div class="header-bar w-full h-14 bg-white flex items-center px-4 border-b shrink-0 shadow-sm border-b-gray-200">
+                        <button onclick="closeSettingsSubpage('settings-battery-page')" class="text-blue-500 flex items-center gap-1 font-medium">
+                            <i data-lucide="chevron-left" class="w-5 h-5"></i> Back
+                        </button>
+                        <h2 class="flex-1 text-center font-bold text-lg mr-8">Battery</h2>
+                    </div>
+                    <div class="flex-1 overflow-y-auto p-4 bg-gray-50">
+                        <div class="settings-card bg-white rounded-2xl shadow-sm p-4 mb-6 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="battery-charging" class="w-8 h-8 text-green-500"></i>
+                                <div>
+                                    <h4 class="font-bold text-sm">Status</h4>
+                                    <p id="setting-battery-saver-text" class="text-xs text-gray-500">Calculating battery telemetry...</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-card bg-white rounded-2xl shadow-sm p-4 mb-6 flex justify-between items-center">
+                            <div>
+                                <h4 class="font-bold text-sm">Low Power Mode</h4>
+                                <p class="text-xs text-gray-500">Reduces screen brightness to extend operations</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="setting-lowpower-toggle">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <h3 class="font-bold text-gray-500 ml-2 mb-2 uppercase text-xs tracking-wider">Health</h3>
+                        <div class="settings-card bg-white rounded-2xl shadow-sm p-4">
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-gray-700 font-medium">Maximum Capacity</span>
+                                <span id="setting-battery-health" class="text-gray-400 font-semibold">98%</span>
+                            </div>
+                            <p class="text-xxs text-gray-400 mt-2">Maximum capacity is a measure of battery capacity relative to when it was new.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- About Subpage -->
+                <div id="settings-about-page" class="settings-page settings-subpage">
+                    <div class="header-bar w-full h-14 bg-white flex items-center px-4 border-b shrink-0 shadow-sm border-b-gray-200">
+                        <button onclick="closeSettingsSubpage('settings-about-page')" class="text-blue-500 flex items-center gap-1 font-medium">
+                            <i data-lucide="chevron-left" class="w-5 h-5"></i> Back
+                        </button>
+                        <h2 class="flex-1 text-center font-bold text-lg mr-8">About</h2>
+                    </div>
+                    <div class="flex-1 overflow-y-auto p-4 bg-gray-50">
+                        <div class="settings-card bg-white rounded-2xl shadow-sm p-4 mb-6">
+                            <label class="block text-xxs font-bold uppercase text-gray-400 mb-1">Device Name</label>
+                            <input type="text" id="setting-device-name-input" class="w-full bg-transparent border-b border-gray-200 pb-1 text-sm font-semibold text-black focus:outline-none focus:border-blue-500">
+                        </div>
+
+                        <h3 class="font-bold text-gray-500 ml-2 mb-2 uppercase text-xs tracking-wider">Hardware Specs</h3>
+                        <div class="settings-card bg-white rounded-2xl shadow-sm overflow-hidden mb-6">
+                            <div class="px-4 py-3 border-b flex justify-between text-sm">
+                                <span class="text-gray-600 font-medium">OS Version</span>
+                                <span class="text-gray-900 font-semibold">Text2 OS 2.5 (WebGL Edition)</span>
+                            </div>
+                            <div class="px-4 py-3 border-b flex justify-between text-sm">
+                                <span class="text-gray-600 font-medium">Total Installed Apps</span>
+                                <span id="total-apps-count" class="text-gray-900 font-semibold">0</span>
+                            </div>
+                            <div class="px-4 py-3 border-b flex justify-between text-sm">
+                                <span class="text-gray-600 font-medium">Processor</span>
+                                <span class="text-gray-900 font-semibold">Gemini Neural Engine 2.0</span>
+                            </div>
+                            <div class="px-4 py-3 border-b flex justify-between text-sm">
+                                <span class="text-gray-600 font-medium">Memory (RAM)</span>
+                                <span class="text-gray-900 font-semibold">16 GB LPDDR5X</span>
+                            </div>
+                            <div class="px-4 py-3 flex justify-between text-sm">
+                                <span class="text-gray-600 font-medium">Model</span>
+                                <span class="text-gray-900 font-semibold">T2-X100 (ARM64)</span>
+                            </div>
+                        </div>
+
+                        <h3 class="font-bold text-gray-500 ml-2 mb-2 uppercase text-xs tracking-wider">Storage</h3>
+                        <div class="settings-card bg-white rounded-2xl shadow-sm p-4">
+                            <div class="flex justify-between items-center text-xs text-gray-500 mb-2">
+                                <span>Used 42.5 GB of 128 GB</span>
+                                <span class="font-semibold text-gray-700">33% Used</span>
+                            </div>
+                            <div class="w-full bg-gray-100 h-2.5 rounded-full overflow-hidden">
+                                <div class="bg-blue-500 h-full rounded-full" style="width: 33%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
             </div>
         </div>
 
-        <!-- Thông báo Toast -->
+        <!-- Notification Toast -->
         <div id="toast" class="absolute top-16 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur text-black px-4 py-2 rounded-full text-xs font-semibold shadow-xl opacity-0 transition-opacity duration-300 pointer-events-none z-50">
-            Thông báo
+            Notification
         </div>
 
-        <!-- Global Home Indicator (Thanh kéo cử chỉ hệ thống) -->
+        <!-- Global Home Indicator (Gesture Bar) -->
         <div id="home-indicator" class="home-indicator-wrapper absolute bottom-0 left-0 right-0 z-50 pb-2">
             <div class="home-indicator-bar"></div>
         </div>
     </div>
 
-    <!-- JS Tách Biệt Theo Từng Cụm chức năng -->
+    <!-- JavaScript Bundles -->
     <script src="data/js/config.js"></script>
     <script src="data/js/webgl-effects.js"></script>
     <script src="data/js/apps.js"></script>
     <script src="data/js/multitasking.js"></script>
+    <script src="data/js/settings/features.js"></script>
+    <script src="data/js/settings/manager.js"></script>
     <script src="data/js/settings.js"></script>
     <script src="data/js/system.js"></script>
     <script src="data/js/gestures.js"></script>

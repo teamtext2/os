@@ -1,19 +1,19 @@
-// --- QUẢN LÝ ĐA NHIỆM TRỰC TIẾP (LIVE WINDOW MULTITASKING MANAGER) ---
+// --- LIVE WINDOW MULTITASKING MANAGER ---
 
-// Mở giao diện đa nhiệm
+// Open multitasking switcher
 function openTaskSwitcher() {
     const appLayer = document.getElementById('app-layer');
     const taskSwitcher = document.getElementById('task-switcher-layer');
     if (!appLayer || !taskSwitcher) return;
 
-    // Hiển thị nền mờ trong suốt phía sau
+    // Display background backdrop blur
     taskSwitcher.classList.add('active');
     
-    // Kích hoạt chế độ hiển thị thẻ (Card) trực quan
+    // Enable visual card switcher mode
     appLayer.classList.add('active');
     appLayer.classList.add('multitasking-active');
 
-    // Hiển thị tất cả các app đang chạy dưới dạng thẻ preview
+    // Show running applications as cards
     const wrappers = document.querySelectorAll('#iframes-container .app-wrapper');
     wrappers.forEach(wrapper => {
         wrapper.style.display = 'flex';
@@ -21,7 +21,7 @@ function openTaskSwitcher() {
             clearWrapperInlineStyles(wrapper);
         }
         
-        // Nhấp vào thẻ app để mở rộng và dùng tiếp
+        // Click app card to restore and expand
         wrapper.onclick = (e) => {
             if (appLayer.classList.contains('multitasking-active')) {
                 const appName = wrapper.getAttribute('data-app-name');
@@ -32,7 +32,7 @@ function openTaskSwitcher() {
         };
     });
 
-    // Nhấp vào khoảng trống ngoài các card để quay lại màn hình chính
+    // Click empty area to exit multitasking
     const container = document.getElementById('iframes-container');
     if (container) {
         container.onclick = (e) => {
@@ -42,7 +42,7 @@ function openTaskSwitcher() {
         };
     }
 
-    // Cập nhật thông báo nếu không có ứng dụng nào chạy
+    // Display message if no apps are running
     const count = Object.keys(runningApps).length;
     let emptyMsg = document.getElementById('task-empty-msg');
     if (count === 0) {
@@ -50,7 +50,7 @@ function openTaskSwitcher() {
             emptyMsg = document.createElement('div');
             emptyMsg.id = 'task-empty-msg';
             emptyMsg.className = 'absolute inset-0 flex items-center justify-center text-gray-400 text-sm pointer-events-none z-10';
-            emptyMsg.textContent = 'Không có ứng dụng nào đang chạy';
+            emptyMsg.textContent = 'No applications running';
             taskSwitcher.appendChild(emptyMsg);
         }
     } else {
@@ -58,14 +58,14 @@ function openTaskSwitcher() {
     }
 }
 
-// Đóng giao diện đa nhiệm và quay về màn hình tương ứng (Mặc định về Home screen)
+// Close multitasking switcher (defaults to Home screen)
 function closeTaskSwitcher(goToHome = true) {
     const appLayer = document.getElementById('app-layer');
     const taskSwitcher = document.getElementById('task-switcher-layer');
     if (appLayer) appLayer.classList.remove('multitasking-active');
     if (taskSwitcher) taskSwitcher.classList.remove('active');
 
-    // Làm sạch inline styles của các wrapper để tránh xung đột layout
+    // Clear inline styles to prevent layout conflicts
     const wrappers = document.querySelectorAll('#iframes-container .app-wrapper');
     wrappers.forEach(w => {
         if (typeof clearWrapperInlineStyles === 'function') {
@@ -76,7 +76,7 @@ function closeTaskSwitcher(goToHome = true) {
     if (goToHome) {
         if (typeof goHome === 'function') goHome();
     } else {
-        // Phục hồi hiển thị app active hiện tại
+        // Restore currently active application
         if (currentActiveApp && runningApps[currentActiveApp]) {
             Object.keys(runningApps).forEach(name => {
                 runningApps[name].style.display = (name === currentActiveApp) ? 'flex' : 'none';
@@ -92,10 +92,11 @@ function closeTaskSwitcher(goToHome = true) {
     }
 }
 
-// Tắt ứng dụng từ giao diện đa nhiệm
+// Terminate application from multitasking switcher
 function killAppFromTask(appName) {
     if (typeof killApp === 'function') {
         killApp(appName);
     }
 }
+
 

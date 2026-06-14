@@ -5,6 +5,8 @@ let currentActiveApp = null; // Tên app đang mở
 
 // Dữ liệu dự phòng khi không tải được dữ liệu từ API
 const FALLBACK_APPS = [
+    { "t": "Settings", "l": "system:settings", "i": "system:settings" },
+    { "t": "Multitasking", "l": "system:multitasking", "i": "system:multitasking" },
     { "t": "Note", "l": "https://text2.co/app/note/", "i": "https://text2.co/app/note/apple-touch-icon.png"},
     { "t": "Translate", "l": "https://text2.co/app/translate/", "i": "https://text2.co/app/translate/apple-touch-icon.png"},
     { "t": "QR", "l": "https://text2.co/app/qr/", "i": "https://text2.co/app/qr/apple-touch-icon.png"},

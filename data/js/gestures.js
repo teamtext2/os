@@ -1,11 +1,11 @@
-// --- ĐIỀU KHIỂN CỬ CHỈ GIAO DIỆN CHUẨN OS (TOUCH & DRAG GESTURES CONTROLLER) ---
+// --- TOUCH & DRAG GESTURES CONTROLLER ---
 
 document.addEventListener('DOMContentLoaded', () => {
     const homeIndicator = document.getElementById('home-indicator');
     const appLayer = document.getElementById('app-layer');
     if (!homeIndicator || !appLayer) return;
 
-    // --- 1. CỬ CHỈ VUỐT THANH HOME (VUỐT THOÁT APP / MỞ ĐA NHIỆM) ---
+    // --- 1. HOME INDICATOR SWIPE GESTURES (SWIPE TO CLOSE / SWIPE AND HOLD TO MULTITASK) ---
     let startY = 0;
     let currentY = 0;
     let isDragging = false;
@@ -13,8 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let holdTimer = null;
     let hasTriggeredHold = false;
     
-    const dragThreshold = 85; // Ngưỡng vuốt (pixel) nhạy và tự nhiên hơn
-    const holdDuration = 260; // Thời gian giữ (ms) chuẩn OS để kích hoạt đa nhiệm
+    const dragThreshold = 85; // Drag threshold in pixels for natural feedback
+    const holdDuration = 260; // OS standard hold duration (ms) to trigger multitasking
 
     let blocker = null;
 
@@ -44,11 +44,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const isMultitasking = appLayer.classList.contains('multitasking-active');
         const activeWrapper = (typeof currentActiveApp !== 'undefined' && currentActiveApp) ? runningApps[currentActiveApp] : null;
 
-        // Nếu đang ở màn hình đa nhiệm mà vuốt thanh Home indicator, ta sẽ thoát đa nhiệm về Home
+        // If in multitasking mode and swiping the home indicator, exit multitasking back to home screen
         if (isMultitasking) {
             isDragging = false;
             if (typeof closeTaskSwitcher === 'function') {
-                closeTaskSwitcher(true); // Về thẳng Home screen
+                closeTaskSwitcher(true); // Return directly to Home screen
             }
             return;
         }
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
         holdTimer = setTimeout(() => {
             if (isDragging) {
                 const deltaY = currentY - startY;
-                if (deltaY < -35) { // Đã vuốt lên một khoảng ngắn
+                if (deltaY < -35) { // Swiped up a short distance
                     hasTriggeredHold = true;
                     document.getElementById('os-container').classList.add('gesture-holding');
                     
@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 activeWrapper.style.transform = `translate3d(0, ${deltaY}px, 0) scale3d(${scale}, ${scale}, 1)`;
                 activeWrapper.style.borderRadius = borderRadius;
             } else {
-                // Hiệu ứng co dãn màn hình chính
+                // Home screen stretching effect
                 const scale = Math.max(1 - percent * 0.22, 0.93);
                 const translateY = deltaY * 0.32;
                 const mainScreen = document.getElementById('main-screen');
@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isActive && activeWrapper) {
             if (deltaY < -dragThreshold) {
                 if (hasTriggeredHold) {
-                    // 1. VUỐT LÊN VÀ GIỮ -> VÀO ĐA NHIỆM LIỀN MẠCH
+                    // 1. SWIPE UP AND HOLD -> ENTER MULTITASKING SWITCHER
                     activeWrapper.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), border-radius 0.4s ease';
                     if (typeof clearWrapperInlineStyles === 'function') {
                         clearWrapperInlineStyles(activeWrapper);
@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         openTaskSwitcher();
                     }
                 } else {
-                    // 2. VUỐT LÊN NHANH -> THOÁT APP MƯỢT MÀ VỀ LẠI ICON VỚI ZOOM CLOSE
+                    // 2. SWIPE UP QUICKLY -> CLOSE APP SMOOTHLY TO ICON BOUNDS
                     if (typeof animateZoomClose === 'function') {
                         animateZoomClose(activeWrapper, () => {
                             appLayer.classList.remove('active');
@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
             } else {
-                // 3. VUỐT KHÔNG ĐỦ XA -> TRẢ VỀ TOÀN MÀN HÌNH MƯỢT MÀ
+                // 3. SWIPE INSUFFICIENT DISTANCE -> SNAP BACK TO FULLSCREEN
                 activeWrapper.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), border-radius 0.3s ease';
                 activeWrapper.style.transform = 'translate3d(0, 0, 0) scale3d(1, 1, 1)';
                 activeWrapper.style.borderRadius = '24px';
@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }, 300);
             }
         } else {
-            // Cử chỉ ở màn hình chính
+            // Home screen gestures
             const springTransition = 'transform 0.35s cubic-bezier(0.25, 1, 0.5, 1)';
             if (mainScreen) { mainScreen.style.transition = springTransition; mainScreen.style.transform = ''; }
             if (dockGrid) { dockGrid.style.transition = springTransition; dockGrid.style.transform = ''; }
@@ -188,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
         hasTriggeredHold = false;
     }
 
-    // Sự kiện thanh indicator
+    // Indicator events
     homeIndicator.addEventListener('touchstart', (e) => { onStart(e.touches[0].clientY); }, { passive: true });
     window.addEventListener('touchmove', (e) => { if (isDragging) onMove(e.touches[0].clientY); }, { passive: false });
     window.addEventListener('touchend', onEnd);
@@ -198,7 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('mouseup', onEnd);
 
 
-    // --- 2. GESTURE VUỐT THẺ ĐỂ ĐÓNG APP TRONG ĐA NHIỆM (SWIPE UP TO CLOSE IN MULTITASKING) ---
+    // --- 2. SWIPE UP TO TERMINATE CARD IN MULTITASKING ---
     const container = document.getElementById('iframes-container');
     if (!container) return;
 
@@ -225,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
         cardCurrentY = clientY;
         const deltaY = cardCurrentY - cardStartY;
 
-        // Chỉ cho phép kéo lên (deltaY < 0)
+        // Allow swipe up dragging only (deltaY < 0)
         if (deltaY < 0) {
             dragCard.style.transform = `translateY(${deltaY}px)`;
             dragCard.style.opacity = Math.max(1 - Math.abs(deltaY) / 280, 0);
@@ -240,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
         dragCard.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease';
 
         if (deltaY < -120) {
-            // Vuốt lên đủ xa -> Đóng ứng dụng hoàn toàn
+            // Swiped far enough -> terminate app
             dragCard.style.transform = 'translateY(-100vh)';
             dragCard.style.opacity = '0';
             
@@ -249,16 +249,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (typeof killApp === 'function') {
                     killApp(appName);
                 }
-                // Nếu không còn app nào chạy sau khi tắt, tắt giao diện đa nhiệm
+                // If no more apps are running, automatically exit multitasking
                 if (Object.keys(runningApps).length === 0) {
                     if (typeof closeTaskSwitcher === 'function') closeTaskSwitcher(true);
                 } else {
-                    // Cập nhật lại giao diện đa nhiệm
+                    // Update multitasking UI
                     if (typeof openTaskSwitcher === 'function') openTaskSwitcher();
                 }
             }, 300);
         } else {
-            // Kéo chưa đủ -> Đàn hồi về vị trí ban đầu trong hàng đa nhiệm
+            // Insufficient pull -> snap card back to grid position
             dragCard.style.transform = '';
             dragCard.style.opacity = '';
         }
@@ -266,7 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
         dragCard = null;
     }
 
-    // Touch events cho card
+    // Touch events for card
     container.addEventListener('touchstart', (e) => {
         onCardStart(e.touches[0].clientY, e.target);
     }, { passive: true });
@@ -274,13 +274,13 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('touchmove', (e) => {
         if (isDraggingCard) {
             onCardMove(e.touches[0].clientY);
-            e.preventDefault(); // chặn cuộn trang khi kéo card
+            e.preventDefault(); // prevent default scrolling during drag
         }
     }, { passive: false });
 
     window.addEventListener('touchend', onCardEnd);
 
-    // Mouse events cho card
+    // Mouse events for card
     container.addEventListener('mousedown', (e) => {
         onCardStart(e.clientY, e.target);
     });
@@ -293,3 +293,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('mouseup', onCardEnd);
 });
+

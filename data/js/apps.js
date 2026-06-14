@@ -1,11 +1,11 @@
-// --- QUẢN LÝ ỨNG DỤNG (APPS MANAGEMENT) ---
+// --- APPS MANAGEMENT ---
 
-// --- ANIMATION ZOOM HỖ TRỢ GIAO DIỆN CAO CẤP ---
+// --- PREMIUM ZOOM TRANSITION EFFECT ---
 function animateZoomOpen(element, iconEl) {
     if (!element) return;
 
     let rect = null;
-    // Tìm thẻ icon thực tế có chứa ảnh hoặc biểu tượng để đo kích thước chuẩn nhất
+    // Find the visual icon container to measure precise coordinates
     if (iconEl) {
         const targetIcon = iconEl.closest('.app-icon');
         if (targetIcon) {
@@ -16,7 +16,7 @@ function animateZoomOpen(element, iconEl) {
     }
 
     if (!rect) {
-        // Fallback ra giữa màn hình
+        // Fallback to center of viewport
         const w = window.innerWidth;
         const h = window.innerHeight;
         rect = { left: w / 2 - 28, top: h / 2 - 28, width: 56, height: 56 };
@@ -32,35 +32,35 @@ function animateZoomOpen(element, iconEl) {
     const scaleX = iconWidth / winW;
     const scaleY = iconHeight / winH;
 
-    // Lưu tọa độ vào dataset để hồi phục khi đóng
+    // Save initial coordinates to dataset for closure return zoom
     element.dataset.iconLeft = iconLeft;
     element.dataset.iconTop = iconTop;
     element.dataset.iconWidth = iconWidth;
     element.dataset.iconHeight = iconHeight;
 
-    // Bắt đầu tại vị trí icon
+    // Start positioned at the icon bounds
     element.style.display = 'flex';
     element.style.transformOrigin = 'top left';
     element.style.transform = `translate3d(${iconLeft}px, ${iconTop}px, 0) scale3d(${scaleX}, ${scaleY}, 1)`;
     element.style.borderRadius = '24px';
     element.style.opacity = '0';
 
-    // Buộc trình duyệt vẽ lại (reflow) trước khi chạy animation
+    // Force browser reflow before triggering transition
     element.offsetHeight;
 
-    // Phóng to toàn màn hình với hiệu ứng spring-back (đàn hồi nhẹ) cực mượt
+    // Expand to full screen with a smooth spring-back cubic bezier curves
     element.style.transition = 'transform 0.48s cubic-bezier(0.34, 1.42, 0.64, 1), opacity 0.35s ease, border-radius 0.48s ease';
     element.style.transform = 'translate3d(0, 0, 0) scale3d(1, 1, 1)';
-    element.style.borderRadius = '24px'; // Bo góc màn hình hiện đại giống flagship phone
+    element.style.borderRadius = '24px'; // Modern flagship phone rounded look
     element.style.opacity = '1';
 
-    // Thu nhỏ và làm mờ nhẹ hình nền màn hình chính
+    // Zoom and blur parent wallpaper/home screen
     const osContainer = document.getElementById('os-container');
     if (osContainer) {
         osContainer.classList.add('app-active');
     }
 
-    // Kích hoạt hiệu ứng WebGL gợn nước lan truyền từ tâm icon
+    // Trigger WebGL liquid ripple effect starting at the center of the icon
     if (typeof window.triggerRipple === 'function') {
         window.triggerRipple(iconLeft + iconWidth / 2, iconTop + iconHeight / 2);
     }
@@ -88,13 +88,13 @@ function animateZoomClose(element, callback) {
     const scaleX = iconWidth / winW;
     const scaleY = iconHeight / winH;
 
-    // Thu nhỏ mượt mà về lại icon
+    // Smoothly scale back to icon bounds
     element.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.35s ease, border-radius 0.4s ease';
     element.style.transform = `translate3d(${iconLeft}px, ${iconTop}px, 0) scale3d(${scaleX}, ${scaleY}, 1)`;
     element.style.borderRadius = '24px';
     element.style.opacity = '0';
 
-    // Trả lại hình nền màn hình chính như cũ
+    // Restore home screen wallpaper depth and scale
     const osContainer = document.getElementById('os-container');
     if (osContainer) {
         osContainer.classList.remove('app-active');
@@ -109,7 +109,7 @@ function animateZoomClose(element, callback) {
     };
 
     element.addEventListener('transitionend', onEnd);
-    // Timeout an toàn
+    // Safety timeout fallback
     setTimeout(() => {
         element.style.display = 'none';
         clearWrapperInlineStyles(element);
@@ -129,7 +129,7 @@ function clearWrapperInlineStyles(wrapper) {
     wrapper.style.top = '';
 }
 
-// Cập nhật số lượng app đang chạy trên biểu tượng đa nhiệm
+// Update running app count on multitasking indicator badge
 function updateTaskBadge() {
     const count = Object.keys(runningApps).length;
     const badge = document.getElementById('task-badge');
@@ -141,24 +141,24 @@ function updateTaskBadge() {
     }
 }
 
-// Mở một ứng dụng (nạp vào wrapper chứa header riêng và iframe hoặc phục hồi từ nền)
+// Open an app (loads into header/iframe wrapper or restores from background)
 function openApp(title, url, event) {
     if (typeof closeTaskSwitcher === 'function') {
-        closeTaskSwitcher(false); // Ẩn switcher nhưng không quay lại Home screen
+        closeTaskSwitcher(false); // Hide switcher without returning to Home Screen
     }
 
     const container = document.getElementById('iframes-container');
     const loader = document.getElementById('app-loading');
     
-    // Tắt chế độ đa nhiệm trên app-layer
+    // Disable multitasking mode on app layer
     document.getElementById('app-layer').classList.remove('multitasking-active');
 
-    // Tìm icon của app trong giao diện để xác định vị trí zoom
+    // Find clicked icon to determine zoom target coordinates
     let iconEl = null;
     if (event) {
         iconEl = event.currentTarget || event.target;
     } else {
-        // Tìm thủ công trong lưới ứng dụng hoặc dock
+        // Fallback: search DOM for app labels
         const icons = document.querySelectorAll('.app-icon');
         for (let icon of icons) {
             const label = icon.querySelector('.app-label');
@@ -169,7 +169,7 @@ function openApp(title, url, event) {
         }
     }
 
-    // Ẩn tất cả wrapper đang chạy khác TRỪ app sắp mở
+    // Hide other running app wrappers except the one being opened
     const wrappers = container.querySelectorAll('.app-wrapper');
     wrappers.forEach(w => {
         if (w.getAttribute('data-app-name') !== title) {
@@ -179,10 +179,10 @@ function openApp(title, url, event) {
 
     let wrapper = runningApps[title];
     if (wrapper) {
-        // App đã mở -> Lấy lại ra hiển thị
+        // App is already running -> restore visibility
         wrapper.style.display = 'flex';
     } else {
-        // Mở App mới
+        // Open new App process
         loader.style.display = 'flex';
 
         wrapper = document.createElement('div');
@@ -223,7 +223,7 @@ function openApp(title, url, event) {
     currentActiveApp = title;
 }
 
-// Quay lại màn hình chính
+// Return to home screen
 function goHome() {
     const appLayer = document.getElementById('app-layer');
     if (!appLayer) return;
@@ -246,14 +246,14 @@ function goHome() {
     }
 }
 
-// Tắt một ứng dụng cụ thể
+// Terminate a specific application process
 function killApp(title) {
     if (runningApps[title]) {
         const wrapper = runningApps[title];
         if (currentActiveApp === title) {
             animateZoomClose(wrapper, () => {
-                wrapper.remove(); // Xóa khỏi DOM
-                delete runningApps[title]; // Xóa khỏi bộ nhớ
+                wrapper.remove(); // Remove from DOM
+                delete runningApps[title]; // Clean from memory
                 updateTaskBadge();
                 const appLayer = document.getElementById('app-layer');
                 if (appLayer) {
@@ -270,7 +270,7 @@ function killApp(title) {
     }
 }
 
-// Tắt hẳn ứng dụng hiện tại đang mở
+// Terminate currently focused app
 function killCurrentApp() {
     if (currentActiveApp) {
         killApp(currentActiveApp);
@@ -279,7 +279,7 @@ function killCurrentApp() {
     }
 }
 
-// Render lưới ứng dụng lên màn hình chính và thiết lập kéo thả
+// Render app grid on main screen and initialize drag-and-drop
 function renderApps(apps) {
     const grid = document.getElementById('app-grid');
     grid.innerHTML = '';
@@ -292,21 +292,43 @@ function renderApps(apps) {
         const appEl = document.createElement('div');
         appEl.className = 'app-icon flex flex-col items-center gap-1.5 cursor-pointer';
         
-        let iconHTML = imageIcon 
-            ? `<div class="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-md shadow-md overflow-hidden flex items-center justify-center border border-white/20">
-                    <img src="${imageIcon}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://via.placeholder.com/150/333333/FFFFFF?text=${appName.charAt(0)}';" draggable="false" />
-               </div>`
-            : `<div class="w-14 h-14 bg-gradient-to-tr from-purple-500 to-indigo-500 rounded-2xl flex items-center justify-center shadow-md text-white">
-                    <i data-lucide="box" class="w-7 h-7"></i>
-               </div>`;
+        let iconHTML = '';
+        if (imageIcon === 'system:settings') {
+            iconHTML = `<div class="w-14 h-14 bg-gray-300 rounded-2xl flex items-center justify-center shadow-md text-gray-800 border border-gray-100">
+                            <i data-lucide="settings" class="w-7 h-7"></i>
+                       </div>`;
+        } else if (imageIcon === 'system:multitasking') {
+            iconHTML = `<div class="w-14 h-14 bg-indigo-500 rounded-2xl flex items-center justify-center shadow-md text-white border border-indigo-400">
+                            <i data-lucide="layers" class="w-7 h-7"></i>
+                       </div>`;
+        } else if (imageIcon) {
+            iconHTML = `<div class="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-md shadow-md overflow-hidden flex items-center justify-center border border-white/20">
+                            <img src="${imageIcon}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://via.placeholder.com/150/333333/FFFFFF?text=${appName.charAt(0)}';" draggable="false" />
+                       </div>`;
+        } else {
+            iconHTML = `<div class="w-14 h-14 bg-gradient-to-tr from-purple-500 to-indigo-500 rounded-2xl flex items-center justify-center shadow-md text-white">
+                            <i data-lucide="box" class="w-7 h-7"></i>
+                       </div>`;
+        }
 
         appEl.innerHTML = `
             ${iconHTML}
             <span class="app-label text-xs text-white text-center w-full truncate drop-shadow-md font-medium px-1">${appName}</span>
         `;
 
-        // Bấm để mở app (truyền cả click event để lấy tọa độ)
-        appEl.onclick = (e) => openApp(appName, appUrl, e);
+        // Click handler with native integration support
+        if (appUrl === 'system:settings' || appName === 'Settings') {
+            appEl.onclick = (e) => {
+                if (typeof openSettings === 'function') openSettings(e);
+            };
+        } else if (appUrl === 'system:multitasking' || appName === 'Multitasking') {
+            appEl.onclick = () => {
+                if (typeof openTaskSwitcher === 'function') openTaskSwitcher();
+            };
+        } else {
+            appEl.onclick = (e) => openApp(appName, appUrl, e);
+        }
+        
         grid.appendChild(appEl);
     });
 
@@ -314,11 +336,11 @@ function renderApps(apps) {
         refreshIcons();
     }
 
-    // Kích hoạt tính năng kéo thả SortableJS (kết nối lưới ứng dụng và dock)
+    // Initialize SortableJS for app reordering between main screen and dock
     new Sortable(grid, {
         group: 'shared-apps-group',
         animation: 150,
-        delay: 150, // Nhạy hơn cho trải nghiệm mượt mà
+        delay: 150, // Responsive delay for mobile interaction
         delayOnTouchOnly: true,
         ghostClass: 'sortable-ghost',
         dragClass: 'sortable-drag'
@@ -336,3 +358,4 @@ function renderApps(apps) {
         });
     }
 }
+
