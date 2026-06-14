@@ -30,6 +30,9 @@
     <!-- Khung Hệ Điều Hành (Tràn viền 100%) -->
     <div id="os-container" class="relative flex flex-col w-full h-[100dvh] bg-cover bg-center text-white overflow-hidden transition-all duration-500" style="background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop');">
         
+        <!-- WebGL Ripple Background Canvas -->
+        <canvas id="webgl-canvas" class="absolute inset-0 w-full h-full z-0 pointer-events-none"></canvas>
+
         <!-- Màn hình khởi động -->
         <div id="boot-screen" class="absolute inset-0 bg-black z-50 flex flex-col items-center justify-center transition-opacity duration-500">
             <i data-lucide="cpu" class="w-16 h-16 text-white animate-pulse mb-4"></i>
@@ -56,13 +59,13 @@
 
         <!-- Dock dưới cùng (Hỗ trợ kéo thả ứng dụng) -->
         <div id="dock-grid" class="absolute bottom-6 left-4 right-4 glass-dock rounded-3xl p-3 flex justify-center items-center gap-4 z-10 drop-shadow-2xl min-h-[72px]">
-            <div class="app-icon flex flex-col items-center cursor-pointer" onclick="openApp('Camera', 'https://text2.co/app/camera/')">
+            <div class="app-icon flex flex-col items-center cursor-pointer" onclick="openApp('Camera', 'https://text2.co/app/camera/', event)">
                 <div class="w-12 h-12 bg-gray-800 rounded-2xl flex items-center justify-center shadow-lg border border-gray-600">
                     <i data-lucide="camera" class="w-6 h-6 text-white"></i>
                 </div>
                 <span class="app-label text-xs text-white text-center w-full truncate drop-shadow-md font-medium px-1 mt-1.5">Camera</span>
             </div>
-            <div class="app-icon flex flex-col items-center cursor-pointer" onclick="openApp('Trình duyệt', 'https://bing.com')">
+            <div class="app-icon flex flex-col items-center cursor-pointer" onclick="openApp('Trình duyệt', 'https://bing.com', event)">
                 <div class="w-12 h-12 bg-blue-500 rounded-2xl flex items-center justify-center shadow-lg border border-blue-400">
                     <i data-lucide="compass" class="w-6 h-6 text-white"></i>
                 </div>
@@ -75,7 +78,7 @@
                 </div>
                 <span class="app-label text-xs text-white text-center w-full truncate drop-shadow-md font-medium px-1 mt-1.5">Đa nhiệm</span>
             </div>
-            <div class="app-icon flex flex-col items-center cursor-pointer" onclick="openSettings()">
+            <div class="app-icon flex flex-col items-center cursor-pointer" onclick="openSettings(event)">
                 <div class="w-12 h-12 bg-gray-300 rounded-2xl flex items-center justify-center shadow-lg border border-gray-100">
                     <i data-lucide="settings" class="w-6 h-6 text-gray-800"></i>
                 </div>
@@ -86,7 +89,7 @@
         <!-- ================= CÁC LAYER ỨNG DỤNG ================= -->
 
         <!-- 1. Layer chứa các Iframe (App đang chạy) -->
-        <div id="app-layer" class="layer-window absolute inset-0 bg-white flex flex-col overflow-hidden">
+        <div id="app-layer" class="layer-window absolute inset-0 bg-transparent flex flex-col overflow-hidden">
             <div id="app-loading" class="absolute inset-0 flex items-center justify-center bg-white z-50 pointer-events-none hidden">
                 <div class="flex flex-col items-center gap-2">
                     <i data-lucide="loader-2" class="w-8 h-8 text-blue-500 animate-spin"></i>
@@ -95,7 +98,7 @@
             </div>
 
             <!-- Container chứa các iframes -->
-            <div id="iframes-container" class="flex-1 relative bg-white"></div>
+            <div id="iframes-container" class="flex-1 relative bg-transparent"></div>
             
             <!-- Đệm khoảng trống ở đáy màn hình thay thế thanh cử chỉ -->
             <div class="h-6 w-full bg-white shrink-0"></div>
@@ -158,6 +161,7 @@
 
     <!-- JS Tách Biệt Theo Từng Cụm chức năng -->
     <script src="data/js/config.js"></script>
+    <script src="data/js/webgl-effects.js"></script>
     <script src="data/js/apps.js"></script>
     <script src="data/js/multitasking.js"></script>
     <script src="data/js/settings.js"></script>

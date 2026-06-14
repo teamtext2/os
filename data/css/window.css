@@ -1,23 +1,67 @@
 /* Layer cửa sổ ứng dụng và chuyển cảnh */
 .layer-window {
-    transform: translateY(100%);
-    transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
-    will-change: transform;
     z-index: 40;
 }
 
-.layer-window.active {
-    transform: translateY(0);
+/* Ghi đè hiệu ứng slide mặc định cho app và settings để dùng JS Zoom Open */
+#app-layer.layer-window,
+#settings-layer.layer-window {
+    position: absolute;
+    inset: 0;
+    transform: none;
+    transition: none;
+    pointer-events: none;
+    display: none;
+    background: transparent;
+}
+
+#app-layer.layer-window.active,
+#settings-layer.layer-window.active {
+    pointer-events: auto;
+    display: flex;
+}
+
+/* Styling mặc định cho App Wrapper khi chạy */
+.app-wrapper {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    will-change: transform, opacity, border-radius;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+    background: #fff;
+}
+
+/* --- HIỆU ỨNG CHIỀU SÂU MÀN HÌNH NỀN (DEPTH OF FIELD WALLPAPER EFFECTS) --- */
+#main-screen,
+#dock-grid {
+    transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.45s ease, filter 0.45s ease;
+    will-change: transform, opacity, filter;
+}
+
+/* Thu nhỏ nhẹ màn hình nền và làm mờ tạo chiều sâu giống iOS/Android */
+#os-container.app-active #main-screen {
+    transform: scale(0.95);
+    opacity: 0.4;
+    filter: blur(6px);
+}
+
+#os-container.app-active #dock-grid {
+    transform: translateY(30px) scale(0.92);
+    opacity: 0.2;
 }
 
 /* --- CHẾ ĐỘ ĐA NHIỆM TRỰC TIẾP (LIVE WINDOW MULTITASKING STYLES) --- */
 
 /* Lớp phủ khi kích hoạt chế độ đa nhiệm */
 #app-layer.multitasking-active {
+    display: flex !important;
     z-index: 45 !important;
     background: rgba(0, 0, 0, 0.35) !important;
     backdrop-filter: blur(30px) !important;
     -webkit-backdrop-filter: blur(30px) !important;
+    pointer-events: auto !important;
+    opacity: 1 !important;
 }
 
 /* Container chứa các ứng dụng khi ở chế độ đa nhiệm */
@@ -67,3 +111,4 @@
     background: rgba(255, 255, 255, 0.95) !important;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
 }
+

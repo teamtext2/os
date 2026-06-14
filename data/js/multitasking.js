@@ -17,13 +17,16 @@ function openTaskSwitcher() {
     const wrappers = document.querySelectorAll('#iframes-container .app-wrapper');
     wrappers.forEach(wrapper => {
         wrapper.style.display = 'flex';
+        if (typeof clearWrapperInlineStyles === 'function') {
+            clearWrapperInlineStyles(wrapper);
+        }
         
         // Nhấp vào thẻ app để mở rộng và dùng tiếp
-        wrapper.onclick = () => {
+        wrapper.onclick = (e) => {
             if (appLayer.classList.contains('multitasking-active')) {
                 const appName = wrapper.getAttribute('data-app-name');
                 if (typeof openApp === 'function') {
-                    openApp(appName, null);
+                    openApp(appName, null, e);
                 }
             }
         };
@@ -62,6 +65,14 @@ function closeTaskSwitcher(goToHome = true) {
     if (appLayer) appLayer.classList.remove('multitasking-active');
     if (taskSwitcher) taskSwitcher.classList.remove('active');
 
+    // Làm sạch inline styles của các wrapper để tránh xung đột layout
+    const wrappers = document.querySelectorAll('#iframes-container .app-wrapper');
+    wrappers.forEach(w => {
+        if (typeof clearWrapperInlineStyles === 'function') {
+            clearWrapperInlineStyles(w);
+        }
+    });
+
     if (goToHome) {
         if (typeof goHome === 'function') goHome();
     } else {
@@ -70,6 +81,11 @@ function closeTaskSwitcher(goToHome = true) {
             Object.keys(runningApps).forEach(name => {
                 runningApps[name].style.display = (name === currentActiveApp) ? 'flex' : 'none';
             });
+            const activeW = runningApps[currentActiveApp];
+            if (typeof clearWrapperInlineStyles === 'function') {
+                clearWrapperInlineStyles(activeW);
+            }
+            activeW.style.display = 'flex';
         } else {
             if (appLayer) appLayer.classList.remove('active');
         }
@@ -82,3 +98,4 @@ function killAppFromTask(appName) {
         killApp(appName);
     }
 }
+

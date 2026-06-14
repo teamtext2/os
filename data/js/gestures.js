@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const isActive = appLayer.classList.contains('active');
         const isMultitasking = appLayer.classList.contains('multitasking-active');
+        const activeWrapper = (typeof currentActiveApp !== 'undefined' && currentActiveApp) ? runningApps[currentActiveApp] : null;
 
         // Nếu đang ở màn hình đa nhiệm mà vuốt thanh Home indicator, ta sẽ thoát đa nhiệm về Home
         if (isMultitasking) {
@@ -52,9 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        if (isActive) {
-            appLayer.classList.remove('gesture-transition');
-            appLayer.style.transition = 'none';
+        if (isActive && activeWrapper) {
+            activeWrapper.style.transition = 'none';
             createBlocker();
         } else {
             const mainScreen = document.getElementById('main-screen');
@@ -70,8 +70,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     hasTriggeredHold = true;
                     document.getElementById('os-container').classList.add('gesture-holding');
                     
-                    if (isActive) {
-                        appLayer.style.transform = `translateY(${deltaY}px) scale(0.82)`;
+                    if (isActive && activeWrapper) {
+                        activeWrapper.style.transform = `translate3d(0, ${deltaY}px, 0) scale3d(0.82, 0.82, 1)`;
                     } else {
                         const mainScreen = document.getElementById('main-screen');
                         const dockGrid = document.getElementById('dock-grid');
@@ -91,13 +91,14 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (deltaY < 0) {
             const isActive = appLayer.classList.contains('active');
+            const activeWrapper = (typeof currentActiveApp !== 'undefined' && currentActiveApp) ? runningApps[currentActiveApp] : null;
             const percent = Math.min(Math.abs(deltaY) / window.innerHeight, 1);
 
-            if (isActive) {
+            if (isActive && activeWrapper) {
                 const scale = Math.max(1 - percent * 0.42, 0.78);
                 const borderRadius = Math.min(Math.abs(deltaY) / 3.5, 28) + 'px';
-                appLayer.style.transform = `translateY(${deltaY}px) scale(${scale})`;
-                appLayer.style.borderRadius = borderRadius;
+                activeWrapper.style.transform = `translate3d(0, ${deltaY}px, 0) scale3d(${scale}, ${scale}, 1)`;
+                activeWrapper.style.borderRadius = borderRadius;
             } else {
                 // Hiệu ứng co dãn màn hình chính
                 const scale = Math.max(1 - percent * 0.22, 0.93);
@@ -118,39 +119,52 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('os-container').classList.remove('gesture-holding');
 
         const isActive = appLayer.classList.contains('active');
+        const activeWrapper = (typeof currentActiveApp !== 'undefined' && currentActiveApp) ? runningApps[currentActiveApp] : null;
         const mainScreen = document.getElementById('main-screen');
         const dockGrid = document.getElementById('dock-grid');
         const deltaY = currentY - startY;
 
-        if (isActive) {
+        if (isActive && activeWrapper) {
             if (deltaY < -dragThreshold) {
                 if (hasTriggeredHold) {
                     // 1. VUỐT LÊN VÀ GIỮ -> VÀO ĐA NHIỆM LIỀN MẠCH
-                    appLayer.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), border-radius 0.4s ease';
-                    appLayer.style.transform = '';
-                    appLayer.style.borderRadius = '';
+                    activeWrapper.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), border-radius 0.4s ease';
+                    if (typeof clearWrapperInlineStyles === 'function') {
+                        clearWrapperInlineStyles(activeWrapper);
+                    } else {
+                        activeWrapper.style.transform = '';
+                        activeWrapper.style.borderRadius = '';
+                    }
                     if (typeof openTaskSwitcher === 'function') {
                         openTaskSwitcher();
                     }
                 } else {
-                    // 2. VUỐT LÊN NHANH -> THOÁT APP MƯỢT MÀ KHÔNG BỊ GIẬT SNAP
-                    appLayer.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s ease, border-radius 0.4s ease';
-                    appLayer.style.transform = 'translateY(100%) scale(0.75)';
-                    appLayer.style.borderRadius = '32px';
-                    setTimeout(() => {
-                        appLayer.style.transform = '';
-                        appLayer.style.transition = '';
-                        appLayer.style.borderRadius = '';
-                        if (typeof goHome === 'function') goHome();
-                    }, 400);
+                    // 2. VUỐT LÊN NHANH -> THOÁT APP MƯỢT MÀ VỀ LẠI ICON VỚI ZOOM CLOSE
+                    if (typeof animateZoomClose === 'function') {
+                        animateZoomClose(activeWrapper, () => {
+                            appLayer.classList.remove('active');
+                            appLayer.classList.remove('multitasking-active');
+                            currentActiveApp = null;
+                        });
+                    } else {
+                        activeWrapper.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s ease, border-radius 0.4s ease';
+                        activeWrapper.style.transform = 'translateY(100%) scale(0.75)';
+                        activeWrapper.style.borderRadius = '32px';
+                        setTimeout(() => {
+                            activeWrapper.style.transform = '';
+                            activeWrapper.style.transition = '';
+                            activeWrapper.style.borderRadius = '';
+                            if (typeof goHome === 'function') goHome();
+                        }, 400);
+                    }
                 }
             } else {
                 // 3. VUỐT KHÔNG ĐỦ XA -> TRẢ VỀ TOÀN MÀN HÌNH MƯỢT MÀ
-                appLayer.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), border-radius 0.3s ease';
-                appLayer.style.transform = '';
-                appLayer.style.borderRadius = '';
+                activeWrapper.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), border-radius 0.3s ease';
+                activeWrapper.style.transform = 'translate3d(0, 0, 0) scale3d(1, 1, 1)';
+                activeWrapper.style.borderRadius = '24px';
                 setTimeout(() => {
-                    appLayer.style.transition = '';
+                    activeWrapper.style.transition = '';
                 }, 300);
             }
         } else {
