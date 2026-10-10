@@ -1,124 +1,142 @@
 /* ==========================================================================
    RISE OF KINGDOMS - VIP SERVICES & COMMUNITY
    Bảng màu chủ đạo: Vàng Hoàng Kim & Trắng Tinh Khiết (Royal Gold & Silk White)
+   Chế độ tối: Vàng Hoàng Kim Obsidian (Imperial Obsidian Gold)
    Thiết kế Bo Góc Cao Cấp (Squircle) & Toàn Bộ Đồ Họa Vẽ Bằng SVG Thuần
+   Tối ưu hóa đa thiết bị: PC riêng biệt & Mobile hoàn hảo trên mọi kích thước (320px -> 4K)
+   Xử lý triệt để: Chống tràn ngang (overflow-x), chống che nút sao chép, chuẩn typography tiếng Việt
    ========================================================================== */
 
 /* --- 1. BIẾN HỆ THỐNG MÀU SẮC, BO GÓC & TOKENS --- */
 :root {
-  /* Gam màu chủ đạo Vàng & Trắng (Default: Light Mode - Vàng Trắng Hoàng Triều Quý Tộc) */
-  --bg-primary: #faf8f5;
-  --bg-secondary: #f4efe6;
+  /* Gam màu chủ đạo Vàng & Trắng (Default: Light Mode) */
+  --bg-primary: #f8fafc;
+  --bg-secondary: #f1f5f9;
   --bg-card: #ffffff;
-  --bg-card-hover: #fefdfb;
-  --bg-glass: rgba(255, 255, 255, 0.78);
-  
-  /* Sắc vàng hoàng kim chuẩn mực (Noble Imperial Gold Palette - Không chói, không bợt) */
-  --gold-50: #fffbf0;
-  --gold-100: #fef4d5;
-  --gold-200: #fde6aa;
-  --gold-300: #fcd34d;
-  --gold-400: #e5a722;
-  --gold-500: #c98a12; /* Vàng hổ phách quý tộc: đậm nét, tương phản hoàn hảo */
-  --gold-600: #a16207; /* Vàng đồng cổ điển, sắc nét */
+  --bg-card-hover: #ffffff;
+  --bg-glass: rgba(255, 255, 255, 0.92);
+  --bg-glass-card: #ffffff;
+
+  /* Sắc vàng hoàng kim chuẩn mực (Noble Imperial Gold) */
+  --gold-50: #fffdf5;
+  --gold-100: #fef7da;
+  --gold-200: #fdeca8;
+  --gold-300: #fbd359;
+  --gold-400: #f59e0b;
+  --gold-500: #d97706;
+  --gold-600: #b45309;
   --gold-700: #854d0e;
-  --gold-primary: #b8860b;
+  --gold-primary: #c98a12;
   --gold-accent: #d97706;
-  --gold-bright: #eab308;
-  
-  /* Gradients Hoàng Kim chuẩn vector & Tối ưu khả năng đọc WCAG AAA */
-  --gradient-gold: linear-gradient(135deg, #e5a722 0%, #c98a12 50%, #92400e 100%);
-  --gradient-gold-text: linear-gradient(135deg, #a16207 0%, #c98a12 45%, #78350f 100%); /* Không bị mất nét chữ trên nền sáng */
-  --gradient-gold-soft: linear-gradient(135deg, #fffbf0 0%, #fef4d5 60%, #fde6aa 100%);
-  --gradient-gold-btn: linear-gradient(135deg, #d97706 0%, #b45309 60%, #92400e 100%); /* Đậm đà, nổi chữ trắng sắc sảo */
-  --gradient-badge: linear-gradient(135deg, #fef9c3 0%, #fde68a 100%);
-  --gradient-surface: linear-gradient(180deg, #ffffff 0%, #fcf9f2 100%);
+  --gold-bright: #f59e0b;
+
+  /* Điểm nhấn thương hiệu phụ */
+  --accent-blue: #0284c7;
+  --accent-blue-hover: #0369a1;
+  --accent-blue-soft: rgba(2, 132, 199, 0.08);
+  --accent-blue-border: rgba(2, 132, 199, 0.22);
+
+  /* Gradients Hoàng Kim */
+  --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #92400e 100%);
+  --gradient-gold-text: linear-gradient(135deg, #b45309 0%, #d97706 45%, #78350f 100%);
+  --gradient-gold-soft: linear-gradient(135deg, #fffdf5 0%, #fef7da 60%, #fdeca8 100%);
+  --gradient-gold-btn: linear-gradient(135deg, #d97706 0%, #b45309 60%, #92400e 100%);
+  --gradient-blue-btn: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  --gradient-surface: linear-gradient(180deg, #ffffff 0%, #fcfbf8 100%);
 
   /* Màu chữ & tương phản chuẩn mực */
-  --text-main: #1c1917;
-  --text-muted: #57534e;
-  --text-sub: #78716c;
-  --text-gold: #a16207;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --text-sub: #64748b;
+  --text-gold: #b45309;
   --text-on-gold: #ffffff;
-  
-  /* Viền & Đổ bóng hoàng kim đa tầng - Dịu êm, sang trọng */
-  --border-light: rgba(180, 120, 20, 0.12);
-  --border-gold: rgba(202, 138, 4, 0.22);
-  --border-gold-strong: rgba(180, 83, 9, 0.55);
-  --shadow-sm: 0 4px 12px rgba(120, 53, 15, 0.04);
-  --shadow-md: 0 10px 26px -4px rgba(120, 53, 15, 0.07), 0 2px 6px rgba(0, 0, 0, 0.02);
-  --shadow-lg: 0 20px 44px -8px rgba(120, 53, 15, 0.1), 0 4px 14px rgba(0, 0, 0, 0.03);
-  --shadow-gold-glow: 0 0 28px rgba(201, 138, 18, 0.18);
 
-  /* HỆ THỐNG BO GÓC MỀM MẠI (PREMIUM SQUIRCLE BORDER-RADIUS) */
-  --radius-xs: 10px;
-  --radius-sm: 14px;
-  --radius-md: 20px;
-  --radius-lg: 26px;
-  --radius-xl: 34px;
-  --radius-2xl: 44px;
+  /* Viền & Đổ bóng hoàng kim đa tầng */
+  --border-light: rgba(148, 163, 184, 0.18);
+  --border-gold: rgba(217, 119, 6, 0.22);
+  --border-gold-strong: rgba(217, 119, 6, 0.55);
+  --shadow-xs: 0 1px 3px rgba(0, 0, 0, 0.03);
+  --shadow-sm: 0 4px 12px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 10px 24px -4px rgba(15, 23, 42, 0.06), 0 2px 6px rgba(0, 0, 0, 0.02);
+  --shadow-lg: 0 20px 40px -8px rgba(15, 23, 42, 0.09), 0 4px 12px rgba(0, 0, 0, 0.03);
+  --shadow-gold-glow: 0 0 28px rgba(217, 119, 6, 0.16);
+
+  /* Bo góc Squircle */
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 24px;
+  --radius-xl: 30px;
+  --radius-2xl: 38px;
   --radius-full: 9999px;
 
   /* Hiệu ứng chuyển động mượt */
-  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-bounce: all 0.38s cubic-bezier(0.34, 1.5, 0.64, 1);
+  --transition-fast: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-smooth: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-bounce: all 0.35s cubic-bezier(0.34, 1.45, 0.64, 1);
 
-  /* Typography */
+  /* Typography: Plus Jakarta Sans hỗ trợ 100% tiếng Việt hoàn hảo */
   --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --font-heading: 'Cinzel', serif;
 }
 
 /* --- THEME DARK MODE: Vàng Hoàng Kim Obsidian Cao Cấp --- */
 [data-theme="dark"] {
-  --bg-primary: #0d0e12;
-  --bg-secondary: #14151c;
-  --bg-card: #191b24;
-  --bg-card-hover: #20232e;
-  --bg-glass: rgba(25, 27, 36, 0.78);
-  --gradient-surface: linear-gradient(180deg, #191b24 0%, #13141b 100%);
+  --bg-primary: #0a0c10;
+  --bg-secondary: #12151e;
+  --bg-card: #171924;
+  --bg-card-hover: #1c1f2d;
+  --bg-glass: rgba(23, 25, 36, 0.94);
+  --bg-glass-card: #171924;
 
   --text-main: #f8fafc;
   --text-muted: #cbd5e1;
   --text-sub: #94a3b8;
   --text-gold: #fcd34d;
 
-  --border-light: rgba(234, 179, 8, 0.14);
-  --border-gold: rgba(245, 158, 11, 0.3);
+  --border-light: rgba(255, 255, 255, 0.08);
+  --border-gold: rgba(245, 158, 11, 0.28);
   --border-gold-strong: rgba(245, 158, 11, 0.65);
 
-  --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.55);
-  --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.7);
-  --shadow-gold-glow: 0 0 32px rgba(234, 179, 8, 0.22);
+  --shadow-xs: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.45);
+  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.75);
+  --shadow-gold-glow: 0 0 32px rgba(245, 158, 11, 0.2);
 
   --gradient-gold: linear-gradient(135deg, #fef08a 0%, #fbbf24 50%, #f59e0b 100%);
-  --gradient-gold-text: linear-gradient(135deg, #fef08a 0%, #fbbf24 50%, #f59e0b 100%); /* Đuôi chữ sáng rõ trong đêm */
-  --gradient-gold-soft: linear-gradient(135deg, #24221a 0%, #1c1a14 100%);
+  --gradient-gold-text: linear-gradient(135deg, #fef08a 0%, #fbbf24 50%, #f59e0b 100%);
+  --gradient-gold-soft: linear-gradient(135deg, #23201a 0%, #191814 100%);
   --gradient-gold-btn: linear-gradient(135deg, #ea9a1b 0%, #c97a06 50%, #9a4b08 100%);
-  --gradient-badge: linear-gradient(135deg, rgba(234, 179, 8, 0.22), rgba(245, 158, 11, 0.1));
+  --gradient-surface: linear-gradient(180deg, #171924 0%, #10121a 100%);
+
+  --accent-blue-soft: rgba(2, 132, 199, 0.15);
+  --accent-blue-border: rgba(2, 132, 199, 0.4);
 }
 
-/* --- 2. RESET & CẤU TRÚC NỀN & ẨN THANH CUỘN TRANG WEB --- */
+/* --- 2. RESET & TRIỆT TIÊU TRÀN NGANG TOÀN DIỆN --- */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
-/* Ẩn triệt để thanh cuộn dọc/ngang nhưng vẫn cuộn trang bình thường */
 html, body {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden !important; /* Tuyệt đối ngăn chặn cuộn ngang */
+  position: relative;
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
 }
 
 html::-webkit-scrollbar,
 body::-webkit-scrollbar,
 *::-webkit-scrollbar {
-  display: none !important; /* Chrome, Safari, Opera, Edge */
+  display: none !important;
   width: 0 !important;
   height: 0 !important;
 }
@@ -128,51 +146,52 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-main);
   min-height: 100vh;
-  position: relative;
-  overflow-x: hidden;
   line-height: 1.6;
-  transition: background-color 0.35s ease, color 0.35s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Ánh sáng vàng chuyển động huyền ảo phía sau - Êm dịu, chống chói mắt */
+/* Nền ánh sáng vàng lan tỏa (Ambient orbs) */
 .bg-ambient {
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: -1;
   overflow: hidden;
+  max-width: 100vw;
 }
 
 .bg-ambient::before {
   content: '';
   position: absolute;
-  top: -12%;
+  top: -10%;
   left: 20%;
-  width: 650px;
-  height: 650px;
-  background: radial-gradient(circle, rgba(202, 138, 4, 0.07) 0%, rgba(254, 240, 138, 0.02) 45%, transparent 70%);
-  filter: blur(85px);
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(217, 119, 6, 0.05) 0%, rgba(254, 240, 138, 0.02) 45%, transparent 70%);
+  filter: blur(80px);
   border-radius: 50%;
-  animation: floatAmbient 18s ease-in-out infinite alternate;
+  animation: floatAmbient 20s ease-in-out infinite alternate;
 }
 
 .bg-ambient::after {
   content: '';
   position: absolute;
-  bottom: 8%;
-  right: 12%;
-  width: 550px;
-  height: 550px;
-  background: radial-gradient(circle, rgba(180, 83, 9, 0.05) 0%, transparent 65%);
+  bottom: 10%;
+  right: 15%;
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, rgba(2, 132, 199, 0.04) 0%, transparent 65%);
   filter: blur(75px);
   border-radius: 50%;
-  animation: floatAmbient 22s ease-in-out infinite alternate-reverse;
+  animation: floatAmbient 24s ease-in-out infinite alternate-reverse;
 }
 
 @keyframes floatAmbient {
   0% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(45px, 35px) scale(1.08); }
-  100% { transform: translate(-35px, 50px) scale(0.95); }
+  50% { transform: translate(30px, 20px) scale(1.05); }
+  100% { transform: translate(-25px, 35px) scale(0.96); }
 }
 
 /* --- 3. TIỆN ÍCH SVG VECTOR CHUNG --- */
@@ -181,18 +200,10 @@ body {
   vertical-align: middle;
   fill: currentColor;
   flex-shrink: 0;
-  transition: var(--transition);
+  transition: var(--transition-fast);
 }
 
-.svg-stroke {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-/* --- 4. HEADER DẠNG TREO LƠ LỬNG (FLOATING ISLAND) VỚI OVERLAY & SMART SCROLL --- */
+/* --- 4. HEADER / THANH ĐIỀU HƯỚNG --- */
 .site-header {
   position: sticky;
   top: 14px;
@@ -200,15 +211,14 @@ body {
   right: 0;
   width: 100%;
   z-index: 1000;
-  padding: 0 22px;
-  pointer-events: none; /* Cho phép click xuyên qua khoảng trống 2 bên */
+  padding: 0 20px;
+  pointer-events: none;
   transform: translateY(0);
   opacity: 1;
-  transition: transform 0.42s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
   will-change: transform, opacity;
 }
 
-/* Khi cuộn xuống: Ẩn nhẹ nhàng lên trên */
 .site-header.header-hidden {
   transform: translateY(-130%);
   opacity: 0;
@@ -216,62 +226,53 @@ body {
 }
 
 .header-inner {
-  max-width: 1116px; /* Khớp đúng 100% với chiều rộng hero-card bên dưới */
+  max-width: 1120px;
   margin: 0 auto;
-  padding: 10px 22px 10px 16px;
+  padding: 10px 20px 10px 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   background: var(--bg-glass);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
   border: 1px solid var(--border-gold);
-  border-radius: var(--radius-full); /* Bo tròn cong vút mềm mại chuẩn Island siêu xịn */
-  box-shadow: 0 10px 30px -6px rgba(180, 83, 9, 0.12), 0 0 16px rgba(234, 179, 8, 0.08);
-  pointer-events: auto; /* Cho phép click tương tác menu */
-  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  border-radius: var(--radius-full);
+  box-shadow: 0 10px 28px -6px rgba(15, 23, 42, 0.08), 0 0 14px rgba(217, 119, 6, 0.06);
+  pointer-events: auto;
+  transition: background-color 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease;
 }
 
-/* Trạng thái khi cuộn qua đầu trang: bóng đổ nổi bật hơn */
 .site-header.header-scrolled .header-inner {
-  background: rgba(255, 255, 255, 0.84);
-  box-shadow: 0 14px 38px -6px rgba(180, 83, 9, 0.18), 0 2px 8px rgba(0, 0, 0, 0.04);
-  border-color: rgba(202, 138, 4, 0.35);
-}
-
-[data-theme="dark"] .site-header.header-scrolled .header-inner {
-  background: rgba(20, 22, 31, 0.85);
-  box-shadow: 0 14px 38px -6px rgba(0, 0, 0, 0.45), 0 0 22px rgba(234, 179, 8, 0.12);
-  border-color: rgba(217, 119, 6, 0.35);
-}
-
-.header-inner:hover {
-  box-shadow: 0 16px 42px -4px rgba(180, 83, 9, 0.22), 0 0 26px rgba(234, 179, 8, 0.2);
+  background: var(--bg-card);
+  box-shadow: 0 12px 32px -6px rgba(15, 23, 42, 0.12), 0 0 18px rgba(217, 119, 6, 0.1);
   border-color: var(--border-gold-strong);
 }
 
 .brand-badge {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   text-decoration: none;
   color: var(--text-main);
+  min-width: 0;
+  flex-shrink: 1;
 }
 
 .brand-icon-box {
-  width: 44px;
-  height: 44px;
+  width: 42px;
+  height: 42px;
   border-radius: var(--radius-sm);
   background: var(--gradient-gold-btn);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fff;
-  box-shadow: 0 4px 14px rgba(217, 119, 6, 0.35);
+  box-shadow: 0 4px 14px rgba(217, 119, 6, 0.28);
   position: relative;
   overflow: hidden;
   transition: var(--transition-bounce);
-  border: 1.5px solid var(--border-gold);
+  border: 1.5px solid rgba(254, 240, 138, 0.4);
+  flex-shrink: 0;
 }
 
 .brand-logo-img {
@@ -282,49 +283,44 @@ body {
   border-radius: inherit;
 }
 
-.brand-icon-box::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.45) 0%, transparent 60%);
-  pointer-events: none;
-}
-
 .brand-badge:hover .brand-icon-box {
-  transform: rotate(-8deg) scale(1.08);
+  transform: rotate(-6deg) scale(1.06);
 }
 
 .brand-title {
   font-family: var(--font-heading);
   font-weight: 800;
-  font-size: 1.25rem;
-  letter-spacing: 0.03em;
+  font-size: 1.18rem;
+  letter-spacing: 0.02em;
   background: var(--gradient-gold-text);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
+  white-space: nowrap;
 }
 
-.brand-sub {
-  font-size: 0.76rem;
-  font-weight: 700;
-  color: var(--text-sub);
-  display: block;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+.brand-title svg {
+  flex-shrink: 0;
+  animation: pulseBadge 3.5s ease-in-out infinite;
+}
+
+@keyframes pulseBadge {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(245, 158, 11, 0.3)); }
+  50% { transform: scale(1.08); filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.6)); }
 }
 
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+  flex-shrink: 0;
 }
 
 .theme-toggle-btn {
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   border-radius: var(--radius-full);
   background: var(--bg-secondary);
   border: 1px solid var(--border-gold);
@@ -334,75 +330,88 @@ body {
   align-items: center;
   justify-content: center;
   transition: var(--transition-bounce);
+  flex-shrink: 0;
 }
 
 .theme-toggle-btn:hover {
-  transform: scale(1.1) rotate(15deg);
+  transform: scale(1.08) rotate(12deg);
   background: var(--gold-100);
   color: var(--gold-700);
-  box-shadow: 0 0 16px rgba(202, 138, 4, 0.28);
+  border-color: var(--gold-400);
+}
+
+[data-theme="dark"] .theme-toggle-btn:hover {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+}
+
+.theme-toggle-btn:active {
+  transform: scale(0.94);
 }
 
 .header-cta-btn {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  padding: 10px 20px;
+  gap: 8px;
+  padding: 9px 18px;
   border-radius: var(--radius-full);
   background: var(--gradient-gold-btn);
   color: #fff;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
-  font-size: 0.88rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.22);
+  font-size: 0.86rem;
   font-weight: 700;
   text-decoration: none;
-  box-shadow: 0 4px 16px rgba(180, 83, 9, 0.28);
-  transition: var(--transition-bounce);
+  box-shadow: 0 4px 14px rgba(217, 119, 6, 0.28);
+  transition: var(--transition-smooth);
+  white-space: nowrap;
 }
 
 .header-cta-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 22px rgba(180, 83, 9, 0.4);
+  box-shadow: 0 7px 20px rgba(217, 119, 6, 0.38);
+}
+
+.header-cta-btn:active {
+  transform: translateY(0) scale(0.97);
 }
 
 .header-chat-icon {
-  width: 18px;
-  height: 18px;
+  width: 17px;
+  height: 17px;
   flex-shrink: 0;
   stroke: currentColor;
-  display: inline-block;
-  vertical-align: middle;
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.header-cta-btn:hover .header-chat-icon {
-  transform: scale(1.15) rotate(-6deg);
-}
+.cta-text-full { display: inline; }
+.cta-text-short { display: none; }
 
-/* --- 5. BỐ CỤC 2 CỘT CHUẨN BIO HUB (SIDEBAR PROFILE & MAIN CONTENT) --- */
+/* --- 5. BỐ CỤC CHÍNH (MAIN WRAPPER & GRID) --- */
 .main-wrapper {
-  max-width: 1220px;
+  max-width: 1140px;
   margin: 0 auto;
-  padding: 30px 22px 80px;
+  padding: 26px 20px 85px;
+  width: 100%;
 }
 
 .profile-layout-grid {
   display: grid;
-  grid-template-columns: 330px 1fr;
-  gap: 32px;
+  grid-template-columns: 320px 1fr;
+  gap: 30px;
   align-items: start;
 }
 
-/* CỘT BÊN TRÁI: PROFILE SIDEBAR */
+/* CỘT TRÁI: PROFILE SIDEBAR */
 .profile-sidebar {
   position: sticky;
   top: 86px;
+  z-index: 10;
 }
 
 .profile-sidebar-card {
   background: var(--bg-card);
   border: 1px solid var(--border-gold);
-  border-radius: 28px;
-  padding: 38px 24px 30px;
+  border-radius: var(--radius-xl);
+  padding: 34px 22px 28px;
   box-shadow: var(--shadow-md);
   display: flex;
   flex-direction: column;
@@ -415,23 +424,24 @@ body {
 
 .profile-sidebar-card:hover {
   border-color: var(--gold-400);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-lg), var(--shadow-gold-glow);
 }
 
+/* Avatar và vòng hào quang xoay */
 .sidebar-avatar-wrapper {
   position: relative;
-  width: 148px;
-  height: 148px;
-  margin-bottom: 18px;
+  width: 132px;
+  height: 132px;
+  margin-bottom: 16px;
 }
 
 .sidebar-avatar-ring {
   position: absolute;
-  inset: -6px;
+  inset: -5px;
   border-radius: 50%;
-  background: conic-gradient(from 0deg, #fde6aa, #d97706, #0284c7, #fde6aa);
-  animation: rotateRing 8s linear infinite;
-  box-shadow: 0 0 24px rgba(2, 132, 199, 0.35);
+  background: conic-gradient(from 0deg, #fcd34d, #d97706, #0284c7, #fcd34d);
+  animation: rotateRing 10s linear infinite;
+  box-shadow: 0 0 20px rgba(2, 132, 199, 0.28);
 }
 
 @keyframes rotateRing {
@@ -444,7 +454,7 @@ body {
   border-radius: 50%;
   overflow: hidden;
   background: #1c1917;
-  border: 3.5px solid var(--bg-card);
+  border: 3px solid var(--bg-card);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -458,8 +468,8 @@ body {
 }
 
 .profile-user-name {
-  font-family: var(--font-heading);
-  font-size: 1.45rem;
+  font-family: var(--font-heading), var(--font-main), serif;
+  font-size: 1.38rem;
   font-weight: 800;
   color: var(--text-main);
   display: inline-flex;
@@ -467,6 +477,7 @@ body {
   justify-content: center;
   gap: 8px;
   margin-bottom: 4px;
+  letter-spacing: 0.01em;
 }
 
 .verified-check-badge {
@@ -474,70 +485,110 @@ body {
   display: inline-flex;
   align-items: center;
   flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+.profile-sidebar-card:hover .verified-check-badge {
+  transform: scale(1.12);
 }
 
 .profile-username-tag {
   display: inline-block;
-  font-size: 0.88rem;
+  font-size: 0.84rem;
   font-weight: 700;
   color: #0284c7;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   text-decoration: none;
   margin-bottom: 18px;
-  transition: var(--transition);
+  padding: 3px 12px;
+  border-radius: var(--radius-full);
+  background: var(--accent-blue-soft);
+  border: 1px solid var(--accent-blue-border);
+  transition: var(--transition-fast);
 }
 
 .profile-username-tag:hover {
-  color: var(--gold-600);
+  color: #fff;
+  background: var(--accent-blue);
   transform: translateY(-1px);
 }
 
-/* Danh sách dịch vụ chính ở Sidebar */
+/* Danh sách lĩnh vực hoạt động chính */
 .sidebar-tech-badges {
   display: flex;
   flex-direction: column;
   gap: 8px;
   width: 100%;
-  margin-bottom: 22px;
+  margin-bottom: 20px;
 }
 
 .tech-badge-item {
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: var(--text-main);
-  padding: 8px 14px;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-gold);
-  border-radius: var(--radius-full);
-  letter-spacing: 0.02em;
   display: flex;
   align-items: center;
-  justify-content: center;
-  text-align: center;
-  transition: var(--transition);
+  gap: 10px;
+  padding: 9px 14px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-full);
+  transition: var(--transition-fast);
+  cursor: default;
 }
 
 .tech-badge-item:hover {
-  border-color: var(--gold-500);
+  border-color: var(--gold-400);
   background: var(--gold-50);
-  color: var(--gold-700);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(180, 83, 9, 0.12);
+  transform: translateY(-1.5px);
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.1);
 }
 
-/* Hàng icon mạng xã hội nhanh */
+[data-theme="dark"] .tech-badge-item:hover {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: var(--gold-400);
+}
+
+.badge-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(217, 119, 6, 0.12);
+  color: var(--gold-600);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+[data-theme="dark"] .badge-icon {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fcd34d;
+}
+
+.tech-badge-item:hover .badge-icon {
+  transform: scale(1.1);
+  color: var(--gold-500);
+}
+
+.badge-text {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: 0.01em;
+  line-height: 1.3;
+}
+
+/* Hàng Icon Mạng Xã Hội Nhanh */
 .sidebar-quick-socials {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .sidebar-social-btn {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   border-radius: 12px;
   background: var(--bg-secondary);
   border: 1px solid var(--border-light);
@@ -546,91 +597,48 @@ body {
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+  transition: var(--transition-bounce);
+  box-shadow: var(--shadow-xs);
 }
 
 .sidebar-social-btn:hover {
-  transform: translateY(-3px) scale(1.06);
+  transform: translateY(-3px) scale(1.08);
   border-color: var(--gold-400);
-  background: var(--gold-50);
-  color: var(--gold-600);
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+  background: var(--bg-card);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
 }
 
-/* CỘT BÊN PHẢI: MAIN CONTENT */
+.sidebar-social-btn:active {
+  transform: scale(0.94);
+}
+
+/* --- 6. CỘT PHẢI: TABS & NỘI DUNG CHÍNH --- */
 .profile-main-content {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
-.verified-pill-header {
-  align-self: center;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 7px 20px;
-  border-radius: var(--radius-full);
-  background: rgba(2, 132, 199, 0.08);
-  border: 1px solid rgba(2, 132, 199, 0.25);
-  color: #0284c7;
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.05em;
-  margin-bottom: 18px;
-  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.08);
-}
-
-[data-theme="dark"] .verified-pill-header {
-  background: rgba(2, 132, 199, 0.15);
-  border-color: rgba(2, 132, 199, 0.4);
-  color: #38bdf8;
-}
-
-/* Responsive cho layout 2 cột */
-@media (max-width: 992px) {
-  .profile-layout-grid {
-    grid-template-columns: 1fr;
-    gap: 24px;
-  }
-  .profile-sidebar {
-    position: static;
-  }
-  .profile-sidebar-card {
-    padding: 30px 20px;
-  }
-}
-
-/* --- 6. HỆ THỐNG TABS BO GÓC CHUẨN ĐẸP --- */
-.tabs-container {
-  margin-top: 10px;
-}
-
+/* Thanh Điều Hướng Tabs 3 Mục */
 .nav-tabs {
-  display: flex;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
   background: var(--bg-card);
   border: 1px solid var(--border-gold);
-  padding: 8px;
+  padding: 6px;
   border-radius: var(--radius-lg);
-  margin-bottom: 26px;
+  margin-bottom: 22px;
   box-shadow: var(--shadow-sm);
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.nav-tabs::-webkit-scrollbar {
-  display: none;
+  width: 100%;
 }
 
 .tab-btn {
-  flex: 1;
-  min-width: 150px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 9px;
-  padding: 13px 20px;
+  gap: 8px;
+  padding: 12px 14px;
   border: none;
   background: transparent;
   color: var(--text-muted);
@@ -641,33 +649,49 @@ body {
   cursor: pointer;
   transition: var(--transition);
   white-space: nowrap;
+  user-select: none;
+  min-width: 0;
+}
+
+.tab-btn svg {
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
 }
 
 .tab-btn:hover:not(.active) {
-  color: #0284c7;
+  color: var(--accent-blue);
   background: var(--bg-secondary);
 }
 
 .tab-btn.active {
-  background: linear-gradient(135deg, #0284c7, #0369a1);
+  background: var(--gradient-blue-btn);
   color: #fff;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
-  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.35);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
 }
 
+.tab-btn.active svg {
+  transform: scale(1.08);
+}
+
+.tab-btn:active {
+  transform: scale(0.97);
+}
+
+/* Nội dung Tab Pane với chuyển cảnh mượt */
 .tab-pane {
   display: none;
-  animation: fadeInTab 0.35s ease forwards;
 }
 
 .tab-pane.active {
   display: block;
+  animation: tabFadeInUp 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-@keyframes fadeInTab {
+@keyframes tabFadeInUp {
   from {
     opacity: 0;
-    transform: translateY(14px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -675,224 +699,21 @@ body {
   }
 }
 
-/* --- 7. HỆ THỐNG MẠNG XÃ HỘI, FANPAGE & TIKTOK (TAB 3) --- */
-.social-section {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.social-intro-box {
-  background: var(--bg-card);
-  border: 1px solid var(--border-gold);
-  border-radius: var(--radius-xl);
-  padding: 30px 26px;
-  text-align: center;
-  box-shadow: var(--shadow-sm);
-}
-
-.social-intro-box h3 {
-  font-family: var(--font-heading);
-  font-size: 1.45rem;
-  font-weight: 800;
-  color: var(--text-main);
-  margin-bottom: 8px;
-}
-
-.social-intro-box p {
-  font-size: 0.92rem;
-  color: var(--text-muted);
-  max-width: 680px;
-  margin: 0 auto;
-  line-height: 1.6;
-}
-
-.social-cards-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 22px;
-}
-
-.social-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-gold);
-  border-radius: var(--radius-lg);
-  padding: 24px 20px;
-  box-shadow: var(--shadow-md);
-  transition: var(--transition-bounce);
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.social-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 4px;
-  background: var(--gradient-gold);
-  opacity: 0;
-  transition: var(--transition);
-}
-
-.social-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--gold-500);
-}
-
-.social-card:hover::before {
-  opacity: 1;
-}
-
-.social-card-header {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-bottom: 14px;
-}
-
-.social-card-icon {
-  width: 50px;
-  height: 50px;
-  min-width: 50px;
-  border-radius: var(--radius-sm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  box-shadow: var(--shadow-sm);
-}
-
-.social-card-meta h4 {
-  font-size: 1.05rem;
-  font-weight: 800;
-  color: var(--text-main);
-  line-height: 1.3;
-}
-
-.social-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  margin-top: 4px;
-  padding: 3px 10px;
-  border-radius: var(--radius-full);
-  background: var(--gold-50);
-  border: 1px solid var(--border-gold);
-  color: var(--gold-600);
-  font-size: 0.72rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.social-card-desc {
-  font-size: 0.88rem;
-  color: var(--text-muted);
-  line-height: 1.6;
-  margin-bottom: 20px;
-  flex-grow: 1;
-}
-
-.social-card-actions {
-  display: flex;
-  gap: 10px;
-  border-top: 1px solid var(--border-light);
-  padding-top: 16px;
-  margin-top: auto;
-}
-
-.btn-social-visit {
-  flex: 1.4;
-  padding: 10px 14px;
-  border-radius: var(--radius-sm);
-  background: var(--gradient-gold-btn);
-  color: #fff;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-  font-size: 0.82rem;
-  font-weight: 700;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  transition: var(--transition);
-}
-
-.btn-social-visit:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 14px rgba(180, 83, 9, 0.35);
-}
-
-.btn-social-copy {
-  flex: 1;
-  padding: 10px 12px;
-  border-radius: var(--radius-sm);
-  background: var(--bg-card);
-  border: 1px solid var(--border-gold);
-  color: var(--text-main);
-  font-size: 0.82rem;
-  font-weight: 700;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  transition: var(--transition);
-}
-
-.btn-social-copy:hover {
-  background: var(--gold-600);
-  color: #fff;
-  border-color: var(--gold-600);
-  box-shadow: 0 4px 12px rgba(161, 98, 7, 0.25);
-}
-
-.social-warning-note {
-  background: var(--gold-50);
-  border: 1px solid var(--border-gold);
-  border-left: 4px solid var(--gold-500);
-  border-radius: var(--radius-lg);
-  padding: 18px 22px;
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  margin-top: 6px;
-}
-
-.social-warning-note p {
-  font-size: 0.88rem;
-  color: var(--text-muted);
-  line-height: 1.6;
-}
-
-[data-theme="dark"] .social-warning-note {
-  background: rgba(201, 138, 18, 0.08);
-  border-color: var(--border-gold);
-  border-left-color: var(--gold-400);
-}
-
-/* --- 8. THÔNG TIN & LIÊN HỆ TỐI GIẢN (THEO MẪU PROFILE HUB) --- */
+/* --- 7. TAB 1: THÔNG TIN LIÊN HỆ & MẠNG XÃ HỘI --- */
 .clean-profile-container {
   display: flex;
   flex-direction: column;
-  gap: 22px;
-  max-width: 900px;
-  margin: 0 auto;
+  gap: 20px;
 }
 
 .clean-box-card {
   background: var(--bg-card);
   border: 1px solid var(--border-gold);
-  border-radius: 20px;
+  border-radius: var(--radius-lg);
   padding: 24px 26px;
   box-shadow: var(--shadow-sm);
   transition: var(--transition);
+  width: 100%;
 }
 
 .clean-box-card:hover {
@@ -904,7 +725,7 @@ body {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
 .clean-header-icon {
@@ -917,11 +738,12 @@ body {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35);
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
 }
 
+/* Tiêu đề tiếng Việt: dùng font-main để 100% hiển thị hoàn hảo các dấu */
 .clean-box-header h3 {
-  font-family: var(--font-heading);
+  font-family: var(--font-main);
   font-size: 1.15rem;
   font-weight: 800;
   color: var(--text-main);
@@ -929,92 +751,7 @@ body {
   letter-spacing: -0.01em;
 }
 
-/* Lưới Mạng Xã Hội (2 cột cân đối cho Facebook & Zalo) */
-.clean-social-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
-}
-
-.clean-pill-item {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 12px 18px;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-light);
-  border-radius: 16px;
-  text-decoration: none;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
-}
-
-.clean-pill-item:hover {
-  transform: translateY(-3px);
-  border-color: var(--gold-400);
-  background: var(--gold-50);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
-}
-
-[data-theme="dark"] .clean-pill-item {
-  background: rgba(255, 255, 255, 0.03);
-  border-color: var(--border-gold);
-}
-
-[data-theme="dark"] .clean-pill-item:hover {
-  background: rgba(217, 119, 6, 0.12);
-  border-color: var(--gold-400);
-}
-
-.pill-icon {
-  width: 38px;
-  height: 38px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  flex-shrink: 0;
-}
-
-.pill-fb {
-  background: #1877f2;
-  box-shadow: 0 4px 12px rgba(24, 119, 242, 0.32);
-}
-
-.pill-messenger {
-  background: linear-gradient(135deg, #00b2ff, #006aff);
-  box-shadow: 0 4px 12px rgba(0, 106, 255, 0.32);
-}
-
-.pill-zalo {
-  background: #0068ff;
-  box-shadow: 0 4px 12px rgba(0, 104, 255, 0.32);
-}
-
-.pill-insta {
-  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-  box-shadow: 0 4px 12px rgba(220, 39, 67, 0.32);
-}
-
-.pill-tiktok {
-  background: #000000;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-.pill-tele {
-  background: #229ed9;
-  box-shadow: 0 4px 12px rgba(34, 158, 217, 0.32);
-}
-
-.pill-label {
-  font-size: 0.96rem;
-  font-weight: 700;
-  color: var(--text-main);
-  white-space: nowrap;
-}
-
-/* Danh Sách Thông Tin Liên Hệ (Các hàng bo góc) */
+/* Danh sách Thông Tin Liên Hệ */
 .clean-contact-list {
   display: flex;
   flex-direction: column;
@@ -1028,68 +765,76 @@ body {
   padding: 12px 18px;
   background: var(--bg-secondary);
   border: 1px solid var(--border-light);
-  border-radius: 16px;
+  border-radius: var(--radius-md);
   text-decoration: none;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+  transition: var(--transition);
+  box-shadow: var(--shadow-xs);
+  min-width: 0;
 }
 
 .clean-pill-row:hover {
   transform: translateY(-2px);
   border-color: var(--gold-400);
   background: var(--gold-50);
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.05);
 }
 
 [data-theme="dark"] .clean-pill-row {
   background: rgba(255, 255, 255, 0.03);
-  border-color: var(--border-gold);
 }
 
 [data-theme="dark"] .clean-pill-row:hover {
-  background: rgba(217, 119, 6, 0.12);
+  background: rgba(245, 158, 11, 0.1);
   border-color: var(--gold-400);
 }
 
 .pill-row-left {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
   flex: 1;
   text-decoration: none;
   color: inherit;
+  min-width: 0;
+  overflow: hidden;
 }
 
-.pill-phone {
-  background: #06b6d4;
-  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.32);
+.pill-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
 }
 
-.pill-mail {
-  background: #0284c7;
-  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.32);
+.clean-pill-row:hover .pill-icon,
+.clean-pill-item:hover .pill-icon {
+  transform: scale(1.06);
 }
 
-.pill-loc {
-  background: #f59e0b;
-  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.32);
-}
-
-.pill-web {
-  background: #0284c7;
-  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.32);
-}
+.pill-phone { background: #06b6d4; box-shadow: 0 4px 12px rgba(6, 182, 212, 0.32); }
+.pill-mail  { background: #0284c7; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.32); }
+.pill-loc   { background: #f59e0b; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.32); }
+.pill-web   { background: #0284c7; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.32); }
+.pill-fb    { background: #1877f2; box-shadow: 0 4px 12px rgba(24, 119, 242, 0.32); }
+.pill-zalo  { background: #0068ff; box-shadow: 0 4px 12px rgba(0, 104, 255, 0.32); }
 
 .pill-text {
-  font-size: 0.98rem;
+  font-size: 0.95rem;
   font-weight: 700;
   color: var(--text-main);
   letter-spacing: 0.01em;
+  word-break: break-word;
 }
 
+/* Nút Sao Chép Tinh Gọn */
 .clean-copy-btn {
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   border-radius: 10px;
   background: var(--bg-card);
   border: 1px solid var(--border-gold);
@@ -1098,7 +843,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: var(--transition);
+  transition: var(--transition-fast);
+  flex-shrink: 0;
+  margin-left: 10px;
 }
 
 .clean-copy-btn:hover {
@@ -1108,37 +855,78 @@ body {
   transform: scale(1.08);
 }
 
-@media (max-width: 768px) {
-  .clean-social-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-  }
-  .clean-pill-item, .clean-pill-row {
-    padding: 10px 14px;
-  }
-  .pill-icon {
-    width: 34px;
-    height: 34px;
-  }
+.clean-copy-btn:active {
+  transform: scale(0.92);
 }
 
-@media (max-width: 480px) {
-  .clean-social-grid {
-    grid-template-columns: 1fr 1fr;
-  }
+.clean-copy-btn.copied {
+  background: #10b981 !important;
+  color: #fff !important;
+  border-color: #10b981 !important;
+  transform: scale(1.08);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
 }
 
-/* --- 9. TÀI KHOẢN THANH TOÁN (TAB 3) --- */
-.banking-section {
+/* Lưới Mạng Xã Hội */
+.clean-social-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.clean-pill-item {
   display: flex;
-  flex-direction: column;
-  gap: 24px;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 18px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: var(--transition);
+  box-shadow: var(--shadow-xs);
+  min-width: 0;
 }
 
-/* --- 9. THÔNG TIN CHUYỂN KHOẢN (CHUẨN FORM THẺ NGANG THEO ẢNH MẪU 2) --- */
+.clean-pill-item:hover {
+  transform: translateY(-2.5px);
+  border-color: var(--gold-400);
+  background: var(--gold-50);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.06);
+}
+
+[data-theme="dark"] .clean-pill-item {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+[data-theme="dark"] .clean-pill-item:hover {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: var(--gold-400);
+}
+
+.pill-label {
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: var(--text-main);
+  white-space: nowrap;
+}
+
+/* --- 8. TAB 2: THÔNG TIN CHUYỂN KHOẢN (NGÂN HÀNG) --- */
 .clean-banking-container {
   display: flex;
   flex-direction: column;
+  background: var(--bg-card);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-lg);
+  padding: 24px 26px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  width: 100%;
+}
+
+.clean-banking-container:hover {
+  border-color: var(--gold-400);
+  box-shadow: var(--shadow-md);
 }
 
 .transfer-accounts-list {
@@ -1150,43 +938,49 @@ body {
 .transfer-item-row {
   display: flex;
   align-items: center;
-  gap: 20px;
-  padding: 18px 24px;
+  gap: 18px;
+  padding: 18px 22px;
   background: #f8fbff;
   border: 1px solid rgba(2, 132, 199, 0.16);
-  border-radius: 22px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xs);
+  transition: var(--transition);
+  min-width: 0;
 }
 
 .transfer-item-row:hover {
   transform: translateY(-2px);
   border-color: #0284c7;
   background: #f0f7ff;
-  box-shadow: 0 10px 26px rgba(2, 132, 199, 0.12);
+  box-shadow: 0 8px 24px rgba(2, 132, 199, 0.12);
 }
 
 [data-theme="dark"] .transfer-item-row {
   background: rgba(255, 255, 255, 0.035);
-  border-color: rgba(2, 132, 199, 0.24);
+  border-color: rgba(2, 132, 199, 0.25);
 }
 
 [data-theme="dark"] .transfer-item-row:hover {
-  background: rgba(2, 132, 199, 0.08);
+  background: rgba(2, 132, 199, 0.1);
   border-color: #38bdf8;
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
 }
 
 .transfer-bank-logo {
-  width: 54px;
-  height: 54px;
+  width: 52px;
+  height: 52px;
   border-radius: 14px;
   overflow: hidden;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease;
+}
+
+.transfer-item-row:hover .transfer-bank-logo {
+  transform: scale(1.05);
 }
 
 .transfer-bank-logo svg {
@@ -1201,14 +995,18 @@ body {
   flex-direction: column;
   gap: 3px;
   min-width: 0;
+  overflow: hidden;
 }
 
 .transfer-holder-name {
-  font-size: 0.88rem;
+  font-size: 0.84rem;
   font-weight: 700;
   color: #475569;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 [data-theme="dark"] .transfer-holder-name {
@@ -1216,12 +1014,13 @@ body {
 }
 
 .transfer-account-num {
-  font-family: var(--font-heading), monospace;
-  font-size: 1.45rem;
+  font-family: var(--font-heading), var(--font-main), monospace;
+  font-size: 1.4rem;
   font-weight: 800;
   color: #0f172a;
   letter-spacing: 0.04em;
   line-height: 1.25;
+  user-select: text;
 }
 
 [data-theme="dark"] .transfer-account-num {
@@ -1229,9 +1028,12 @@ body {
 }
 
 .transfer-bank-label {
-  font-size: 0.86rem;
+  font-size: 0.84rem;
   font-weight: 600;
   color: #0284c7;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 [data-theme="dark"] .transfer-bank-label {
@@ -1241,14 +1043,14 @@ body {
 .transfer-item-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   flex-shrink: 0;
 }
 
 .transfer-action-btn {
-  width: 46px;
-  height: 46px;
-  border-radius: 14px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
   background: #ffffff;
   border: 1px solid #e2e8f0;
   color: #0284c7;
@@ -1256,8 +1058,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.22s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  transition: var(--transition-fast);
+  box-shadow: var(--shadow-xs);
+  flex-shrink: 0;
 }
 
 .transfer-action-btn:hover {
@@ -1265,7 +1068,18 @@ body {
   border-color: #0284c7;
   color: #ffffff;
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(2, 132, 199, 0.28);
+  box-shadow: 0 5px 14px rgba(2, 132, 199, 0.28);
+}
+
+.transfer-action-btn:active {
+  transform: scale(0.92);
+}
+
+.transfer-action-btn.copied {
+  background: #10b981 !important;
+  color: #ffffff !important;
+  border-color: #10b981 !important;
+  box-shadow: 0 0 14px rgba(16, 185, 129, 0.4);
 }
 
 [data-theme="dark"] .transfer-action-btn {
@@ -1278,26 +1092,25 @@ body {
   background: #0284c7;
   border-color: #0284c7;
   color: #ffffff;
-  box-shadow: 0 6px 16px rgba(2, 132, 199, 0.4);
+  box-shadow: 0 5px 14px rgba(2, 132, 199, 0.4);
 }
 
-/* KHỐI TRẠNG THÁI HỆ THỐNG ĐANG CẬP NHẬT */
+/* --- 9. TAB 3: HỆ THỐNG ĐANG CẬP NHẬT --- */
 .system-updating-card {
-  padding: 46px 24px;
+  padding: 44px 22px;
   background: var(--bg-card);
   border: 1.5px dashed var(--border-gold);
-  border-radius: 22px;
+  border-radius: var(--radius-lg);
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   gap: 12px;
-  margin: 10px 0;
 }
 
 .updating-icon-box {
-  width: 60px;
-  height: 60px;
+  width: 58px;
+  height: 58px;
   border-radius: 50%;
   background: rgba(2, 132, 199, 0.08);
   color: #0284c7;
@@ -1313,6 +1126,7 @@ body {
 }
 
 .system-updating-card h3 {
+  font-family: var(--font-main);
   font-size: 1.25rem;
   font-weight: 800;
   color: var(--text-main);
@@ -1326,68 +1140,73 @@ body {
 }
 
 .btn-updating-contact {
-  margin-top: 10px;
+  margin-top: 8px;
   display: inline-flex;
   align-items: center;
-  padding: 11px 24px;
+  padding: 10px 22px;
   border-radius: var(--radius-full);
   background: var(--gradient-gold-btn);
   color: #fff;
   font-size: 0.88rem;
   font-weight: 700;
   text-decoration: none;
-  box-shadow: 0 4px 14px rgba(180, 83, 9, 0.25);
+  box-shadow: 0 4px 14px rgba(217, 119, 6, 0.25);
   transition: var(--transition-bounce);
 }
 
 .btn-updating-contact:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(180, 83, 9, 0.35);
+  box-shadow: 0 7px 18px rgba(217, 119, 6, 0.35);
 }
 
-/* --- 10. FOOTER BO GÓC SANG TRỌNG --- */
+/* --- 10. FOOTER TRANG WEB --- */
 .site-footer {
+  width: 100%;
   background: var(--bg-card);
   border-top: 1px solid var(--border-gold);
-  padding: 44px 22px 32px;
-  margin-top: 60px;
+  padding: 42px 20px 30px;
+  margin-top: 50px;
+  box-sizing: border-box;
 }
 
 .footer-inner {
-  max-width: 1160px;
+  max-width: 1120px;
   margin: 0 auto;
+  width: 100%;
 }
 
 .footer-top {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;
-  gap: 40px;
-  margin-bottom: 32px;
+  gap: 36px;
+  margin-bottom: 28px;
 }
 
 .footer-brand h4 {
-  font-family: var(--font-heading);
-  font-size: 1.25rem;
+  font-family: var(--font-main);
+  font-size: 1.15rem;
   font-weight: 800;
   color: var(--text-main);
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   background: var(--gradient-gold-text);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .footer-brand p {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: var(--text-muted);
   line-height: 1.65;
-  max-width: 460px;
+  max-width: 440px;
+  white-space: pre-line;
 }
 
 .footer-links h5, .footer-contact h5 {
-  font-size: 0.98rem;
+  font-family: var(--font-main);
+  font-size: 0.96rem;
   font-weight: 800;
   color: var(--text-main);
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 .footer-links ul {
@@ -1395,17 +1214,17 @@ body {
 }
 
 .footer-links li {
-  margin-bottom: 9px;
+  margin-bottom: 8px;
 }
 
 .footer-links a {
   text-decoration: none;
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   color: var(--text-muted);
   transition: color 0.2s;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
 }
 
 .footer-links a:hover {
@@ -1413,12 +1232,12 @@ body {
 }
 
 .footer-contact p {
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   color: var(--text-muted);
-  margin-bottom: 10px;
+  margin-bottom: 9px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 9px;
 }
 
 .footer-contact .svg-icon {
@@ -1427,50 +1246,51 @@ body {
 
 .footer-bottom {
   border-top: 1px solid var(--border-light);
-  padding-top: 22px;
+  padding-top: 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.84rem;
+  font-size: 0.82rem;
   color: var(--text-sub);
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 10px;
 }
 
 /* --- 11. FLOATING ACTION WIDGETS --- */
 .floating-actions {
   position: fixed;
-  bottom: 26px;
-  right: 26px;
+  bottom: 24px;
+  right: 24px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  z-index: 999;
+  gap: 12px;
+  z-index: 998;
 }
 
 .float-btn {
-  width: 52px;
-  height: 52px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fff;
   text-decoration: none;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
   transition: var(--transition-bounce);
   position: relative;
   border: none;
+  flex-shrink: 0;
 }
 
 .float-zalo {
   background: linear-gradient(135deg, #0284c7, #0369a1);
-  box-shadow: 0 8px 24px rgba(2, 132, 199, 0.4);
+  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.38);
 }
 
 .float-phone {
   background: linear-gradient(135deg, #059669, #047857);
-  box-shadow: 0 8px 24px rgba(5, 150, 105, 0.4);
+  box-shadow: 0 6px 20px rgba(5, 150, 105, 0.38);
 }
 
 .float-scroll {
@@ -1480,7 +1300,7 @@ body {
   cursor: pointer;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(12px);
+  transform: translateY(10px);
   box-shadow: var(--shadow-md);
 }
 
@@ -1491,44 +1311,50 @@ body {
 }
 
 .float-btn:hover {
-  transform: scale(1.12);
+  transform: scale(1.1);
+}
+
+.float-btn:active {
+  transform: scale(0.94);
 }
 
 .pulse-ring {
   position: absolute;
-  inset: -5px;
+  inset: -4px;
   border-radius: 50%;
-  border: 2px solid rgba(0, 136, 255, 0.6);
-  animation: pulseAnimation 2s infinite;
+  border: 2px solid rgba(2, 132, 199, 0.55);
+  animation: pulseAnimation 2.2s infinite;
   pointer-events: none;
 }
 
 @keyframes pulseAnimation {
-  0% { transform: scale(1); opacity: 1; }
-  100% { transform: scale(1.4); opacity: 0; }
+  0% { transform: scale(1); opacity: 0.9; }
+  100% { transform: scale(1.42); opacity: 0; }
 }
 
-/* --- 12. TOAST NOTIFICATION & MODAL QR BO GÓC MỀM --- */
+/* --- 12. TOAST NOTIFICATION & MODAL QR --- */
 .toast-notice {
   position: fixed;
-  bottom: 32px;
+  bottom: 24px;
   left: 50%;
-  transform: translateX(-50%) translateY(32px);
+  transform: translateX(-50%) translateY(28px);
   background: var(--bg-card);
   color: var(--text-main);
   border: 1px solid var(--border-gold-strong);
-  padding: 14px 28px;
+  padding: 12px 22px;
   border-radius: var(--radius-full);
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   font-weight: 700;
   box-shadow: var(--shadow-lg), var(--shadow-gold-glow);
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   z-index: 10000;
   opacity: 0;
   pointer-events: none;
-  transition: all 0.35s cubic-bezier(0.34, 1.4, 0.64, 1);
+  transition: all 0.32s cubic-bezier(0.34, 1.4, 0.64, 1);
+  max-width: calc(100vw - 32px);
+  white-space: nowrap;
 }
 
 .toast-notice.show {
@@ -1537,26 +1363,23 @@ body {
   pointer-events: auto;
 }
 
-.toast-notice svg {
-  color: #10b981;
-}
-
 /* Modal Popup QR */
 .modal-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   z-index: 10001;
   display: none;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 16px;
 }
 
 .modal-overlay.active {
   display: flex;
-  animation: fadeInModal 0.25s ease;
+  animation: fadeInModal 0.22s ease;
 }
 
 @keyframes fadeInModal {
@@ -1568,26 +1391,26 @@ body {
   background: var(--bg-card);
   border: 1px solid var(--border-gold);
   border-radius: var(--radius-xl);
-  max-width: 420px;
+  max-width: 390px;
   width: 100%;
-  padding: 32px 26px;
+  padding: 28px 20px;
   text-align: center;
   position: relative;
   box-shadow: var(--shadow-lg);
-  animation: scaleUpModal 0.3s cubic-bezier(0.34, 1.4, 0.64, 1);
+  animation: scaleUpModal 0.28s cubic-bezier(0.34, 1.4, 0.64, 1);
 }
 
 @keyframes scaleUpModal {
-  from { transform: scale(0.9) translateY(20px); }
+  from { transform: scale(0.92) translateY(14px); }
   to { transform: scale(1) translateY(0); }
 }
 
 .modal-close-btn {
   position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 36px;
-  height: 36px;
+  top: 14px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   border: 1px solid var(--border-light);
   background: var(--bg-secondary);
@@ -1596,205 +1419,105 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: var(--transition);
+  transition: var(--transition-fast);
 }
 
 .modal-close-btn:hover {
   background: #fee2e2;
   color: #ef4444;
+  transform: rotate(90deg);
 }
 
 .qr-image-display {
-  width: 220px;
-  height: 220px;
-  margin: 18px auto;
-  border-radius: var(--radius-lg);
+  width: 200px;
+  height: 200px;
+  margin: 16px auto;
+  border-radius: var(--radius-md);
   border: 2px solid var(--border-gold);
   overflow: hidden;
   background: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px;
+  padding: 8px;
 }
 
 .qr-image-display img {
   max-width: 100%;
   height: auto;
   display: block;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
 }
 
 /* ==========================================================================
-   13. TỐI ƯU ĐA THIẾT BỊ CHUYÊN SÂU (PC DESKTOP, LAPTOP, TABLET & MOBILE)
+   13. TỐI ƯU HÓA GIAO DIỆN PC DESKTOP (>= 993px)
    ========================================================================== */
-
-/* --- TIER 1: PC & DESKTOP MÀN HÌNH LỚN (>= 1200px) --- */
-@media (min-width: 1200px) {
-  .main-wrapper {
-    max-width: 1200px;
-    padding: 36px 24px 90px;
+@media (min-width: 993px) {
+  .profile-sidebar {
+    position: sticky;
+    top: 86px;
   }
 
-  .site-header {
-    top: 20px;
-    padding: 0 24px;
-    width: 100%;
+  /* Micro-animation khi hover card trên PC */
+  .clean-box-card,
+  .clean-banking-container,
+  .profile-sidebar-card {
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.28s ease;
   }
 
-  .header-inner {
-    max-width: 1152px; /* Thẳng hàng tuyệt đối 100% với hero-card (1200px - 24px*2) */
-    padding: 12px 24px 12px 16px;
+  .clean-pill-row,
+  .clean-pill-item,
+  .transfer-item-row {
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.22s ease,
+                background-color 0.22s ease;
   }
 
-  .hero-card {
-    padding: 50px 44px;
-    border-radius: var(--radius-2xl);
-  }
+  .clean-contact-list .clean-pill-row:nth-child(1) { animation: tabFadeInUp 0.25s ease backwards 0.04s; }
+  .clean-contact-list .clean-pill-row:nth-child(2) { animation: tabFadeInUp 0.25s ease backwards 0.08s; }
+  .clean-contact-list .clean-pill-row:nth-child(3) { animation: tabFadeInUp 0.25s ease backwards 0.12s; }
+  .clean-contact-list .clean-pill-row:nth-child(4) { animation: tabFadeInUp 0.25s ease backwards 0.16s; }
 
-  .hero-grid {
-    grid-template-columns: 320px 1fr;
-    gap: 48px;
-  }
-
-  .avatar-wrapper {
-    width: 175px;
-    height: 175px;
-  }
-
-  .hero-main-title {
-    font-size: 2.5rem;
-  }
-
-  .pillars-grid {
-    gap: 20px;
-  }
-
-  .pillar-item {
-    padding: 22px 18px;
-  }
-
-  .services-section {
-    gap: 26px;
-  }
-
-  .service-card {
-    padding: 32px 28px;
-  }
-
-  .contact-layout {
-    gap: 32px;
-  }
-
-  .bank-cards-grid {
-    gap: 28px;
-  }
+  .transfer-accounts-list .transfer-item-row:nth-child(1) { animation: tabFadeInUp 0.25s ease backwards 0.05s; }
+  .transfer-accounts-list .transfer-item-row:nth-child(2) { animation: tabFadeInUp 0.25s ease backwards 0.1s; }
 }
 
-/* --- TIER 2: LAPTOP & DESKTOP VỪA (993px - 1199px) --- */
-@media (min-width: 993px) and (max-width: 1199px) {
-  .main-wrapper {
-    max-width: 1040px;
-    padding: 30px 20px 80px;
-  }
-
-  .site-header {
-    top: 16px;
-    padding: 0 20px;
-    width: 100%;
-  }
-
-  .header-inner {
-    max-width: 1000px; /* Thẳng hàng 100% với hero-card (1040px - 20px*2) */
-  }
-
-  .hero-grid {
-    grid-template-columns: 280px 1fr;
-    gap: 36px;
-  }
-
-  .hero-main-title {
-    font-size: 2.1rem;
-  }
-
-  .pillars-grid {
-    gap: 14px;
-  }
-
-  .services-section {
-    gap: 18px;
-  }
-
-  .service-card {
-    padding: 24px 20px;
-  }
-}
-
-/* --- TIER 3: TABLET (769px - 992px) --- */
+/* ==========================================================================
+   14. TỐI ƯU HÓA TABLET (769px - 992px)
+   ========================================================================== */
 @media (min-width: 769px) and (max-width: 992px) {
   .main-wrapper {
-    padding: 26px 18px 70px;
+    padding: 24px 18px 70px;
   }
 
   .profile-layout-grid {
     grid-template-columns: 1fr;
-    gap: 28px;
+    gap: 24px;
   }
 
   .profile-sidebar {
     position: static;
-    max-width: 480px;
+    max-width: 520px;
     margin: 0 auto;
     width: 100%;
   }
 
-  .site-header {
-    top: 14px;
-    padding: 0 14px;
+  .profile-sidebar-card {
+    padding: 28px 22px 24px;
   }
 
-  .hero-grid {
-    grid-template-columns: 1fr;
-    text-align: center;
-    gap: 32px;
+  .sidebar-tech-badges {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
-  .hero-content {
-    align-items: center;
-  }
-
-  .hero-main-title {
-    font-size: 2rem;
-  }
-
-  .pillars-grid {
-    grid-template-columns: repeat(3, 1fr);
-    width: 100%;
-    gap: 14px;
-  }
-
-  .services-section {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-  }
-
-  .services-section .service-card:last-child {
-    grid-column: span 2;
-  }
-
-  .workflow-steps {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-  }
-
-  .contact-layout {
-    grid-template-columns: 1fr;
-    gap: 24px;
-  }
-
-  .bank-cards-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 18px;
+  .tech-badge-item {
+    font-size: 0.8rem;
+    padding: 6px 14px;
   }
 
   .footer-top {
@@ -1807,220 +1530,42 @@ body {
   }
 }
 
-/* --- TIER 4: MOBILE CHUNG (< 768px) --- */
-@media (max-width: 768px) {
+/* ==========================================================================
+   15. TỐI ƯU HÓA TOÀN DIỆN CHO MOBILE (< 992px VÀ ĐẶC BIỆT < 768px)
+   - Header bám đỉnh full-width, nền vững chắc, không để lộ chữ bên dưới
+   - Floating Action Buttons dạng dock ngang dưới đáy: KHÔNG CHE NÚT SAO CHÉP
+   - Khối Profile thon gọn, tiết kiệm không gian
+   - Triệt tiêu 100% hiện tượng tràn ngang (Horizontal overflow stripe)
+   ========================================================================== */
+@media (max-width: 992px) {
+  /* 1. Header trên Mobile: Bám đỉnh full-width vững chắc, chống xuyên thấu chữ */
   .site-header {
-    top: 10px;
-    padding: 0 10px;
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 0;
+    width: 100%;
+    z-index: 1000;
   }
 
   .header-inner {
-    padding: 8px 14px 8px 10px;
-    border-radius: var(--radius-full);
-  }
-
-  .brand-icon-box {
-    width: 40px;
-    height: 40px;
-  }
-
-  .brand-title {
-    font-size: 1.05rem;
-  }
-
-  .header-cta-btn span {
-    display: none;
-  }
-
-  .header-cta-btn {
-    padding: 9px 12px;
-  }
-
-  .theme-toggle-btn {
-    width: 40px;
-    height: 40px;
-  }
-
-  .main-wrapper {
-    padding: 18px 14px 70px;
-  }
-
-  .profile-layout-grid {
-    grid-template-columns: 1fr;
-    gap: 24px;
-  }
-
-  .profile-sidebar {
-    position: static;
-    width: 100%;
+    border-radius: 0 0 16px 16px;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    background: var(--bg-card); /* Nền vững chắc không để lộ chữ cuộn bên dưới */
+    padding: 9px 14px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
     max-width: 100%;
   }
 
-  .profile-sidebar-card {
-    padding: 28px 18px 24px;
-    border-radius: 22px;
-  }
-
-  .sidebar-avatar-wrapper {
-    width: 130px;
-    height: 130px;
-  }
-
-  .hero-card {
-    padding: 28px 18px;
-    border-radius: var(--radius-xl);
-    margin-bottom: 24px;
-  }
-
-  .hero-grid {
-    grid-template-columns: 1fr;
-    text-align: center;
-    gap: 24px;
-  }
-
-  .hero-content {
-    align-items: center;
-  }
-
-  .avatar-wrapper {
-    width: 140px;
-    height: 140px;
-    margin-bottom: 16px;
-  }
-
-  .hero-name {
-    font-size: 1.5rem;
-  }
-
-  .hero-main-title {
-    font-size: 1.7rem;
-    line-height: 1.3;
-  }
-
-  .hero-desc {
-    font-size: 0.92rem;
-    margin-bottom: 14px;
-  }
-
-  .pillars-grid {
-    grid-template-columns: 1fr;
-    width: 100%;
-    gap: 8px;
-    margin-top: 2px;
-  }
-
-  .pillar-item {
-    padding: 8px 12px;
-    border-radius: var(--radius-sm);
-    gap: 10px;
-  }
-
-  .pillar-icon {
-    width: 32px;
-    height: 32px;
-    min-width: 32px;
-    border-radius: 8px;
-  }
-
-  .pillar-icon svg {
-    width: 16px;
-    height: 16px;
-  }
-
-  .pillar-item h4 {
-    font-size: 0.85rem;
-  }
-
-  .nav-tabs {
-    gap: 6px;
-    padding: 6px;
-    border-radius: var(--radius-md);
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-
-  .tab-btn {
-    min-width: 135px;
-    padding: 11px 14px;
-    font-size: 0.86rem;
-  }
-
-  .services-section {
-    grid-template-columns: 1fr;
-    gap: 18px;
-  }
-
-  .service-card {
-    padding: 24px 18px;
-    border-radius: var(--radius-md);
-  }
-
-  .workflow-box {
-    padding: 26px 18px;
-    border-radius: var(--radius-lg);
-  }
-
-  .workflow-steps {
-    grid-template-columns: 1fr;
-    gap: 18px;
-  }
-
-  .contact-layout {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-
-  .contact-card, .consultation-form-card {
-    padding: 26px 18px;
-    border-radius: var(--radius-lg);
-  }
-
-  .bank-cards-grid {
-    grid-template-columns: 1fr;
-    gap: 18px;
-  }
-
-  .bank-item-box {
-    padding: 22px 18px;
-    border-radius: var(--radius-lg);
-  }
-
-  .footer-top {
-    grid-template-columns: 1fr;
-    gap: 24px;
-  }
-
-  .footer-bottom {
-    flex-direction: column;
-    text-align: center;
-    gap: 10px;
-  }
-
-  .floating-actions {
-    bottom: 18px;
-    right: 18px;
-    gap: 10px;
-  }
-
-  .float-btn {
-    width: 48px;
-    height: 48px;
-  }
-}
-
-/* --- TIER 5: SMARTPHONE CỠ NHỎ (< 480px & 360px) --- */
-@media (max-width: 480px) {
-  .site-header {
-    top: 8px;
-    padding: 0 8px;
-  }
-
-  .header-inner {
-    padding: 7px 12px 7px 8px;
+  [data-theme="dark"] .header-inner {
+    background: #171924;
   }
 
   .brand-badge {
-    gap: 10px;
+    gap: 9px;
   }
 
   .brand-icon-box {
@@ -2030,7 +1575,13 @@ body {
   }
 
   .brand-title {
-    font-size: 0.96rem;
+    font-size: 1.05rem;
+    gap: 5px;
+  }
+
+  .brand-title svg {
+    width: 16px;
+    height: 16px;
   }
 
   .header-actions {
@@ -2043,100 +1594,264 @@ body {
   }
 
   .header-cta-btn {
-    padding: 8px 10px;
+    padding: 8px 12px;
+    font-size: 0.82rem;
+    gap: 6px;
   }
 
+  .cta-text-full { display: none; }
+  .cta-text-short { display: inline; }
+
+  /* 2. Main Wrapper trên Mobile */
   .main-wrapper {
-    padding: 14px 10px 60px;
+    padding: 16px 12px 85px; /* 85px đệm dưới giúp nội dung luôn cuộn trên dock nổi */
+    max-width: 100%;
   }
 
-  .hero-card {
-    padding: 22px 14px;
+  .profile-layout-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  /* 3. Khối Profile Sidebar Thon Gọn Trên Mobile */
+  .profile-sidebar {
+    position: static;
+    width: 100%;
+  }
+
+  .profile-sidebar-card {
+    padding: 20px 14px 18px;
     border-radius: var(--radius-lg);
   }
 
-  .avatar-wrapper {
-    width: 120px;
-    height: 120px;
-  }
-
-  .hero-main-title {
-    font-size: 1.45rem;
-  }
-
-  .hero-desc {
-    font-size: 0.88rem;
-    line-height: 1.5;
+  .sidebar-avatar-wrapper {
+    width: 94px;
+    height: 94px;
     margin-bottom: 12px;
   }
 
-  .pillars-grid {
-    grid-template-columns: 1fr;
+  .sidebar-avatar-ring {
+    inset: -4px;
+  }
+
+  .profile-user-name {
+    font-size: 1.25rem;
+    margin-bottom: 2px;
+  }
+
+  .verified-check-badge svg {
+    width: 19px;
+    height: 19px;
+  }
+
+  .profile-username-tag {
+    font-size: 0.78rem;
+    padding: 2px 10px;
+    margin-bottom: 12px;
+  }
+
+  /* 3 Ô HÀNG NGANG - HÌNH THẺ CHỮ NHẬT ĐỨNG - THU NHỎ DIỆN TÍCH THEO YÊU CẦU */
+  .sidebar-tech-badges {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 6px !important;
+    width: 100% !important;
+    margin-bottom: 14px !important;
+    box-sizing: border-box !important;
+  }
+
+  .tech-badge-item {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    padding: 8px 4px 7px !important;
+    min-height: 70px !important;
+    border-radius: 12px !important;
+    background: var(--bg-secondary) !important;
+    border: 1px solid var(--border-gold) !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02) !important;
+    gap: 0 !important;
+    transition: var(--transition-fast) !important;
+  }
+
+  .tech-badge-item:hover,
+  .tech-badge-item:active {
+    background: var(--gold-50) !important;
+    border-color: var(--gold-400) !important;
+    transform: translateY(-2px) !important;
+  }
+
+  [data-theme="dark"] .tech-badge-item {
+    background: rgba(255, 255, 255, 0.035) !important;
+    border-color: rgba(245, 158, 11, 0.25) !important;
+  }
+
+  [data-theme="dark"] .tech-badge-item:hover,
+  [data-theme="dark"] .tech-badge-item:active {
+    background: rgba(245, 158, 11, 0.12) !important;
+    border-color: var(--gold-400) !important;
+  }
+
+  .badge-icon {
+    width: 26px !important;
+    height: 26px !important;
+    border-radius: 8px !important;
+    background: rgba(217, 119, 6, 0.12) !important;
+    color: var(--gold-600) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-bottom: 4px !important;
+    flex-shrink: 0 !important;
+  }
+
+  [data-theme="dark"] .badge-icon {
+    background: rgba(245, 158, 11, 0.18) !important;
+    color: #fcd34d !important;
+  }
+
+  .badge-icon svg {
+    width: 15px !important;
+    height: 15px !important;
+  }
+
+  .badge-text {
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    color: var(--text-main) !important;
+    line-height: 1.25 !important;
+    letter-spacing: 0 !important;
+    text-align: center !important;
+    display: block !important;
+  }
+
+  .sidebar-quick-socials {
+    gap: 12px;
+  }
+
+  .sidebar-social-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+  }
+
+  /* 4. Thanh Tabs trên Mobile: Grid 3 Cột Vừa Khít 100%, Không Tràn */
+  .nav-tabs {
+    position: static; /* Không làm sticky để tránh che khuất màn hình */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 6px;
+    padding: 5px;
+    border-radius: var(--radius-md);
+    margin-bottom: 16px;
     width: 100%;
-    margin-top: 0;
   }
 
-  .pillar-item {
-    padding: 6px 10px;
-    border-radius: 10px;
-    gap: 8px;
+  .tab-btn {
+    min-width: 0 !important;
+    padding: 10px 4px;
+    font-size: 0.84rem;
+    gap: 6px;
+    border-radius: 12px;
+    justify-content: center;
   }
 
-  .pillar-icon {
-    width: 28px;
-    height: 28px;
-    min-width: 28px;
-    border-radius: 7px;
-  }
-
-  .pillar-icon svg {
+  .tab-btn svg {
     width: 15px;
     height: 15px;
   }
 
-  .pillar-item h4 {
-    font-size: 0.82rem;
-    font-weight: 700;
+  /* 5. Khối Nội Dung Liên Hệ trên Mobile */
+  .clean-box-card {
+    padding: 18px 14px;
+    border-radius: var(--radius-md);
   }
 
-  .contact-row-item {
-    flex-direction: column;
-    align-items: flex-start;
+  .clean-box-header {
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .clean-header-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+  }
+
+  .clean-header-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .clean-box-header h3 {
+    font-size: 1.05rem;
+  }
+
+  .clean-contact-list {
+    gap: 10px;
+  }
+
+  .clean-pill-row {
+    padding: 10px 12px;
+    border-radius: 14px;
+  }
+
+  .pill-row-left {
     gap: 12px;
-    padding: 14px 14px;
   }
 
-  .contact-item-left {
-    width: 100%;
+  .pill-icon {
+    width: 35px;
+    height: 35px;
+    border-radius: 10px;
+  }
+
+  .pill-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .pill-text {
+    font-size: 0.88rem;
+  }
+
+  .clean-copy-btn {
+    width: 35px;
+    height: 35px;
+    border-radius: 9px;
+  }
+
+  .clean-social-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .clean-pill-item {
+    padding: 10px 12px;
+    gap: 10px;
+    border-radius: 14px;
+  }
+
+  .pill-label {
+    font-size: 0.88rem;
+  }
+
+  /* 6. Khối Ngân Hàng trên Mobile */
+  .clean-banking-container {
+    padding: 18px 14px;
+    border-radius: var(--radius-md);
+  }
+
+  .transfer-accounts-list {
     gap: 12px;
-  }
-
-  .contact-type-icon {
-    width: 42px;
-    height: 42px;
-  }
-
-  .contact-info-meta .value {
-    font-size: 0.9rem;
-    word-break: break-all;
-  }
-
-  .item-action-btns {
-    width: 100%;
-    justify-content: flex-end;
-  }
-
-  .btn-icon-copy, .btn-icon-link {
-    flex: 1;
-    justify-content: center;
-    padding: 9px 10px;
   }
 
   .transfer-item-row {
-    padding: 14px 14px;
+    padding: 14px 12px;
     gap: 12px;
-    border-radius: 18px;
+    border-radius: 16px;
   }
 
   .transfer-bank-logo {
@@ -2146,7 +1861,7 @@ body {
   }
 
   .transfer-holder-name {
-    font-size: 0.8rem;
+    font-size: 0.78rem;
   }
 
   .transfer-account-num {
@@ -2157,17 +1872,72 @@ body {
     font-size: 0.8rem;
   }
 
+  .transfer-item-actions {
+    gap: 8px;
+  }
+
   .transfer-action-btn {
     width: 38px;
     height: 38px;
     border-radius: 10px;
   }
 
+  .transfer-action-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* 7. Footer trên Mobile: Full 100%, Không Bị Trắng Góc Phải */
+  .site-footer {
+    padding: 30px 16px 24px;
+    margin-top: 36px;
+    width: 100%;
+  }
+
+  .footer-top {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    margin-bottom: 22px;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+    gap: 8px;
+  }
+
+  /* 8. FLOATING ACTIONS TRÊN MOBILE: DOCK NGANG DƯỚI ĐÁY - KHÔNG CHE NÚT SAO CHÉP */
+  .floating-actions {
+    bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+    right: 14px;
+    display: flex;
+    flex-direction: row-reverse; /* Đặt Zalo ngoài cùng bên phải, Hotline ở giữa, Cuộn lên bên trái */
+    align-items: center;
+    gap: 8px;
+    z-index: 998;
+  }
+
+  .float-btn {
+    width: 42px;
+    height: 42px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
+  }
+
+  .float-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .float-scroll {
+    width: 38px;
+    height: 38px;
+  }
+
+  /* Toast & Modal trên Mobile */
   .toast-notice {
-    width: calc(100% - 24px);
-    max-width: 360px;
-    padding: 12px 16px;
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px));
     font-size: 0.84rem;
+    padding: 10px 16px;
   }
 
   .modal-box {
@@ -2179,10 +1949,133 @@ body {
     width: 180px;
     height: 180px;
   }
+}
+
+/* ==========================================================================
+   16. TỐI ƯU HÓA MÀN HÌNH NHỎ (< 480px VÀ ĐẶC BIỆT 320px - 360px)
+   ========================================================================== */
+@media (max-width: 480px) {
+  .header-inner {
+    padding: 8px 12px;
+  }
+
+  .brand-title {
+    font-size: 0.96rem;
+  }
+
+  .brand-icon-box {
+    width: 34px;
+    height: 34px;
+  }
+
+  .header-cta-btn {
+    padding: 7px 10px;
+    font-size: 0.78rem;
+  }
+
+  .main-wrapper {
+    padding: 12px 10px 80px;
+  }
+
+  .sidebar-avatar-wrapper {
+    width: 86px;
+    height: 86px;
+    margin-bottom: 10px;
+  }
+
+  .profile-user-name {
+    font-size: 1.18rem;
+  }
+
+  .sidebar-tech-badges {
+    gap: 5px !important;
+  }
+
+  .tech-badge-item {
+    padding: 7px 2px 6px !important;
+    min-height: 65px !important;
+    border-radius: 10px !important;
+  }
+
+  .badge-icon {
+    width: 24px !important;
+    height: 24px !important;
+    margin-bottom: 3px !important;
+  }
+
+  .badge-icon svg {
+    width: 13px !important;
+    height: 13px !important;
+  }
+
+  .badge-text {
+    font-size: 0.68rem !important;
+    line-height: 1.2 !important;
+  }
+
+  .tab-btn {
+    font-size: 0.78rem;
+    padding: 9px 2px;
+    gap: 4px;
+  }
+
+  .clean-box-card,
+  .clean-banking-container {
+    padding: 16px 12px;
+  }
+
+  .clean-pill-row {
+    padding: 9px 10px;
+  }
+
+  .pill-text {
+    font-size: 0.84rem;
+  }
+
+  .transfer-item-row {
+    padding: 12px 10px;
+    gap: 10px;
+  }
+
+  .transfer-bank-logo {
+    width: 40px;
+    height: 40px;
+  }
+
+  .transfer-account-num {
+    font-size: 1.12rem;
+  }
+
+  .transfer-action-btn {
+    width: 36px;
+    height: 36px;
+  }
 
   .float-btn {
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .float-scroll {
+    width: 36px;
+    height: 36px;
   }
 }
 
+/* ==========================================================================
+   17. HỖ TRỢ PREFERS-REDUCED-MOTION (ACCESSIBILITY)
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .bg-ambient::before,
+  .bg-ambient::after,
+  .sidebar-avatar-ring,
+  .pulse-ring {
+    animation: none !important;
+  }
+}

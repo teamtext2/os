@@ -1,26 +1,27 @@
 /**
  * RISE OF KINGDOMS - VIP SERVICES & COMMUNITY
- * Javascript Logic Tối Ưu, Vẽ SVG Vector Thuần & Hiệu Năng Cao
+ * Javascript Logic Tối Ưu Cho Cả PC & Mobile
+ * Micro-animations Nhẹ Nhàng, Hiện Đại, Hiệu Năng Cao
  */
 
 document.addEventListener('DOMContentLoaded', () => {
   // 1. Quản lý Theme (Sáng: Vàng Trắng / Tối: Vàng Obsidian) với SVG
   initThemeManager();
 
-  // 2. Chuyển đổi Tabs
+  // 2. Chuyển đổi Tabs & Hiệu ứng chuyển động mượt mà
   initTabsManager();
 
-  // 3. Sao chép thông tin (Copy to Clipboard) & Toast Notification SVG
+  // 3. Sao chép thông tin (Copy to Clipboard) với Micro-Feedback Checkmark
   initCopyActions();
 
   // 4. Modal QR Ngân Hàng
   initQrModal();
 
-  // 5. Scroll to top & Floating Buttons
+  // 5. Scroll to top & Header Scroll Thông Minh
   initScrollActions();
 
-  // 6. Form tư vấn dịch vụ ROK
-  initConsultationForm();
+  // 6. Cập nhật năm bản quyền tự động
+  initDynamicYear();
 });
 
 /* ===================================================
@@ -40,14 +41,14 @@ function initThemeManager() {
     document.documentElement.setAttribute('data-theme', nextTheme);
     localStorage.setItem('rok_theme', nextTheme);
     updateThemeIcon(nextTheme);
-    showToast(`Đã chuyển sang giao diện ${nextTheme === 'dark' ? 'Hoàng Kim Tối' : 'Vàng Trắng Tinh Khiết'}`);
+    showToast(`Đã chuyển sang nền ${nextTheme === 'dark' ? 'Hoàng Kim Tối' : 'Vàng Trắng Tinh Khiết'}`);
   });
 
   function updateThemeIcon(theme) {
     if (theme === 'dark') {
       // SVG Mặt Trời Hoàng Kim
       themeToggleBtn.innerHTML = `
-        <svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg class="svg-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="5"></circle>
           <line x1="12" y1="1" x2="12" y2="3"></line>
           <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -63,7 +64,7 @@ function initThemeManager() {
     } else {
       // SVG Mặt Trăng Lưỡi Liềm
       themeToggleBtn.innerHTML = `
-        <svg class="svg-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg class="svg-icon" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
         </svg>
       `;
@@ -73,7 +74,7 @@ function initThemeManager() {
 }
 
 /* ===================================================
-   2. QUẢN LÝ TABS NỘI DUNG
+   2. QUẢN LÝ TABS NỘI DUNG VỚI HIỆU ỨNG MƯỢT
    =================================================== */
 function initTabsManager() {
   const tabButtons = document.querySelectorAll('.tab-btn');
@@ -94,7 +95,12 @@ function initTabsManager() {
 
       targetBtn.classList.add('active');
       targetBtn.setAttribute('aria-selected', 'true');
+      
+      // Kích hoạt lại animation để tab luôn có hiệu ứng êm ái
       targetPane.classList.add('active');
+      targetPane.style.animation = 'none';
+      targetPane.offsetHeight; // force reflow
+      targetPane.style.animation = '';
     }
   }
 
@@ -102,6 +108,20 @@ function initTabsManager() {
     btn.addEventListener('click', () => {
       const targetId = btn.getAttribute('data-tab');
       switchTab(targetId);
+
+      // Nếu người dùng đang cuộn dở trên mobile, cuộn nhẹ về đầu phần nội dung tab
+      if (window.innerWidth <= 768) {
+        const tabsNav = document.querySelector('.nav-tabs');
+        if (tabsNav) {
+          const rect = tabsNav.getBoundingClientRect();
+          if (rect.top < 60) {
+            window.scrollTo({
+              top: window.scrollY + rect.top - 70,
+              behavior: 'smooth'
+            });
+          }
+        }
+      }
     });
   });
 
@@ -112,9 +132,9 @@ function initTabsManager() {
       if (hash) {
         e.preventDefault();
         switchTab(hash);
-        const tabsContainer = document.querySelector('.tabs-container');
-        if (tabsContainer) {
-          tabsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const navTabs = document.querySelector('.nav-tabs');
+        if (navTabs) {
+          navTabs.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
       }
     });
@@ -122,7 +142,7 @@ function initTabsManager() {
 }
 
 /* ===================================================
-   3. SAO CHÉP THÔNG TIN & TOAST NOTIFICATION VỚI SVG
+   3. SAO CHÉP THÔNG TIN VỚI MICRO-FEEDBACK TỨC THÌ
    =================================================== */
 let toastTimeout;
 function showToast(message) {
@@ -134,9 +154,9 @@ function showToast(message) {
     document.body.appendChild(toast);
   }
 
-  // Icon SVG Checkmark sắc nét
+  // Icon SVG Checkmark xanh lục bảo ngọc sắc nét
   toast.innerHTML = `
-    <svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="svg-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
       <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
       <polyline points="22 4 12 14.01 9 11.01"></polyline>
     </svg>
@@ -147,39 +167,66 @@ function showToast(message) {
   clearTimeout(toastTimeout);
   toastTimeout = setTimeout(() => {
     toast.classList.remove('show');
-  }, 2600);
+  }, 2400);
 }
 
 function initCopyActions() {
   document.querySelectorAll('[data-copy]').forEach(btn => {
+    // Lưu lại icon SVG gốc
+    btn.dataset.originalSvg = btn.innerHTML;
+
     btn.addEventListener('click', (e) => {
       e.preventDefault();
+      e.stopPropagation();
       const content = btn.getAttribute('data-copy');
       const label = btn.getAttribute('data-label') || 'thông tin';
 
       if (!content) return;
 
+      const triggerSuccessFeedback = () => {
+        showToast(`Đã sao chép ${label}: ${content}`);
+
+        // Micro-feedback checkmark ngay trên nút bấm
+        btn.classList.add('copied');
+        btn.innerHTML = `
+          <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        `;
+
+        clearTimeout(btn._resetTimer);
+        btn._resetTimer = setTimeout(() => {
+          btn.innerHTML = btn.dataset.originalSvg;
+          btn.classList.remove('copied');
+        }, 1400);
+      };
+
       if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(content)
-          .then(() => showToast(`Đã sao chép ${label}: ${content}`))
-          .catch(() => fallbackCopy(content, label));
+          .then(triggerSuccessFeedback)
+          .catch(() => fallbackCopy(content, label, triggerSuccessFeedback));
       } else {
-        fallbackCopy(content, label);
+        fallbackCopy(content, label, triggerSuccessFeedback);
       }
     });
   });
 
-  function fallbackCopy(text, label) {
+  function fallbackCopy(text, label, callback) {
     const tempInput = document.createElement('textarea');
     tempInput.value = text;
     tempInput.style.position = 'fixed';
     tempInput.style.left = '-9999px';
+    tempInput.style.top = '-9999px';
     document.body.appendChild(tempInput);
     tempInput.focus();
     tempInput.select();
     try {
       document.execCommand('copy');
-      showToast(`Đã sao chép ${label}: ${text}`);
+      if (typeof callback === 'function') {
+        callback();
+      } else {
+        showToast(`Đã sao chép ${label}: ${text}`);
+      }
     } catch (err) {
       showToast('Không thể tự động sao chép!');
     }
@@ -199,7 +246,8 @@ function initQrModal() {
   if (!modal) return;
 
   document.querySelectorAll('[data-qr-open]').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
       const qrUrl = btn.getAttribute('data-qr-img');
       const bankName = btn.getAttribute('data-bank-name') || 'Mã QR Ngân Hàng';
 
@@ -254,25 +302,25 @@ function initScrollActions() {
 
     // 1. Quản lý nút Scroll To Top
     if (scrollBtn) {
-      if (currentScrollY > 350) {
+      if (currentScrollY > 300) {
         scrollBtn.classList.add('visible');
       } else {
         scrollBtn.classList.remove('visible');
       }
     }
 
-    // 2. Quản lý Header ẩn/hiện thông minh & overlay
+    // 2. Quản lý Header ẩn/hiện thông minh
     if (!header) return;
 
-    if (currentScrollY <= 40) {
+    if (currentScrollY <= 30) {
       // Đang ở sát đỉnh trang: luôn hiện trạng thái nguyên bản
       header.classList.remove('header-hidden');
       header.classList.remove('header-scrolled');
     } else {
       header.classList.add('header-scrolled');
 
-      // Cuộn xuống -> Ẩn header để tăng không gian đọc
-      if (currentScrollY > lastScrollY && currentScrollY > 90) {
+      // Cuộn xuống -> Ẩn header để tối đa không gian đọc
+      if (currentScrollY > lastScrollY && currentScrollY > 80) {
         header.classList.add('header-hidden');
       } 
       // Cuộn ngược lên -> Hiện header ngay lập tức
@@ -283,13 +331,13 @@ function initScrollActions() {
 
     lastScrollY = currentScrollY;
 
-    // 3. Khi DỪNG CUỘN (ngừng lướt trang): êm ái hiện lại header
+    // 3. Khi dừng cuộn: nhẹ nhàng hiện lại header
     clearTimeout(stopScrollTimer);
     stopScrollTimer = setTimeout(() => {
       if (header) {
         header.classList.remove('header-hidden');
       }
-    }, 850);
+    }, 700);
   }
 
   if (scrollBtn) {
@@ -303,38 +351,11 @@ function initScrollActions() {
 }
 
 /* ===================================================
-   6. FORM TƯ VẤN DỊCH VỤ ROK
+   6. CẬP NHẬT NĂM BẢN QUYỀN TỰ ĐỘNG
    =================================================== */
-function initConsultationForm() {
-  const form = document.getElementById('consultationForm');
-  if (!form) return;
-
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    const name = document.getElementById('clientName')?.value.trim();
-    const contact = document.getElementById('clientContact')?.value.trim();
-    const service = document.getElementById('clientService')?.value;
-    const notes = document.getElementById('clientNotes')?.value.trim();
-
-    if (!name || !contact) {
-      showToast('Vui lòng nhập tên và SĐT / Zalo liên hệ!');
-      return;
-    }
-
-    // Mở liên kết Zalo trực tiếp với nội dung đã điền
-    const zaloMsg = encodeURIComponent(
-      `Chào bạn, mình cần hỗ trợ dịch vụ Rise of Kingdoms:\n` +
-      `- Tên: ${name}\n` +
-      `- Liên hệ: ${contact}\n` +
-      `- Dịch vụ: ${service}\n` +
-      `- Yêu cầu: ${notes || 'Cần tư vấn chi tiết'}`
-    );
-
-    const zaloUrl = `https://zalo.me/84949257924?text=${zaloMsg}`;
-    window.open(zaloUrl, '_blank');
-
-    showToast('Đang kết nối tới Zalo 0949.257.924...');
-    form.reset();
-  });
+function initDynamicYear() {
+  const footerYear = document.getElementById('footerYear');
+  if (footerYear) {
+    footerYear.textContent = new Date().getFullYear();
+  }
 }
