@@ -414,6 +414,20 @@ body.force-mobile .app-viewport {
   transform: scale(1.05);
 }
 
+.mobile-header-icon.mobile-header-zalo,
+.mobile-header-zalo {
+  background: linear-gradient(135deg, #0068ff 0%, #0084ff 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(0, 104, 255, 0.45);
+}
+
+.mobile-header-icon.mobile-header-zalo:hover,
+.mobile-header-zalo:hover {
+  background: linear-gradient(135deg, #0056d6 0%, #0070d6 100%) !important;
+  box-shadow: 0 3px 10px rgba(0, 104, 255, 0.6);
+  transform: scale(1.06);
+}
+
 .mobile-gold-badge {
   display: flex;
   align-items: center;
