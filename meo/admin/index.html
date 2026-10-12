@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WONTRADE Admin CMS - Quản Lý & Cập Nhật list.js</title>
+  <link rel="icon" href="../assets/rok_avatar.jpg" type="image/jpeg">
+  <style>
+    :root {
+      --primary: #e60012;
+      --primary-hover: #cf0010;
+      --primary-light: #fff1f0;
+      --dark: #1f2329;
+      --dark-card: #272c35;
+      --bg: #f4f5f8;
+      --card-bg: #ffffff;
+      --border: #e2e8f0;
+      --text: #1e293b;
+      --muted: #64748b;
+      --gold: #d48806;
+      --gold-bg: #fffbe6;
+      --gold-border: #ffe58f;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-pill: 9999px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 14px rgba(0,0,0,0.06);
+      --shadow-lg: 0 10px 30px rgba(0,0,0,0.09);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      font-size: 14px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    button, input, select, textarea {
+      font-family: inherit;
+      outline: none;
+    }
+
+    /* Top Navigation */
+    .admin-navbar {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .navbar-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      color: #111;
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-dagger {
+      color: var(--primary);
+      font-size: 22px;
+      margin: 0 -1px;
+    }
+
+    .admin-badge {
+      background: #1f2329;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      letter-spacing: 0.5px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(230, 0, 18, 0.3);
+    }
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(230, 0, 18, 0.4);
+    }
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--text);
+      border-color: var(--border);
+    }
+    .btn-secondary:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+    }
+
+    .btn-dark {
+      background: #1f2329;
+      color: #fff;
+    }
+    .btn-dark:hover {
+      background: #333a46;
+    }
+
+    .btn-success {
+      background: #10b981;
+      color: #fff;
+    }
+    .btn-success:hover {
+      background: #059669;
+    }
+
+    /* Main Container */
+    .admin-container {
+      max-width: 1400px;
+      margin: 20px auto 40px auto;
+      padding: 0 20px;
+      flex: 1;
+      width: 100%;
+    }
+
+    /* Worker Config Card */
+    .config-card {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      padding: 16px 20px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .config-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      flex: 1;
+    }
+
+    .config-input-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      min-width: 280px;
+    }
+
+    .config-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      white-space: nowrap;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .input-text {
+      width: 100%;
+      padding: 8px 14px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border);
+      font-size: 13px;
+      background: #f8fafc;
+      color: var(--text);
+      transition: all 0.2s;
+    }
+
+    .input-text:focus {
+      background: #fff;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: #ffffff;
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .stat-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .stat-icon.red { background: #fff1f0; color: var(--primary); }
+    .stat-icon.gold { background: var(--gold-bg); color: var(--gold); }
+    .stat-icon.blue { background: #e6f7ff; color: #1890ff; }
+    .stat-icon.green { background: #f6ffed; color: #52c41a; }
+
+    .stat-info .stat-val {
+      font-size: 20px;
+      font-weight: 800;
+      color: #111;
+      line-height: 1.2;
+    }
+
+    .stat-info .stat-title {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* Content Area */
+    .cms-main-card {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+
+    /* Toolbar */
+    .cms-toolbar {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      background: #ffffff;
+    }
+
+    .toolbar-search {
+      position: relative;
+      flex: 1;
+      max-width: 380px;
+      min-width: 220px;
+    }
+
+    .toolbar-search svg {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+    }
+
+    .toolbar-search input {
+      width: 100%;
+      padding: 9px 16px 9px 38px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border);
+      font-size: 13px;
+      background: #f8fafc;
+      transition: all 0.2s;
+    }
+
+    .toolbar-search input:focus {
+      background: #fff;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    }
+
+    .toolbar-filters {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .select-dropdown {
+      padding: 8px 14px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border);
+      font-size: 13px;
+      background: #ffffff;
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    /* Items Table / List */
+    .items-table-wrap {
+      overflow-x: auto;
+    }
+
+    table.items-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+    }
+
+    table.items-table th {
+      background: #f8fafc;
+      padding: 12px 16px;
+      font-weight: 700;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+    }
+
+    table.items-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: middle;
+    }
+
+    table.items-table tr:hover {
+      background-color: #fafbfd;
+    }
+
+    .item-id-badge {
+      font-family: monospace;
+      font-weight: 700;
+      color: #3b82f6;
+      background: #eff6ff;
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+      border: 1px solid #bfdbfe;
+    }
+
+    .item-title-cell {
+      max-width: 280px;
+    }
+
+    .item-title-text {
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.35;
+      margin-bottom: 4px;
+    }
+
+    .item-sub-badges {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .mini-badge {
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: var(--radius-pill);
+      font-weight: 700;
+    }
+    .mini-badge.red { background: var(--primary); color: #fff; }
+    .mini-badge.dark { background: #272c35; color: #fff; }
+
+    .price-badge {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .commander-avatar-stack {
+      display: flex;
+      align-items: center;
+      gap: -4px;
+    }
+
+    .mini-comm-frame {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: 1.5px solid var(--gold-border);
+      background: #1f2329;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      margin-right: 4px;
+    }
+
+    .actions-cell {
+      white-space: nowrap;
+      text-align: right;
+    }
+
+    .btn-action {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-left: 4px;
+    }
+
+    .btn-action:hover {
+      border-color: #94a3b8;
+      color: var(--text);
+      transform: translateY(-1px);
+    }
+
+    .btn-action.edit:hover { background: #eff6ff; color: #2563eb; border-color: #bfdbfe; }
+    .btn-action.copy:hover { background: #fefce8; color: #ca8a04; border-color: #fef08a; }
+    .btn-action.delete:hover { background: #fef2f2; color: #dc2626; border-color: #fecaca; }
+
+    /* Modal Form */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-backdrop.show {
+      display: flex;
+    }
+
+    .modal-dialog {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 780px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border);
+      animation: modalFadeIn 0.2s ease-out;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.96) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .btn-close-modal {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--muted);
+      transition: all 0.2s;
+    }
+
+    .btn-close-modal:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .modal-body {
+      padding: 20px 24px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      background: #f8fafc;
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    }
+
+    /* Form Fields */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group.full {
+      grid-column: span 2;
+    }
+
+    .form-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #475569;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 9px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      font-size: 13px;
+      background: #ffffff;
+      color: var(--text);
+      transition: all 0.2s;
+    }
+
+    .form-control:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    }
+
+    /* Toast Alert Notification */
+    .toast-notice {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #1f2329;
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: var(--radius-pill);
+      font-size: 13.5px;
+      font-weight: 600;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 99999;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      max-width: 90vw;
+      text-align: center;
+    }
+
+    .toast-notice.show {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast-notice.success { background: #065f46; border: 1px solid #10b981; }
+    .toast-notice.error { background: #991b1b; border: 1px solid #ef4444; }
+
+    /* Success Publish Modal Alert */
+    .publish-success-banner {
+      background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
+      border: 1px solid #10b981;
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      color: #fff;
+      margin-bottom: 20px;
+      display: none;
+      animation: modalFadeIn 0.3s ease;
+    }
+
+    .publish-success-banner.show {
+      display: block;
+    }
+
+    .banner-title-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+
+    .banner-desc {
+      font-size: 13px;
+      color: #d1fae5;
+      line-height: 1.5;
+    }
+
+    /* Code View Modal */
+    pre.code-preview {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 16px;
+      border-radius: var(--radius-md);
+      font-family: Consolas, Monaco, monospace;
+      font-size: 12px;
+      max-height: 480px;
+      overflow: auto;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <nav class="admin-navbar">
+    <div class="navbar-inner">
+      <div class="brand-wrap">
+        <a href="../index.html" class="logo" title="Xem trang chủ">
+          WON<span class="logo-dagger">†</span>RADE
+        </a>
+        <span class="admin-badge">ADMIN CMS</span>
+      </div>
+
+      <div class="nav-actions">
+        <!-- View Main Website -->
+        <a href="../index.html" target="_blank" class="btn btn-secondary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          <span>Xem Website</span>
+        </a>
+
+        <!-- Export Backup -->
+        <button class="btn btn-secondary" onclick="exportListJsFile()" title="Tải file list.js về máy dự phòng">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <span>Tải file list.js</span>
+        </button>
+
+        <!-- View Raw Code -->
+        <button class="btn btn-secondary" onclick="openRawCodeModal()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+          <span>Xem Code</span>
+        </button>
+
+        <!-- Save & Publish to GitHub -->
+        <button class="btn btn-primary" id="btnPublishGithub" onclick="publishToGithubWorker()">
+          <svg id="publishIcon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+          <span id="publishText">LƯU LÊN GITHUB</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="admin-container">
+
+    <!-- Success Message Notice (Hidden by default, shown on HTTP 200) -->
+    <div class="publish-success-banner" id="publishSuccessBanner">
+      <div class="banner-title-row">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        <span>Lưu thành công vào kho lưu trữ GitHub!</span>
+      </div>
+      <div class="banner-desc">
+        Vui lòng đợi <strong>1 - 3 phút</strong> để hệ thống (GitHub Webhook / Cloudflare Pages) tự động nhận diện và build lại giao diện mới cho khách hàng.
+      </div>
+    </div>
+
+    <!-- Cloudflare Worker Configuration Bar -->
+    <div class="config-card">
+      <div class="config-left">
+        <div class="config-input-group">
+          <span class="config-label">Worker URL:</span>
+          <input type="url" id="workerUrlInput" class="input-text" placeholder="https://your-worker.your-subdomain.workers.dev" onchange="saveWorkerSettings()">
+        </div>
+
+        <div class="config-input-group" style="max-width: 240px;">
+          <span class="config-label">Secret Key:</span>
+          <input type="password" id="workerSecretInput" class="input-text" placeholder="(Tùy chọn) X-Admin-Key" onchange="saveWorkerSettings()">
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 8px;">
+        <button class="btn btn-secondary" onclick="testWorkerConnection()" style="font-size: 12px; padding: 6px 14px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+          <span>Kiểm tra kết nối</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Statistics Overview -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon red">📦</div>
+        <div class="stat-info">
+          <div class="stat-val" id="totalItemsCount">19</div>
+          <div class="stat-title">Tổng số vật phẩm</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon gold">💰</div>
+        <div class="stat-info">
+          <div class="stat-val" id="highestPriceVal">$12,500</div>
+          <div class="stat-title">Giá cao nhất</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon blue">⭐</div>
+        <div class="stat-info">
+          <div class="stat-val" id="totalFavoritesVal">0</div>
+          <div class="stat-title">Tổng lượt yêu thích</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon green">🛡️</div>
+        <div class="stat-info">
+          <div class="stat-val">Rise of Kingdoms</div>
+          <div class="stat-title">Danh mục game</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Table Card -->
+    <div class="cms-main-card">
+      <!-- Toolbar -->
+      <div class="cms-toolbar">
+        <div class="toolbar-search">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="adminSearchInput" placeholder="Tìm ID hoặc tên vật phẩm..." oninput="filterAdminItems()">
+        </div>
+
+        <div class="toolbar-filters">
+          <select class="select-dropdown" id="sortFilter" onchange="filterAdminItems()">
+            <option value="id-desc">ID mới nhất</option>
+            <option value="id-asc">ID cũ nhất</option>
+            <option value="price-desc">Giá cao nhất</option>
+            <option value="price-asc">Giá thấp nhất</option>
+            <option value="fav-desc">Lượt thích nhiều nhất</option>
+          </select>
+
+          <!-- Add Item Button -->
+          <button class="btn btn-primary" onclick="openAddItemModal()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>Thêm vật phẩm mới</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Items Table -->
+      <div class="items-table-wrap">
+        <table class="items-table">
+          <thead>
+            <tr>
+              <th style="width: 80px;">ID</th>
+              <th>Tiêu đề & Huy hiệu</th>
+              <th>Giá ($ USD)</th>
+              <th>Vương quốc & Nhập cư</th>
+              <th>5 Tướng chính</th>
+              <th>Thích</th>
+              <th style="text-align: right;">Hành động</th>
+            </tr>
+          </thead>
+          <tbody id="itemsTableBody">
+            <!-- Populated dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Modal Edit / Add Item -->
+  <div class="modal-backdrop" id="itemModalBackdrop">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="itemModalTitle">Thêm vật phẩm mới</h3>
+        <button class="btn-close-modal" onclick="closeItemModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <form id="itemForm" onsubmit="event.preventDefault(); saveItemForm();">
+          <input type="hidden" id="formIsEdit" value="false">
+          <input type="hidden" id="formOriginalId" value="">
+
+          <div class="form-grid">
+            <!-- ID -->
+            <div class="form-group">
+              <label class="form-label">ID sản phẩm (Số duy nhất) *</label>
+              <input type="number" id="fId" class="form-control" required placeholder="Ví dụ: 2654">
+            </div>
+
+            <!-- Price -->
+            <div class="form-group">
+              <label class="form-label">Giá bán ($ USD) *</label>
+              <input type="number" step="0.01" id="fPrice" class="form-control" required placeholder="Ví dụ: 466.09">
+            </div>
+
+            <!-- Title -->
+            <div class="form-group full">
+              <label class="form-label">Tiêu đề vật phẩm *</label>
+              <input type="text" id="fTitle" class="form-control" required placeholder="Ví dụ: Mùa Chinh Phạt - Full T5 3 Đạo">
+            </div>
+
+            <!-- Kingdom & Immigration -->
+            <div class="form-group full">
+              <label class="form-label">Thông tin vương quốc & nhập cư</label>
+              <input type="text" id="fInfo" class="form-control" placeholder="#2654 | Có thể nhập cư">
+            </div>
+
+            <!-- Stats -->
+            <div class="form-group full">
+              <label class="form-label">Chỉ số tài khoản (Stats)</label>
+              <input type="text" id="fStats" class="form-control" placeholder="Cấp độ 25 | Sức mạnh 91,652,733 | VIP 16 | Điểm Tiêu Diệt 7,527,939,303">
+            </div>
+
+            <!-- Badges -->
+            <div class="form-group">
+              <label class="form-label">Huy hiệu (Cách nhau bởi dấu phẩy)</label>
+              <input type="text" id="fBadges" class="form-control" placeholder="Chơi, BẢN ANH HÙNG CA">
+            </div>
+
+            <!-- Favorites -->
+            <div class="form-group">
+              <label class="form-label">Lượt yêu thích ban đầu</label>
+              <input type="number" id="fFavorites" class="form-control" value="0">
+            </div>
+
+            <!-- Tags -->
+            <div class="form-group full">
+              <label class="form-label">Thẻ trang bị / Đặc điểm (Mỗi dòng 1 thẻ)</label>
+              <textarea id="fTags" class="form-control" rows="4" placeholder="Chỉ Huy Thức Tỉnh Huyền Thoại ×19&#10;Trang Bị Huyền Thoại ×43&#10;Số Dư Xu Lung Linh 5&#10;Trang Hộ Chiếu 20"></textarea>
+            </div>
+
+            <!-- 5 Commanders IDs -->
+            <div class="form-group full">
+              <label class="form-label">Danh sách 5 Tướng (chọn từ: arthur, tontu, achilles, tanthuyhoang, scipio, quanvu, choiyoung, bachkhoi, giacatluong, luutriet, alparslan)</label>
+              <input type="text" id="fCommanders" class="form-control" placeholder="arthur, tontu, achilles, tanthuyhoang, scipio">
+            </div>
+
+            <!-- Countdown Seconds -->
+            <div class="form-group">
+              <label class="form-label">Thời gian đếm ngược (Số ngày còn lại)</label>
+              <input type="number" id="fDays" class="form-control" value="7" placeholder="Số ngày">
+            </div>
+
+            <!-- Gem Multiplier -->
+            <div class="form-group">
+              <label class="form-label">Hệ số sao / ngọc</label>
+              <input type="number" id="fGem" class="form-control" value="5">
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeItemModal()">Hủy</button>
+        <button type="button" class="btn btn-primary" onclick="saveItemForm()">Lưu vào danh sách</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Raw Code Modal -->
+  <div class="modal-backdrop" id="codeModalBackdrop">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Nội dung mã nguồn file list.js</h3>
+        <button class="btn-close-modal" onclick="closeCodeModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <pre class="code-preview" id="rawCodePreview"></pre>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="copyRawCodeToClipboard()">Sao chép mã</button>
+        <button class="btn btn-primary" onclick="closeCodeModal()">Đóng</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notice -->
+  <div class="toast-notice" id="adminToast">
+    <span id="toastMessage">Thông báo</span>
+  </div>
+
+  <!-- Nạp dữ liệu hiện tại từ list.js -->
+  <script src="../js/list.js"></script>
+
+  <script>
+    // Dữ liệu nội bộ Admin
+    let adminProducts = [];
+
+    // Danh sách tên hiển thị chuẩn của các tướng
+    const commanderNameMap = {
+      arthur: "Arthur Pendragon",
+      tontu: "Tôn Tử",
+      achilles: "Achilles",
+      tanthuyhoang: "Tần Thủy Hoàng",
+      scipio: "Scipio Africanus",
+      quanvu: "Quan Vũ",
+      choiyoung: "Choi Young",
+      bachkhoi: "Bạch Khởi",
+      giacatluong: "Gia Cát Lượng",
+      luutriet: "Lưu Triệt",
+      alparslan: "Alp Arslan"
+    };
+
+    // Khởi tạo
+    document.addEventListener("DOMContentLoaded", () => {
+      // Nạp cấu hình từ localStorage
+      const savedWorkerUrl = localStorage.getItem("wontrade_worker_url") || "";
+      const savedSecret = localStorage.getItem("wontrade_worker_secret") || "";
+      if (savedWorkerUrl) document.getElementById("workerUrlInput").value = savedWorkerUrl;
+      if (savedSecret) document.getElementById("workerSecretInput").value = savedSecret;
+
+      // Nạp danh sách từ mockProducts của list.js
+      if (typeof mockProducts !== "undefined" && Array.isArray(mockProducts) && mockProducts.length > 0) {
+        adminProducts = JSON.parse(JSON.stringify(mockProducts));
+      } else {
+        adminProducts = [];
+      }
+
+      renderAdminTable();
+      updateStats();
+    });
+
+    // Lưu cài đặt vào localStorage
+    function saveWorkerSettings() {
+      const url = document.getElementById("workerUrlInput").value.trim();
+      const secret = document.getElementById("workerSecretInput").value.trim();
+      localStorage.setItem("wontrade_worker_url", url);
+      localStorage.setItem("wontrade_worker_secret", secret);
+    }
+
+    // Hiển thị thông báo Toast
+    function showToast(msg, type = "normal") {
+      const toast = document.getElementById("adminToast");
+      const msgEl = document.getElementById("toastMessage");
+      msgEl.textContent = msg;
+      toast.className = `toast-notice show ${type}`;
+      clearTimeout(toast._timeout);
+      toast._timeout = setTimeout(() => {
+        toast.className = "toast-notice";
+      }, 3500);
+    }
+
+    // Cập nhật thống kê
+    function updateStats() {
+      document.getElementById("totalItemsCount").textContent = adminProducts.length;
+      if (adminProducts.length > 0) {
+        const maxPrice = Math.max(...adminProducts.map(p => p.price));
+        document.getElementById("highestPriceVal").textContent = "$" + maxPrice.toLocaleString();
+        const totalFav = adminProducts.reduce((sum, p) => sum + (p.favorites || 0), 0);
+        document.getElementById("totalFavoritesVal").textContent = totalFav.toLocaleString();
+      } else {
+        document.getElementById("highestPriceVal").textContent = "$0";
+        document.getElementById("totalFavoritesVal").textContent = "0";
+      }
+    }
+
+    // Hiển thị danh sách vật phẩm trong bảng
+    function renderAdminTable(itemsToRender = adminProducts) {
+      const tbody = document.getElementById("itemsTableBody");
+      if (!tbody) return;
+
+      if (itemsToRender.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" style="text-align: center; padding: 40px; color: #94a3b8;">
+              Không tìm thấy vật phẩm nào phù hợp.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = itemsToRender.map(item => {
+        const badgesHtml = (item.badges || []).map(b => `
+          <span class="mini-badge ${b.type === 'red' ? 'red' : 'dark'}">${b.text}</span>
+        `).join("");
+
+        const commandersHtml = (item.commanders || []).slice(0, 5).map(c => `
+          <div class="mini-comm-frame" title="${c.name || c.id}">
+            <span style="font-size: 10px; color: #faad14; font-weight: 700;">${(c.name || c.id || "").charAt(0)}</span>
+          </div>
+        `).join("");
+
+        const priceFormatted = Number(item.price).toLocaleString("en-US", {
+          minimumFractionDigits: item.price % 1 === 0 ? 0 : 2,
+          maximumFractionDigits: 2
+        });
+
+        return `
+          <tr>
+            <td>
+              <span class="item-id-badge">#${item.id}</span>
+            </td>
+            <td class="item-title-cell">
+              <div class="item-title-text">${escapeHtml(item.title)}</div>
+              <div class="item-sub-badges">${badgesHtml}</div>
+            </td>
+            <td>
+              <div class="price-badge">$${priceFormatted}</div>
+            </td>
+            <td>
+              <div style="color: #475569; font-size: 12.5px;">${escapeHtml(item.info || '')}</div>
+            </td>
+            <td>
+              <div class="commander-avatar-stack">${commandersHtml}</div>
+            </td>
+            <td>
+              <span style="font-weight: 600; color: #d48806;">★ ${item.favorites || 0}</span>
+            </td>
+            <td class="actions-cell">
+              <button class="btn-action edit" onclick="openEditItemModal(${item.id})" title="Chỉnh sửa">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+              </button>
+              <button class="btn-action copy" onclick="duplicateItem(${item.id})" title="Nhân bản">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              </button>
+              <button class="btn-action delete" onclick="deleteItem(${item.id})" title="Xóa">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    // Lọc & Tìm kiếm
+    function filterAdminItems() {
+      const q = (document.getElementById("adminSearchInput")?.value || "").trim().toLowerCase();
+      const sortBy = document.getElementById("sortFilter")?.value || "id-desc";
+
+      let filtered = adminProducts.filter(item => {
+        if (!q) return true;
+        const matchId = String(item.id).includes(q);
+        const matchTitle = (item.title || "").toLowerCase().includes(q);
+        const matchInfo = (item.info || "").toLowerCase().includes(q);
+        return matchId || matchTitle || matchInfo;
+      });
+
+      // Sắp xếp
+      filtered.sort((a, b) => {
+        if (sortBy === "id-desc") return b.id - a.id;
+        if (sortBy === "id-asc") return a.id - b.id;
+        if (sortBy === "price-desc") return b.price - a.price;
+        if (sortBy === "price-asc") return a.price - b.price;
+        if (sortBy === "fav-desc") return (b.favorites || 0) - (a.favorites || 0);
+        return 0;
+      });
+
+      renderAdminTable(filtered);
+    }
+
+    // Mở Modal Thêm mới
+    function openAddItemModal() {
+      document.getElementById("itemModalTitle").textContent = "Thêm vật phẩm mới";
+      document.getElementById("formIsEdit").value = "false";
+      document.getElementById("formOriginalId").value = "";
+      document.getElementById("itemForm").reset();
+
+      // Gợi ý ID tiếp theo
+      const maxId = adminProducts.length > 0 ? Math.max(...adminProducts.map(p => p.id)) : 1000;
+      document.getElementById("fId").value = maxId + 1;
+      document.getElementById("fCommanders").value = "arthur, tontu, achilles, tanthuyhoang, scipio";
+      document.getElementById("fDays").value = "7";
+      document.getElementById("fGem").value = "5";
+
+      document.getElementById("itemModalBackdrop").classList.add("show");
+    }
+
+    // Mở Modal Chỉnh sửa
+    function openEditItemModal(id) {
+      const item = adminProducts.find(p => p.id === id);
+      if (!item) return;
+
+      document.getElementById("itemModalTitle").textContent = `Chỉnh sửa vật phẩm #${item.id}`;
+      document.getElementById("formIsEdit").value = "true";
+      document.getElementById("formOriginalId").value = String(item.id);
+
+      document.getElementById("fId").value = item.id;
+      document.getElementById("fPrice").value = item.price;
+      document.getElementById("fTitle").value = item.title || "";
+      document.getElementById("fInfo").value = item.info || "";
+      document.getElementById("fStats").value = item.stats || "";
+      document.getElementById("fFavorites").value = item.favorites || 0;
+
+      // Badges
+      const badgesText = (item.badges || []).map(b => b.text).join(", ");
+      document.getElementById("fBadges").value = badgesText;
+
+      // Tags
+      const tagsText = (item.tags || []).map(t => t.text).join("\n");
+      document.getElementById("fTags").value = tagsText;
+
+      // Commanders
+      const commIds = (item.commanders || []).map(c => c.id).join(", ");
+      document.getElementById("fCommanders").value = commIds;
+
+      // Countdown Days
+      const days = Math.round((item.countdownSeconds || 604800) / 86400);
+      document.getElementById("fDays").value = days;
+      document.getElementById("fGem").value = item.gemMultiplier || 5;
+
+      document.getElementById("itemModalBackdrop").classList.add("show");
+    }
+
+    // Đóng Modal
+    function closeItemModal() {
+      document.getElementById("itemModalBackdrop").classList.remove("show");
+    }
+
+    // Lưu Form
+    function saveItemForm() {
+      const isEdit = document.getElementById("formIsEdit").value === "true";
+      const origId = Number(document.getElementById("formOriginalId").value);
+      const newId = Number(document.getElementById("fId").value);
+      const price = parseFloat(document.getElementById("fPrice").value) || 0;
+      const title = document.getElementById("fTitle").value.trim();
+      const info = document.getElementById("fInfo").value.trim();
+      const stats = document.getElementById("fStats").value.trim();
+      const favorites = parseInt(document.getElementById("fFavorites").value) || 0;
+      const days = parseInt(document.getElementById("fDays").value) || 7;
+      const gem = parseInt(document.getElementById("fGem").value) || 5;
+
+      if (!newId || !title || price <= 0) {
+        showToast("Vui lòng điền đầy đủ ID, tiêu đề và giá hợp lệ!", "error");
+        return;
+      }
+
+      // Kiểm tra trùng ID
+      if (!isEdit || (isEdit && newId !== origId)) {
+        if (adminProducts.some(p => p.id === newId)) {
+          showToast(`ID #${newId} đã tồn tại! Vui lòng chọn ID khác.`, "error");
+          return;
+        }
+      }
+
+      // Xử lý Badges
+      const badgesInput = document.getElementById("fBadges").value.trim();
+      const badges = badgesInput ? badgesInput.split(",").map(b => {
+        const text = b.trim();
+        return { text, type: text.toLowerCase().includes("chơi") ? "red" : "dark" };
+      }).filter(b => b.text) : [{ text: "Chơi", type: "red" }];
+
+      // Xử lý Tags
+      const tagsInput = document.getElementById("fTags").value.trim();
+      const tags = tagsInput ? tagsInput.split("\n").map(line => {
+        const text = line.trim();
+        const isBlue = text.includes("Xu") || text.includes("Hộ Chiếu") || text.includes("Tượng");
+        return { text, type: isBlue ? "blue" : "orange" };
+      }).filter(t => t.text) : [];
+
+      // Xử lý Commanders
+      const commInput = document.getElementById("fCommanders").value.trim();
+      const commIds = commInput ? commInput.split(",").map(s => s.trim().toLowerCase()).filter(Boolean) : ["arthur", "tontu", "achilles", "tanthuyhoang", "scipio"];
+      const commanders = commIds.slice(0, 5).map(cid => ({
+        id: cid,
+        name: commanderNameMap[cid] || cid.charAt(0).toUpperCase() + cid.slice(1),
+        level: 60,
+        isImg: cid === "arthur"
+      }));
+
+      const itemData = {
+        id: newId,
+        title,
+        price,
+        favorites,
+        isFavorited: false,
+        badges,
+        info: info || `#${newId} | Có thể nhập cư`,
+        stats: stats || "Cấp độ 25 | Sức mạnh 100,000,000 | VIP 17 | Điểm Tiêu Diệt 5,000,000,000",
+        tags,
+        commanders,
+        gemMultiplier: gem,
+        countdownSeconds: days * 86400 + Math.floor(Math.random() * 86400)
+      };
+
+      if (isEdit) {
+        const idx = adminProducts.findIndex(p => p.id === origId);
+        if (idx !== -1) {
+          adminProducts[idx] = itemData;
+          showToast(`Đã cập nhật vật phẩm #${newId} thành công!`, "success");
+        }
+      } else {
+        adminProducts.unshift(itemData);
+        showToast(`Đã thêm mới vật phẩm #${newId} thành công!`, "success");
+      }
+
+      closeItemModal();
+      filterAdminItems();
+      updateStats();
+    }
+
+    // Nhân bản vật phẩm
+    function duplicateItem(id) {
+      const item = adminProducts.find(p => p.id === id);
+      if (!item) return;
+
+      const maxId = Math.max(...adminProducts.map(p => p.id));
+      const newItem = JSON.parse(JSON.stringify(item));
+      newItem.id = maxId + 1;
+      newItem.title = newItem.title + " (Bản sao)";
+      newItem.info = `#${newItem.id} | Có thể nhập cư`;
+
+      adminProducts.unshift(newItem);
+      filterAdminItems();
+      updateStats();
+      showToast(`Đã nhân bản thành công vật phẩm #${newItem.id}!`, "success");
+    }
+
+    // Xóa vật phẩm
+    function deleteItem(id) {
+      if (!confirm(`Bạn có chắc chắn muốn xóa vật phẩm #${id} khỏi danh sách?`)) return;
+
+      adminProducts = adminProducts.filter(p => p.id !== id);
+      filterAdminItems();
+      updateStats();
+      showToast(`Đã xóa vật phẩm #${id}!`, "success");
+    }
+
+    // Tạo chuỗi nội dung file list.js hoàn chỉnh
+    function generateListJsString() {
+      const jsonContent = JSON.stringify(adminProducts, null, 2);
+      return `/**
+ * ==============================================================================
+ * WONTRADE - RISE OF KINGDOMS TRADING PLATFORM
+ * FILE QUẢN LÝ DANH SÁCH VẬT PHẨM (Tổng số: ${adminProducts.length} vật phẩm)
+ * Cập nhật tự động qua WONTRADE Admin CMS & Cloudflare Worker
+ * ==============================================================================
+ */
+
+var mockProducts = ${jsonContent};
+
+// Gán vào window để đảm bảo tương thích mọi ngữ cảnh trình duyệt
+if (typeof window !== "undefined") {
+  window.mockProducts = mockProducts;
+}
+
+// Hỗ trợ môi trường Module/NodeJS nếu cần
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = mockProducts;
+}
+`;
+    }
+
+    // Xuất file tải về máy
+    function exportListJsFile() {
+      const content = generateListJsString();
+      const blob = new Blob([content], { type: "application/javascript;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "list.js";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast("Đã tải file list.js về máy thành công!", "success");
+    }
+
+    // Xem trước mã nguồn file
+    function openRawCodeModal() {
+      const code = generateListJsString();
+      document.getElementById("rawCodePreview").textContent = code;
+      document.getElementById("codeModalBackdrop").classList.add("show");
+    }
+
+    function closeCodeModal() {
+      document.getElementById("codeModalBackdrop").classList.remove("show");
+    }
+
+    function copyRawCodeToClipboard() {
+      const code = generateListJsString();
+      navigator.clipboard.writeText(code).then(() => {
+        showToast("Đã sao chép toàn bộ code list.js vào bộ nhớ tạm!", "success");
+      });
+    }
+
+    // Kiểm tra kết nối Worker
+    async function testWorkerConnection() {
+      saveWorkerSettings();
+      const workerUrl = document.getElementById("workerUrlInput").value.trim();
+      const secret = document.getElementById("workerSecretInput").value.trim();
+
+      if (!workerUrl) {
+        showToast("Vui lòng nhập Worker URL trước!", "error");
+        return;
+      }
+
+      showToast("Đang kiểm tra kết nối tới Cloudflare Worker...");
+
+      try {
+        const headers = {};
+        if (secret) headers["X-Admin-Key"] = secret;
+
+        const res = await fetch(workerUrl, { method: "GET", headers });
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          showToast(`Kết nối Worker & GitHub thành công! (${data.repo})`, "success");
+        } else {
+          showToast(`Lỗi Worker: ${data.error || res.statusText}`, "error");
+        }
+      } catch (err) {
+        showToast(`Không thể kết nối Worker: ${err.message}`, "error");
+      }
+    }
+
+    // ========================================================================
+    // BẮN POST REQUEST LÊN CLOUDFLARE WORKER ĐỂ COMMIT GITHUB
+    // ========================================================================
+    async function publishToGithubWorker() {
+      saveWorkerSettings();
+      const workerUrl = document.getElementById("workerUrlInput").value.trim();
+      const secret = document.getElementById("workerSecretInput").value.trim();
+
+      if (!workerUrl) {
+        showToast("Vui lòng nhập đường dẫn Cloudflare Worker URL ở thanh trên!", "error");
+        document.getElementById("workerUrlInput").focus();
+        return;
+      }
+
+      const btn = document.getElementById("btnPublishGithub");
+      const btnText = document.getElementById("publishText");
+      btn.disabled = true;
+      btnText.textContent = "ĐANG LƯU LÊN GITHUB...";
+
+      try {
+        // Tạo chuỗi nội dung list.js mới
+        const fileContent = generateListJsString();
+
+        const headers = {
+          "Content-Type": "application/json"
+        };
+        if (secret) {
+          headers["X-Admin-Key"] = secret;
+        }
+
+        const payload = {
+          content: fileContent,
+          message: `Admin CMS update list.js (Tổng số: ${adminProducts.length} vật phẩm)`,
+          updateBoth: true // Đồng bộ cả js/list.js và list.js
+        };
+
+        const res = await fetch(workerUrl, {
+          method: "POST",
+          headers,
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          // Hiển thị Banner lưu thành công theo yêu cầu UX Ticket
+          const banner = document.getElementById("publishSuccessBanner");
+          banner.classList.add("show");
+          window.scrollTo({ top: 0, behavior: "smooth" });
+
+          showToast("Lưu thành công! Vui lòng đợi 1-3 phút để hệ thống cập nhật.", "success");
+        } else {
+          showToast(`Lỗi khi lưu: ${data.error || data.details || "Không rõ nguyên nhân"}`, "error");
+        }
+      } catch (err) {
+        showToast(`Lỗi kết nối tới Worker: ${err.message}`, "error");
+      } finally {
+        btn.disabled = false;
+        btnText.textContent = "LƯU LÊN GITHUB";
+      }
+    }
+
+    function escapeHtml(str) {
+      if (!str) return "";
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Lịch Sử Xem Vật Phẩm - WONTRADE</title>
+  <meta name="description" content="Danh sách các vật phẩm bạn đã xem trên WONTRADE - Nền tảng giao dịch Rise of Kingdoms uy tín.">
+  <link rel="icon" href="../assets/rok_avatar.jpg" type="image/jpeg">
+  <style>
+    :root {
+      --primary: #e60012;
+      --primary-hover: #cf0010;
+      --primary-light: #fff1f0;
+      --dark: #1f2329;
+      --bg: #f4f5f8;
+      --card-bg: #ffffff;
+      --border: #e2e8f0;
+      --text: #1e293b;
+      --muted: #64748b;
+      --gold: #d48806;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-pill: 9999px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 14px rgba(0,0,0,0.06);
+      --shadow-lg: 0 10px 30px rgba(0,0,0,0.09);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      font-size: 14px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button {
+      font-family: inherit;
+      outline: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* Header */
+    .site-header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .header-inner {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 900;
+      color: #1f2329;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-dagger {
+      color: var(--primary);
+      margin: 0 1px;
+    }
+
+    .header-divider {
+      width: 1px;
+      height: 22px;
+      background-color: #e5e6eb;
+    }
+
+    .page-title-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #f8fafc;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border);
+      font-size: 13px;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-home {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 600;
+      color: #475569;
+      transition: all 0.2s;
+    }
+
+    .btn-home:hover {
+      border-color: #cbd5e1;
+      background: #f8fafc;
+      color: #1e293b;
+    }
+
+    .btn-chat-zalo {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: linear-gradient(135deg, #0068ff 0%, #0084ff 100%);
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 18px;
+      border-radius: var(--radius-pill);
+      box-shadow: 0 2px 10px rgba(0, 104, 255, 0.28);
+      transition: all 0.2s;
+    }
+
+    .btn-chat-zalo:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(0, 104, 255, 0.45);
+    }
+
+    /* Main Container */
+    .main-wrapper {
+      max-width: 1320px;
+      margin: 24px auto 60px auto;
+      padding: 0 20px;
+      flex: 1;
+      width: 100%;
+    }
+
+    .history-card {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+    }
+
+    .history-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .history-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .history-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .history-count {
+      font-size: 13px;
+      background: #f1f5f9;
+      color: #475569;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      font-weight: 600;
+    }
+
+    .btn-clear-history {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 16px;
+      background: #fff;
+      border: 1px solid #fecdd3;
+      border-radius: var(--radius-pill);
+      color: #e11d48;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .btn-clear-history:hover {
+      background: #fff1f2;
+      border-color: #fda4af;
+    }
+
+    /* History List */
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      divide-y: 1px solid var(--border);
+    }
+
+    .history-item {
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #f1f5f9;
+      transition: background-color 0.15s ease;
+      gap: 18px;
+    }
+
+    .history-item:hover {
+      background-color: #f8fafc;
+    }
+
+    .history-item-left {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .item-title-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .item-id {
+      font-size: 12px;
+      font-weight: 700;
+      color: #64748b;
+      background: #f1f5f9;
+      padding: 2px 8px;
+      border-radius: var(--radius-sm);
+    }
+
+    .item-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .item-badges {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+    }
+
+    .badge-primary {
+      background: #fff1f0;
+      color: var(--primary);
+      border: 1px solid #ffccc7;
+    }
+
+    .badge-gold {
+      background: #fffbe6;
+      color: var(--gold);
+      border: 1px solid #ffe58f;
+    }
+
+    .item-info {
+      font-size: 13px;
+      color: #475569;
+    }
+
+    .item-stats {
+      font-size: 13px;
+      color: #64748b;
+    }
+
+    .item-time-stamp {
+      font-size: 12px;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .history-item-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .item-price {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .item-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-view-item {
+      padding: 6px 16px;
+      background: #f1f5f9;
+      color: #1e293b;
+      font-weight: 600;
+      font-size: 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid #e2e8f0;
+      transition: all 0.2s;
+    }
+
+    .btn-view-item:hover {
+      background: #e2e8f0;
+    }
+
+    .btn-delete-single {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: transparent;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .btn-delete-single:hover {
+      background: #fee2e2;
+      color: #ef4444;
+    }
+
+    /* Empty state */
+    .empty-state {
+      padding: 70px 24px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .empty-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .empty-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 8px;
+    }
+
+    .empty-desc {
+      font-size: 14px;
+      color: #64748b;
+      max-width: 420px;
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    .btn-explore {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 24px;
+      background: var(--primary);
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 14px;
+      border-radius: var(--radius-pill);
+      box-shadow: 0 4px 14px rgba(230, 0, 18, 0.3);
+      transition: all 0.2s;
+    }
+
+    .btn-explore:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    @media (max-width: 768px) {
+      .header-inner {
+        padding: 10px 16px;
+      }
+      .page-title-badge {
+        display: none;
+      }
+      .history-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .history-item-right {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px dashed #e2e8f0;
+        padding-top: 12px;
+        margin-top: 6px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="header-left">
+        <a href="../index.html" class="logo">
+          WON<span class="logo-dagger">†</span>RADE
+        </a>
+        <div class="header-divider"></div>
+        <div class="page-title-badge">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+          </svg>
+          <span>Lịch sử xem</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <a href="../index.html" class="btn-home">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          <span>Trang chủ</span>
+        </a>
+        <a href="https://zalo.me/0372996420" target="_blank" rel="noopener noreferrer" class="btn-chat-zalo" title="Liên hệ Zalo">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+          </svg>
+          <span>Zalo CSKH</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-wrapper">
+    <div class="history-card">
+      <div class="history-header">
+        <div class="history-header-left">
+          <h1 class="history-title">Vật phẩm bạn đã xem</h1>
+          <span class="history-count" id="historyCount">0 mục</span>
+        </div>
+        <button class="btn-clear-history" id="clearHistoryBtn" onclick="clearAllHistory()" style="display: none;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+          <span>Xóa toàn bộ</span>
+        </button>
+      </div>
+
+      <!-- Container list -->
+      <div class="history-list" id="historyListContainer">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const STORAGE_KEY = 'wontrade_viewed_history';
+
+    function loadHistory() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        console.error(e);
+        return [];
+      }
+    }
+
+    function renderHistory() {
+      const items = loadHistory();
+      const container = document.getElementById('historyListContainer');
+      const countLabel = document.getElementById('historyCount');
+      const clearBtn = document.getElementById('clearHistoryBtn');
+
+      countLabel.textContent = `${items.length} mục`;
+
+      if (items.length === 0) {
+        clearBtn.style.display = 'none';
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 14 14"></polyline>
+              </svg>
+            </div>
+            <h2 class="empty-title">Chưa có lịch sử xem</h2>
+            <p class="empty-desc">
+              Khi bạn xem hoặc bấm vào các vật phẩm tài khoản trên trang chủ, hệ thống sẽ tự động lưu lại ở đây để bạn dễ dàng xem lại bất cứ lúc nào.
+            </p>
+            <a href="../index.html" class="btn-explore">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <span>Khám phá vật phẩm ngay</span>
+            </a>
+          </div>
+        `;
+        return;
+      }
+
+      clearBtn.style.display = 'inline-flex';
+
+      container.innerHTML = items.map((item, idx) => {
+        const badgesHtml = (item.badges || []).map(b => {
+          const isGold = b.includes('VIP') || b.includes('Chinh Phạt');
+          return `<span class="badge ${isGold ? 'badge-gold' : 'badge-primary'}">${b}</span>`;
+        }).join('');
+
+        const formattedPrice = Number(item.price || 0).toLocaleString('en-US');
+
+        return `
+          <div class="history-item" id="item-${item.id}">
+            <div class="history-item-left">
+              <div class="item-title-row">
+                <span class="item-id">#${item.id}</span>
+                <span class="item-title">${item.title}</span>
+                <div class="item-badges">${badgesHtml}</div>
+              </div>
+              ${item.info ? `<div class="item-info">${item.info}</div>` : ''}
+              ${item.stats ? `<div class="item-stats">${item.stats}</div>` : ''}
+              <div class="item-time-stamp">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 14 14"></polyline>
+                </svg>
+                <span>Đã xem: ${item.viewedAt || 'Gần đây'}</span>
+              </div>
+            </div>
+
+            <div class="history-item-right">
+              <div class="item-price">$ ${formattedPrice}</div>
+              <div class="item-actions">
+                <a href="../index.html" class="btn-view-item">Xem lại trên web</a>
+                <button class="btn-delete-single" onclick="deleteHistoryItem(${item.id})" title="Xóa khỏi lịch sử">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function deleteHistoryItem(id) {
+      let items = loadHistory();
+      items = items.filter(it => it.id !== id);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+      renderHistory();
+    }
+
+    function clearAllHistory() {
+      if (confirm('Bạn có chắc chắn muốn xóa toàn bộ lịch sử xem không?')) {
+        localStorage.removeItem(STORAGE_KEY);
+        renderHistory();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', renderHistory);
+  </script>
+</body>
+</html>
